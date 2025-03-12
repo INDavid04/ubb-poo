@@ -45,8 +45,24 @@ void definirea_unei_clase_persoana() {
     ///     • Creează o clasă Persoana cu atribute nume și varsta.
     ///     • Adaugă un constructor pentru inițializare și o metodă afisare() pentru a printa informațiile persoanei.
     ///     • Creează obiecte și testează metoda.
-    cout << "test" << endl;
-    // TODO: contiunue here;
+    class Persoana {
+        private:
+            char nume[20];
+            int varsta;
+    }
+    Persoana() {
+        nume = "John Doe";
+        varsta = 20;
+    }
+    afisare(nume, varsta) {
+        cout << nume << " are " << varsta << " ani.\n";
+    }
+    Persoana p1, p2;
+    p1.nume = "Mihai Cristian";
+    p1.varsta = "40";
+    p2.varsta = "30";
+    afisare(p1.nume, p1.varsta);
+    afisare(p2.nume, p2.varsta);
 }
 
 
