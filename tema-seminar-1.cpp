@@ -57,20 +57,53 @@ public:
 };
 
 void definirea_unei_clase_persoana() {
-    /// 1. Definirea unei clase "Persoană"
-    ///     • Creează o clasă Persoana cu atribute nume și varsta.
-    ///     • Adaugă un constructor pentru inițializare și o metodă afisare() pentru a printa informațiile persoanei.
-    ///     • Creează obiecte și testează metoda.
-
+    /// Creează o clasă Persoana cu atribute nume și varsta.
+    /// Adaugă un constructor pentru inițializare și o metodă afisare() pentru a printa informațiile persoanei.
+    /// Creează obiecte și testează metoda.
     Persoana p1("Mihai Cristian", 40);
     Persoana p2("Mircea Grigore", 30);
     p1.afisare();
     p2.afisare();
 }
 
+///------------------------------------------------------------------------------------------------------------------///
+
+class Masina {
+private:
+    char marca[40];
+    char model[40];
+    int anFabricatie;
+public:
+    /// Constructorul
+    Masina(const char* marcaInitiala = "Seat", const char* modelInitial = "Leon", int anFabricatieInitial = 1950) {
+        strcpy(marca, marcaInitiala);
+        strcpy(model, modelInitial);
+        anFabricatie = anFabricatieInitial;
+    }
+
+    void afiseazaDetalii() {
+        cout << "Masina cu marca " << marca << ", modelul " << model << " a fost fabricata in anul " << anFabricatie << endl;
+    }
+
+    void modificaAnFabricatie(int an = 1980) {
+        anFabricatie = an;
+    }
+};
+
+void clasa_masina() {
+    /// Adaugă atribute marca, model, anFabricatie.
+    /// Scrie metode afiseazaDetalii() și modificaAnFabricatie(int).
+    Masina m1;
+    m1.afiseazaDetalii();
+    m1.modificaAnFabricatie(2010);
+    m1.afiseazaDetalii();
+    m1.modificaAnFabricatie();
+    m1.afiseazaDetalii();
+}
 
 int main() {
-    definirea_unei_clase_persoana();
+    // definirea_unei_clase_persoana();
+    clasa_masina();
 
     return 0;
 }
