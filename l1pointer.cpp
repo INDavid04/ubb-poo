@@ -1,3 +1,5 @@
+/// Laborator #1 - Pointer
+
 #include <iostream>
 using namespace std;
 

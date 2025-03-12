@@ -1,12 +1,27 @@
 /// Seminar #1 - Tema 1 Due March 18, 2025 11:59 PM
 
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
 /// TODO (Mandatory):
 /// De implementat cele două clase Vector și Stivă de la finalul Seminarului I. Aveți seminarul atașat în canalul Seminar > Files > Seminarii > Seminarul I. Multă baftă.
+
 /// 1. Implementati clasa Stiva avand urmatoarele functionalitati:
 ///     • memorie alocata dinamic
 ///     • constructor (de toate tipurile) si destructor
 ///     • metoda de adaugare element in Stiva
 ///     • metoda de eliminare element din Stiva care returneaza elementul eliminat;
+
+// class Stiva {
+//     s t u d e n t ∗ s = new s t u d e n t ;
+//     2 ∗( s ) . prenume = ” Fl o ri n ” ;
+//     3 s−>prenume = ” Fl o ri n ” ;
+    
+//     student
+// }
+
 /// 2. Implementati clasa Vector avand urmatoarele functionalitati:
 ///     • memorie alocata dinamic
 ///     • constructor (de toate tipurile) si destructor
@@ -23,14 +38,20 @@
 /// 4. Implementati un program care citeste de la tastatura un numar intreg si determina daca este palindrom.
 
 
-#include <iostream>
-#include <string.h>
+/// TODO (Aside):
 
-using namespace std;
+void definirea_unei_clase_persoana() {
+    /// 1. Definirea unei clase "Persoană"
+    ///     • Creează o clasă Persoana cu atribute nume și varsta.
+    ///     • Adaugă un constructor pentru inițializare și o metodă afisare() pentru a printa informațiile persoanei.
+    ///     • Creează obiecte și testează metoda.
+    cout << "test" << endl;
+    // TODO: contiunue here;
+}
+
 
 int main() {
-    int v[] {1, 2, 3, 4};
-    cout << "Primul element este " << v[0] << endl;
+    definirea_unei_clase_persoana();
 
     return 0;
 }
