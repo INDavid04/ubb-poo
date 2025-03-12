@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <cstring>
 
 using namespace std;
 
@@ -40,29 +41,31 @@ using namespace std;
 
 /// TODO (Aside):
 
+class Persoana {
+private:
+    char nume[20];
+    int varsta;
+public:
+    // Constructor
+    Persoana(const char* numeInitial = "John Doe", int varstaInitiala = 20) {
+        strcpy(nume, numeInitial);
+        varsta = varstaInitiala;
+    }
+    void afisare() {
+        cout << nume << " are " << varsta << " ani.\n";
+    }
+};
+
 void definirea_unei_clase_persoana() {
     /// 1. Definirea unei clase "Persoană"
     ///     • Creează o clasă Persoana cu atribute nume și varsta.
     ///     • Adaugă un constructor pentru inițializare și o metodă afisare() pentru a printa informațiile persoanei.
     ///     • Creează obiecte și testează metoda.
-    class Persoana {
-        private:
-            char nume[20];
-            int varsta;
-    }
-    Persoana() {
-        nume = "John Doe";
-        varsta = 20;
-    }
-    afisare(nume, varsta) {
-        cout << nume << " are " << varsta << " ani.\n";
-    }
-    Persoana p1, p2;
-    p1.nume = "Mihai Cristian";
-    p1.varsta = "40";
-    p2.varsta = "30";
-    afisare(p1.nume, p1.varsta);
-    afisare(p2.nume, p2.varsta);
+
+    Persoana p1("Mihai Cristian", 40);
+    Persoana p2("Mircea Grigore", 30);
+    p1.afisare();
+    p2.afisare();
 }
 
 
