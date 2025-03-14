@@ -175,9 +175,51 @@ void implementarea_unei_clase_student_cu_memoria_alocata_dinamic() {
 
 ///------------------------------------------------------------------------------------------------------------------///
 
+class Biblioteca {
+private:
+    char* carti = new char[40];
+    int numarCarti = 0;
+protected:
+public:
+    /// Constructor
+    Biblioteca(const char* cartiInitiale = nullptr, int nrCarti = 0) {
+        if (cartiInitiale != nullptr) {
+            for (int i = 0; i < nrCarti; i++) {
+                carti[i] = cartiInitiale[i];
+            }
+        } else {
+            for (int i = 0; i < nrCarti; i++) {
+                carti[i] = 0;
+            }
+        }
+    }
+    /// Destructor
+    ~Biblioteca() {
+        cout << "Cartea 's-a dus'!" << endl;
+        delete [] carti;
+    }
+
+    void adaugaCarte(const char* numeCarte = nullptr) {
+        numarCarti += 1;
+        if (numeCarte != nullptr) {
+            strcpy(carti[numarCarti], numeCarte);
+        }
+        i = 0;
+        cout << "Pana acum avem cartile: " << endl;
+        while (carti[i] != nullptr) {
+            cout << carti[i] << endl;
+            i++;
+        }
+    }
+};
+
 void clasa_biblioteca_cu_array_alocat_dinamic() {
     /// Conține un vector de cărți alocat dinamic și o metodă adaugaCarte().
     /// Destructor care eliberează memoria.
+    char primeleCarti[2][40] = ["In tara luminii", "Cu Dumnezeu in subterana"]
+    Biblioteca b1(primeleCarti, 2);
+    b1.adaugaCarte();
+    b1.adaugaCarte("Saptezeci de ori cate sapte");
 }
 
 /// Etapa 3: Encapsulare și Getteri/Setteri
@@ -219,7 +261,8 @@ void clasa_care_si_biblioteca_compozitie() {
 int main() {
     // definirea_unei_clase_persoana();
     // clasa_masina();
-    implementarea_unei_clase_student_cu_memoria_alocata_dinamic();
+    // implementarea_unei_clase_student_cu_memoria_alocata_dinamic();
+    clasa_biblioteca_cu_array_alocat_dinamic();
 
     return 0;
 }
