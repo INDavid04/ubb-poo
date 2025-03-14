@@ -177,49 +177,61 @@ void implementarea_unei_clase_student_cu_memoria_alocata_dinamic() {
 
 class Biblioteca {
 private:
-    char* carti = new char[40];
-    int numarCarti = 0;
-protected:
+    char** carti;  // Pointer la un array de string-uri
+    int numarCarti;
+
 public:
     /// Constructor
-    Biblioteca(const char* cartiInitiale = nullptr, int nrCarti = 0) {
-        if (cartiInitiale != nullptr) {
-            for (int i = 0; i < nrCarti; i++) {
-                carti[i] = cartiInitiale[i];
-            }
-        } else {
-            for (int i = 0; i < nrCarti; i++) {
-                carti[i] = 0;
-            }
+    Biblioteca(const char* cartiInitiale[] = nullptr, int nrCarti = 0) {
+        numarCarti = nrCarti;
+        carti = new char*[numarCarti]; // Alocare pentru pointeri către string-uri
+
+        for (int i = 0; i < numarCarti; i++) {
+            carti[i] = new char[strlen(cartiInitiale[i]) + 1]; // Alocare memorie pentru fiecare carte
+            strcpy(carti[i], cartiInitiale[i]);
         }
-    }
-    /// Destructor
-    ~Biblioteca() {
-        cout << "Cartea 's-a dus'!" << endl;
-        delete [] carti;
     }
 
-    void adaugaCarte(const char* numeCarte = nullptr) {
-        numarCarti += 1;
-        if (numeCarte != nullptr) {
-            strcpy(carti[numarCarti], numeCarte);
+    /// Destructor
+    ~Biblioteca() {
+        for (int i = 0; i < numarCarti; i++) {
+            delete[] carti[i]; // Eliberăm fiecare string
         }
-        i = 0;
-        cout << "Pana acum avem cartile: " << endl;
-        while (carti[i] != nullptr) {
+        delete[] carti; // Eliberăm array-ul de pointeri
+
+        cout << "Biblioteca s-a inchis!" << endl;
+    }
+
+    /// Metoda pentru adăugarea unei cărți
+    void adaugaCarte(const char* numeCarte) {
+        char** temp = new char*[numarCarti + 1]; // Alocăm memorie pentru un array mai mare
+        for (int i = 0; i < numarCarti; i++) {
+            temp[i] = carti[i]; // Copiem cărțile existente
+        }
+
+        // Alocăm memorie pentru noua carte
+        temp[numarCarti] = new char[strlen(numeCarte) + 1];
+        strcpy(temp[numarCarti], numeCarte);
+
+        delete[] carti; // Eliberăm vechiul array
+        carti = temp;
+        numarCarti++;
+
+        // Afișăm cărțile actualizate
+        cout << "Cartile din biblioteca:\n";
+        for (int i = 0; i < numarCarti; i++) {
             cout << carti[i] << endl;
-            i++;
         }
     }
 };
 
 void clasa_biblioteca_cu_array_alocat_dinamic() {
-    /// Conține un vector de cărți alocat dinamic și o metodă adaugaCarte().
-    /// Destructor care eliberează memoria.
-    char primeleCarti[2][40] = ["In tara luminii", "Cu Dumnezeu in subterana"]
+    /// Testăm constructorul și metoda `adaugaCarte()`
+    const char* primeleCarti[] = {"In tara luminii", "Cu Dumnezeu in subterana"};
     Biblioteca b1(primeleCarti, 2);
-    b1.adaugaCarte();
+    
     b1.adaugaCarte("Saptezeci de ori cate sapte");
+    b1.adaugaCarte("Codul bunelor maniere");
 }
 
 /// Etapa 3: Encapsulare și Getteri/Setteri
