@@ -386,24 +386,35 @@ void clasa_animal_si_mostenire() {
 
 class Book {
 private:
-protected:
     char title[80];
     char author[40];
+protected:
 public:
     Book(const char* defaultTitle = "Believer's journey", const char* defaultAuthor = "John Bunyan") {
         strcpy(title, defaultTitle);
         strcpy(author, defaultAuthor);
     }
-    virtual ~Book {
+    ~Book() {
         cout << "The book " << title << " by " << author << " is now out of the library.\n";
+    }
+    void show() {
+        cout << "The book " << title << " is written by " << author << endl;
     }
 };
 
-/// Ce inseaman un vector de o clasa?
+class Library {
+private:
+    /// Merge mai bine cu STL, asadar mai astept pana invatam STL la clasa
+    /// TODO: come here to continue after STL lesson;
+protected:
+public:
+};
 
 void clasa_carte_si_biblioteca_compozitie() {
     /// Carte are titlu, autor.
     /// Biblioteca conține un vector de Carte.
+    Book b1;
+    b1.show();
 }
 
 ///------------------------------------------------------------------------------------------------------------------///
@@ -419,7 +430,8 @@ int main() {
     // clasa_biblioteca_cu_array_alocat_dinamic();
     // clasa_cont_bancar();
     // clasa_telefon();
-    clasa_animal_si_mostenire();
+    // clasa_animal_si_mostenire();
+    clasa_carte_si_biblioteca_compozitie();
 
     return 0;
 }
