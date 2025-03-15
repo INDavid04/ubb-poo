@@ -23,44 +23,52 @@ using namespace std;
 class Stiva {
 private:
     int dim;
-    float* el = new float[dim];
+    float* el;
 protected:
 public:
     Stiva(int initialDim = 0, float* initialEl = nullptr) {
         dim = initialDim;
+        el = new float[dim];
         if (initialEl != nullptr) {
             for (int i = 0; i < dim; i++) {
                 el[i] = initialEl[i];
             }
+        } else {
+            for (int i = 0; i < dim; i++) {
+                el[i] = 0;
+            }
         }
     }
     ~Stiva() {
-        delete [] el;
+        delete[] el;
         cout << "Done stack!" << endl;
     }
     void addElement(float added_element = 0) {
-        dim++;
-        el[dim - 1] = added_element;
-    }
-    float removeElement(float removed_element = 0) {
-        bool is_in_stack = false;
-        for (int i = 0; i < dim; i ++) {
-            if (el[i] == removed_element) {
-                is_in_stack = true;
-                dim--;
-                for (int j = i; j < dim; j++) {
-                    el[j] = el[j + 1];
-                }
-            }
+        float* aux = new float[dim + 1];
+        for (int i = 0; i < dim; i++) {
+            aux[i] = el[i];
         }
-        if (is_in_stack) {
-            return removed_element;
-        } else {
-            cout << "Sorry! No " << removed_element << " in the stack!\n";
+        aux[dim] = added_element;
+        delete[] el;
+        el = aux;
+        dim++;
+    }
+    float removeElement() {
+        if (dim == 0) {
+            cout << "Empty stack!\n";
             return 0;
         }
+        float removed_element = el[dim - 1];
+        dim--;
+        float* aux = new float[dim];
+        for (int i = 0; i < dim; i++) {
+            aux[i] = el[i];
+        }
+        delete[] el;
+        el = aux;
+        return removed_element;
     }
-    void show() {
+    void show() const {
         cout << "Stack: ";
         for (int i = 0; i < dim; i++) {
             cout << el[i] << " ";
@@ -70,8 +78,6 @@ public:
 };
 
 void testeaza_clasa_stiva() {
-    /// TODO: fix this -> terminate called after throwing an instance of 'std::bad_array_new_length'
-  what():  std::bad_array_new_length
     float arr[] {4.9, 8.3, 4.5, 9.0}; // se poate si fara egal
     Stiva s1(4, arr);
     s1.show(); /// initial stack
@@ -80,11 +86,7 @@ void testeaza_clasa_stiva() {
     s1.addElement(7);
     s1.show(); /// add seven
     cout << "Removed element is " << s1.removeElement() << endl;
-    s1.show(); /// remove 0
-    cout << "Removed element is " << s1.removeElement(8.3) << endl;
-    s1.show(); /// remove 8.3
-    cout << "Removed element is " << s1.removeElement(987) << endl;
-    s1.show(); /// 987 not in stack
+    s1.show();
 }
 
 /// 2. Implementati clasa Vector avand urmatoarele functionalitati:
