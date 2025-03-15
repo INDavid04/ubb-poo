@@ -253,12 +253,26 @@ public:
         cout << "Persoana " << titular << " a iesit de sub evidenta bancii.\n";
     }
 
+    /// Getter
+    const char* getTitular() const {
+        return titular;
+    }
+
+    /// Setter
+    void setTitular(const char* noulTitular = "Hannah Smith") {
+        strcpy(titular, noulTitular);
+    }
+
     void depunere(float sumaDepusa = 0) {
         sold += sumaDepusa;
     }
 
     void retrage(float sumaRetrasa = 0) {
-        sold -= sumaRetrasa;
+        if (sold < sumaRetrasa) {
+            cout << "Ne pare rau insa nu ai fonduri suficiente pentru a retrage suma " << sumaRetrasa << endl;
+        } else {
+            sold -= sumaRetrasa;
+        }
     }
 
     void afiseazaSold() {
@@ -276,6 +290,11 @@ void clasa_cont_bancar() {
     c1.afiseazaSold();
     c1.retrage(100);
     c1.afiseazaSold();
+    cout << "Primul titular este " << c1.getTitular() << endl;
+    c1.setTitular("Hannah Montana");
+    cout << "Cel de al doilea titular este " << c1.getTitular() << endl;
+    c1.setTitular();
+    cout << "Si cel de al treilea titular este " << c1.getTitular() << endl;
 }
 
 ///------------------------------------------------------------------------------------------------------------------///
