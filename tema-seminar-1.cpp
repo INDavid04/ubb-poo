@@ -384,7 +384,24 @@ void clasa_animal_si_mostenire() {
 
 ///------------------------------------------------------------------------------------------------------------------///
 
-void clasa_care_si_biblioteca_compozitie() {
+class Book {
+private:
+protected:
+    char title[80];
+    char author[40];
+public:
+    Book(const char* defaultTitle = "Believer's journey", const char* defaultAuthor = "John Bunyan") {
+        strcpy(title, defaultTitle);
+        strcpy(author, defaultAuthor);
+    }
+    virtual ~Book {
+        cout << "The book " << title << " by " << author << " is now out of the library.\n";
+    }
+};
+
+/// Ce inseaman un vector de o clasa?
+
+void clasa_carte_si_biblioteca_compozitie() {
     /// Carte are titlu, autor.
     /// Biblioteca conține un vector de Carte.
 }
