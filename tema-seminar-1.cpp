@@ -234,6 +234,8 @@ void clasa_biblioteca_cu_array_alocat_dinamic() {
     b1.adaugaCarte("Codul bunelor maniere");
 }
 
+///------------------------------------------------------------------------------------------------------------------///
+
 /// Etapa 3: Encapsulare și Getteri/Setteri
 
 class ContBancar {
@@ -299,10 +301,39 @@ void clasa_cont_bancar() {
 
 ///------------------------------------------------------------------------------------------------------------------///
 
+class Phone {
+private:
+    char brand[40];
+    float price;
+protected:
+public:
+    Phone(const char* defaultBrand = "iPhone", float defaultPrice = 9999.99) {
+        strcpy(brand, defaultBrand);
+        price = defaultPrice;
+    }
+    ~Phone() {
+        cout << "Broken phone " << brand << " at price " << price << endl;
+    }
+    void setPrice(float newPrice = 3980.98) {
+        if (newPrice > 0) {
+            price = newPrice;
+        }
+    }
+    void showDetails() const {
+        cout << "The phone " << brand << " is at price " << price << endl;
+    }
+};
+
 void clasa_telefon() {
     /// Atribute private: brand, pret.
     /// Metode pentru modificarea prețului și afișarea detaliilor.
+    Phone p1("Samsung A70", 1704.98);
+    p1.showDetails();
+    p1.setPrice(2849.89);
+    p1.showDetails();
 }
+
+///------------------------------------------------------------------------------------------------------------------///
 
 /// Etapa 4: Relații între clase (Compoziție, Agregare, Moștenire)
 
@@ -330,7 +361,8 @@ int main() {
     // clasa_masina();
     // implementarea_unei_clase_student_cu_memoria_alocata_dinamic();
     // clasa_biblioteca_cu_array_alocat_dinamic();
-    clasa_cont_bancar();
+    // clasa_cont_bancar();
+    clasa_telefon();
 
     return 0;
 }
