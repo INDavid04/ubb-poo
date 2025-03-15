@@ -337,10 +337,48 @@ void clasa_telefon() {
 
 /// Etapa 4: Relații între clase (Compoziție, Agregare, Moștenire)
 
+class Animal {
+private:
+protected:
+    char name[40];
+public:
+    Animal(const char* defaultName = "Cat") {
+        strcpy(name, defaultName);
+    }
+    ~Animal() {
+        cout << "Animal is out of the view.";
+    }
+    virtual void show() const {
+        cout << "The animal is a " << name << endl;
+    }
+};
+
+class Dog : public Animal {
+private:
+    char race[40];
+protected:
+public:
+    Dog(const char* defaultRace = "Labrador") {
+        strcpy(race, defaultRace);
+    }
+    ~Dog() {
+        cout << "The animal " << name << " with race " << race << " is now out of the view\n";
+    }
+    void show() const override {
+        cout << "The animal is a " << name << " with race " << race << endl;
+    }
+};
+
 void clasa_animal_si_mostenire() {
     /// Clasa Animal cu atribut nume.
     /// Clasa Caine derivată din Animal, care adaugă un atribut rasa.
     /// Suprascrie metoda afisare().
+    Animal a1("crocodile");
+    a1.show();
+    Animal a2();
+    a2.show();
+    Dog d1("Pablo", "husky");
+    dog.show();
 }
 
 ///------------------------------------------------------------------------------------------------------------------///
@@ -362,7 +400,8 @@ int main() {
     // implementarea_unei_clase_student_cu_memoria_alocata_dinamic();
     // clasa_biblioteca_cu_array_alocat_dinamic();
     // clasa_cont_bancar();
-    clasa_telefon();
+    // clasa_telefon();
+    clasa_animal_si_mostenire();
 
     return 0;
 }
