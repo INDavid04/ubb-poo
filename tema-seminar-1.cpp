@@ -20,13 +20,72 @@ using namespace std;
 ///     • metoda de adaugare element in Stiva
 ///     • metoda de eliminare element din Stiva care returneaza elementul eliminat;
 
-// class Stiva {
-//     s t u d e n t ∗ s = new s t u d e n t ;
-//     2 ∗( s ) . prenume = ” Fl o ri n ” ;
-//     3 s−>prenume = ” Fl o ri n ” ;
-    
-//     student
-// }
+class Stiva {
+private:
+    int dim;
+    float* el = new float[dim];
+protected:
+public:
+    Stiva(int initialDim = 0, float* initialEl = nullptr) {
+        dim = initialDim;
+        if (initialEl != nullptr) {
+            for (int i = 0; i < dim; i++) {
+                el[i] = initialEl[i];
+            }
+        }
+    }
+    ~Stiva() {
+        delete [] el;
+        cout << "Done stack!" << endl;
+    }
+    void addElement(float added_element = 0) {
+        dim++;
+        el[dim - 1] = added_element;
+    }
+    float removeElement(float removed_element = 0) {
+        bool is_in_stack = false;
+        for (int i = 0; i < dim; i ++) {
+            if (el[i] == removed_element) {
+                is_in_stack = true;
+                dim--;
+                for (int j = i; j < dim; j++) {
+                    el[j] = el[j + 1];
+                }
+            }
+        }
+        if (is_in_stack) {
+            return removed_element;
+        } else {
+            cout << "Sorry! No " << removed_element << " in the stack!\n";
+            return 0;
+        }
+    }
+    void show() {
+        cout << "Stack: ";
+        for (int i = 0; i < dim; i++) {
+            cout << el[i] << " ";
+        }
+        cout << "\n";
+    }
+};
+
+void testeaza_clasa_stiva() {
+    /// TODO: fix this -> terminate called after throwing an instance of 'std::bad_array_new_length'
+  what():  std::bad_array_new_length
+    float arr[] {4.9, 8.3, 4.5, 9.0}; // se poate si fara egal
+    Stiva s1(4, arr);
+    s1.show(); /// initial stack
+    s1.addElement();
+    s1.show(); /// add zero
+    s1.addElement(7);
+    s1.show(); /// add seven
+    cout << "Removed element is " << s1.removeElement() << endl;
+    s1.show(); /// remove 0
+    cout << "Removed element is " << s1.removeElement(8.3) << endl;
+    s1.show(); /// remove 8.3
+    cout << "Removed element is " << s1.removeElement(987) << endl;
+    s1.show(); /// 987 not in stack
+}
 
 /// 2. Implementati clasa Vector avand urmatoarele functionalitati:
 ///     • memorie alocata dinamic
@@ -49,7 +108,7 @@ using namespace std;
 
 ///------------------------------------------------------------------------------------------------------------------///
 
-/// TODO (Aside, sursa: chatgpt):
+/// DONE (Aside, sursa: chatgpt):
 
 ///------------------------------------------------------------------------------------------------------------------///
 
@@ -431,7 +490,8 @@ int main() {
     // clasa_cont_bancar();
     // clasa_telefon();
     // clasa_animal_si_mostenire();
-    clasa_carte_si_biblioteca_compozitie();
+    // clasa_carte_si_biblioteca_compozitie();
+    testeaza_clasa_stiva();
 
     return 0;
 }
