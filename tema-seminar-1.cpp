@@ -345,8 +345,8 @@ public:
     Animal(const char* defaultName = "Cat") {
         strcpy(name, defaultName);
     }
-    ~Animal() {
-        cout << "Animal is out of the view.";
+    virtual ~Animal() {
+        cout << "Animal " << name << " is out of the view.\n";
     }
     virtual void show() const {
         cout << "The animal is a " << name << endl;
@@ -358,14 +358,15 @@ private:
     char race[40];
 protected:
 public:
-    Dog(const char* defaultRace = "Labrador") {
+    Dog(const char* defaultName = "Max", const char* defaultRace = "Labrador") {
+        strcpy(name, defaultName);
         strcpy(race, defaultRace);
     }
     ~Dog() {
         cout << "The animal " << name << " with race " << race << " is now out of the view\n";
     }
     void show() const override {
-        cout << "The animal is a " << name << " with race " << race << endl;
+        cout << "The animal is named " << name << " and has the race " << race << endl;
     }
 };
 
@@ -375,10 +376,10 @@ void clasa_animal_si_mostenire() {
     /// Suprascrie metoda afisare().
     Animal a1("crocodile");
     a1.show();
-    Animal a2();
+    Animal a2;
     a2.show();
     Dog d1("Pablo", "husky");
-    dog.show();
+    d1.show();
 }
 
 ///------------------------------------------------------------------------------------------------------------------///
