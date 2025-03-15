@@ -236,10 +236,46 @@ void clasa_biblioteca_cu_array_alocat_dinamic() {
 
 /// Etapa 3: Encapsulare și Getteri/Setteri
 
+class ContBancar {
+private:
+    char titular[40];
+    float sold;
+protected:
+public:
+    /// Constructor
+    ContBancar(const char* titularDefault = "John Doe", float soldDefault = 0) {
+        strcpy(titular, titularDefault);
+        sold = soldDefault;
+    }
+
+    /// Destructor
+    ~ContBancar() {
+        cout << "Persoana " << titular << " a iesit de sub evidenta bancii.\n";
+    }
+
+    void depunere(float sumaDepusa = 0) {
+        sold += sumaDepusa;
+    }
+
+    void retrage(float sumaRetrasa = 0) {
+        sold -= sumaRetrasa;
+    }
+
+    void afiseazaSold() {
+        cout << "Titularul " << titular << " are soldul: " << sold << endl;
+    }
+};
+
 void clasa_cont_bancar() {
     /// Atribute private: titular, sold.
     /// Metode depunere(float), retrage(float), afiseazaSold().
     /// Getteri și setteri pentru titular.
+    ContBancar c1;
+    c1.afiseazaSold();
+    c1.depunere(50.5);
+    c1.afiseazaSold();
+    c1.retrage(100);
+    c1.afiseazaSold();
 }
 
 ///------------------------------------------------------------------------------------------------------------------///
@@ -274,7 +310,8 @@ int main() {
     // definirea_unei_clase_persoana();
     // clasa_masina();
     // implementarea_unei_clase_student_cu_memoria_alocata_dinamic();
-    clasa_biblioteca_cu_array_alocat_dinamic();
+    // clasa_biblioteca_cu_array_alocat_dinamic();
+    clasa_cont_bancar();
 
     return 0;
 }
