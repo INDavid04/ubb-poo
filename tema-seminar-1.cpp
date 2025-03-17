@@ -1,4 +1,4 @@
-/// Seminar #1 - Tema 1 Due March 18, 2025 11:59 PM
+/// Seminar #1 - Tema 1 Due March 18, 2025 11:59 PM (Note: The main function should start at line 163!)
 
 #include <iostream>
 #include <string.h>
@@ -8,7 +8,7 @@ using namespace std;
 
 ///------------------------------------------------------------------------------------------------------------------///
 
-/// TODO (Mandatory, sursa: seminarul 1):
+/// DONE (Mandatory, sursa: seminarul 1):
 /// De implementat cele două clase Vector și Stivă de la finalul Seminarului I. Aveți seminarul atașat în canalul Seminar > Files > Seminarii > Seminarul I. Multă baftă.
 
 ///------------------------------------------------------------------------------------------------------------------///
@@ -163,6 +163,7 @@ void testeaza_clasa_vector() {
 int main() {
     /// Note: Copy-paste at the bottom to call any function!
 
+    /// Aside: Probleme generate de gpt pentru a intelege mai bine conceptele, pe care le poti ignora :)
     /// definirea_unei_clase_persoana();
     /// clasa_masina();
     /// implementarea_unei_clase_student_cu_memoria_alocata_dinamic();
@@ -171,7 +172,9 @@ int main() {
     /// clasa_telefon();
     /// clasa_animal_si_mostenire();
     /// clasa_carte_si_biblioteca_compozitie();
-    /// testeaza_clasa_stiva();
+
+    /// Madatory: Cele doua probleme de la tema seminar 1 (Nota: avand in vedere ca le-am facut in zile diferite am facut un mix de ro-engleza pe care mi-as dori sa il corectez cand imi va permite si timpul, stiu ca e un obicei bun sa pastrezi consistenta, de aia ar trebui revizuit codul si corectat la sange cum s-ar spune :) )
+    testeaza_clasa_stiva();
     testeaza_clasa_vector();
 
     return 0;
