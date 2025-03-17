@@ -9,16 +9,15 @@ using namespace std;
 ///------------------------------------------------------------------------------------------------------------------///
 
 /// TODO (Mandatory, sursa: seminarul 1):
+/// De implementat cele două clase Vector și Stivă de la finalul Seminarului I. Aveți seminarul atașat în canalul Seminar > Files > Seminarii > Seminarul I. Multă baftă.
 
 ///------------------------------------------------------------------------------------------------------------------///
 
-/// De implementat cele două clase Vector și Stivă de la finalul Seminarului I. Aveți seminarul atașat în canalul Seminar > Files > Seminarii > Seminarul I. Multă baftă.
-
 /// 1. Implementati clasa Stiva avand urmatoarele functionalitati:
-///     • memorie alocata dinamic
-///     • constructor (de toate tipurile) si destructor
-///     • metoda de adaugare element in Stiva
-///     • metoda de eliminare element din Stiva care returneaza elementul eliminat;
+///     • memorie alocata dinamic - done!
+///     • constructor (de toate tipurile) si destructor - done!
+///     • metoda de adaugare element in Stiva - done!
+///     • metoda de eliminare element din Stiva care returneaza elementul eliminat - done!
 
 class Stiva {
 private:
@@ -89,13 +88,94 @@ void testeaza_clasa_stiva() {
     s1.show();
 }
 
+///------------------------------------------------------------------------------------------------------------------///
+
 /// 2. Implementati clasa Vector avand urmatoarele functionalitati:
-///     • memorie alocata dinamic
-///     • constructor (de toate tipurile) si destructor
-///     • metoda de adaugare element la sfarsitul vectorului
-///     • metoda de eliminare element de la sfarsitul vectorului
-///     • metoda ce intoarce un element de pe pozitia i primita ca parameteru
-///     • metoda ce intoarce numarul de elemente din vector
+///     • memorie alocata dinamic - done!
+///     • constructor (de toate tipurile) si destructor - done!
+///     • metoda de adaugare element la sfarsitul vectorului - done!
+///     • metoda de eliminare element de la sfarsitul vectorului - done!
+///     • metoda ce intoarce un element de pe pozitia i primita ca parameteru - done!
+///     • metoda ce intoarce numarul de elemente din vector - done!
+
+class Vector {
+private:
+    int* v = new int[40]; /// vom initializa vectorul in constructor pentru a pune dimensiune in loc de 40
+    int dimensiune;
+protected:
+public:
+    Vector(int* vector = nullptr, int dim = 0) {
+        dimensiune = dim;
+        for (int i = 0; i < dimensiune; i++) {
+            v[i] = vector[i];
+        }
+    }
+    ~Vector() {
+        cout << "Vectorul a fost sters, dezalocat!\n";
+        delete[] v;
+    }
+    void adaugaElement(int valoareDeAdaugat = 0) {
+        int* aux = new int[dimensiune + 1];
+        for (int i = 0; i < dimensiune; i++) {
+            aux[i] = v[i];
+        }
+        aux[dimensiune] = valoareDeAdaugat;
+        dimensiune++;
+        v = aux;
+        // delete[] aux; // not good :) it is better to keep the aux, don't know why, but I would like to know
+    }
+    void eliminaElement() {
+        dimensiune--;
+        int* aux = new int[dimensiune];
+        for (int i = 0; i < dimensiune; i++) {
+            aux[i] = v[i];
+        }
+        v = aux;
+    }
+    void afiseazaElDePePozI(int i = 0) {
+        cout << "Elementul de pe pozitia " << i << " (cu indexare de la 1 este): " << v[i - 1] << "\n";
+    }
+    const int getNumberOfElements() {
+        return dimensiune;
+    }
+    void show() {
+        cout << "Vectorul este: ";
+        for (int i = 0; i < dimensiune; i++) {
+            cout << v[i] << " ";
+        }
+        cout << "\n";
+    }
+};
+
+void testeaza_clasa_vector() {
+    int vectoras[] = {12, 56, 78, 43};
+    int dimensiune = sizeof(vectoras) / sizeof(int);
+    Vector v(vectoras, dimensiune);
+    v.show();
+    v.adaugaElement(101);
+    v.show();
+    v.eliminaElement();
+    v.show();
+    v.afiseazaElDePePozI(3);
+    cout << "Numarul de elemente din vector este " << v.getNumberOfElements() << endl;
+}
+
+int main() {
+    /// Note: Copy-paste at the bottom to call any function!
+
+    /// definirea_unei_clase_persoana();
+    /// clasa_masina();
+    /// implementarea_unei_clase_student_cu_memoria_alocata_dinamic();
+    /// clasa_biblioteca_cu_array_alocat_dinamic();
+    /// clasa_cont_bancar();
+    /// clasa_telefon();
+    /// clasa_animal_si_mostenire();
+    /// clasa_carte_si_biblioteca_compozitie();
+    /// testeaza_clasa_stiva();
+    testeaza_clasa_vector();
+
+    return 0;
+}
 
 ///------------------------------------------------------------------------------------------------------------------///
 
@@ -484,16 +564,4 @@ void clasa_carte_si_biblioteca_compozitie() {
 
 ///------------------------------------------------------------------------------------------------------------------///
 
-int main() {
-    // definirea_unei_clase_persoana();
-    // clasa_masina();
-    // implementarea_unei_clase_student_cu_memoria_alocata_dinamic();
-    // clasa_biblioteca_cu_array_alocat_dinamic();
-    // clasa_cont_bancar();
-    // clasa_telefon();
-    // clasa_animal_si_mostenire();
-    // clasa_carte_si_biblioteca_compozitie();
-    testeaza_clasa_stiva();
-
-    return 0;
-}
+/// Note: Paste here the main function to call any function!
