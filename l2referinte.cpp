@@ -11,30 +11,28 @@ int f1(int x, int y) {
     return x + y;
 }
 
-// ASA NU -> SUPRAINCARCARE (GENEREAZA AMBIGUITATI)
-/*int f2(int *x) {
+// ASA NU -> SUPRAINCARCARE (GENEREAZA AMBIGUITATI, din cauza ca *x este la fel cu x[])
+/*
+int f2(int *x) {
     return *x;
 }
 
 int f2(int x[]) {
     return x[0];
-}*/
+}
+*/
 
 int f3(int &x) {
-    return x;
+    return x; // i.e. valoarea de la adresa x
 }
 
 int f3(int x) {
-    return x;
+    return x; // i.e. valoarea x
 }
 
-/**
+/// Parametrii impliciti <=> parametrii optionali. Intotdeauna, parametrii impliciti intr-o functie se vor pune de la dreapta spre stanga
+// TODO: continue here;
 
-Parametrii impliciti <=> parametrii optionali
-
-Intotdeauna, parametrii impliciti intr-o functie se vor pune de la dreapta
-spre stanga
-**/
 void salut(const char* name = "anonim") {
     cout << "Salut, " << name << "!" << endl;
 }
@@ -113,8 +111,10 @@ int* hPointerPointer(int* x) {
     return x;
 }
 
-int main()
-{
+int main() {
+    cout << f3(0x87) << endl;
+
+    cout << "De la clasa\n";
     salut();
     salut("Max");
     int x = 32;
@@ -195,6 +195,7 @@ int main()
     int * hresultPointer = hPointerPointer(&a);
     *hresultPointer = 329582;
     cout << a << endl;
+
     return 0;
 }
  

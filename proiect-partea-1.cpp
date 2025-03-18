@@ -1,4 +1,4 @@
-/// Laborator - Tema 1 Due March 24, 2025 11:59 PM
+/// Proiect #1 Due March 24, 2025 11:59 PM
 
 #include <iostream>
 using namespace std;
@@ -17,14 +17,14 @@ using namespace std;
     TODO supraincarcarea operatorilor pentru stream << si >>
     TODO Fiecare clasa trebuie sa respecte principiul incapsularii datelor (cu setteri si getteri)
     TODO Fiecare clasa trebuie sa aiba cel putin trei atribute (proprietati) iar in tot proiectul sa regasim variabile de urmatoarele tipuri:
-    TODO int sau long long
+    DONE int sau long long
     TODO bool
-    TODO char*
-    TODO float
-    TODO char
-    TODO int* sau float*
+    DONE char*
+    DONE float
+    DONE char
+    DONE int* sau float*
     TODO static
-    TODO const
+    DONE const
     TODO Fiecare clasa trebuie sa implementeze supraincarcarea pentru urmatorii operatori:
     TODO operatorul de indexare - [] (care sa spunem daca avem o clasa de tip Eveniment iar in clasa Eveniment avem Participant* putem folosi operatorul de indexare pentru a accesa direct informatiile despre participant de la pozitia i)
     TODO operatorul ++ sau -- (postfixat sau prefixat, pentru postfixat aveti nevoie de un parametru dummy)
@@ -36,9 +36,20 @@ using namespace std;
 */
 
 /// Ideea jocului: Bunicul Neculai este plecat intr-o vacanta la munte. De aceea, te-a rugat sa te ocupi de ferma lui pentru cateva saptamani. Crezi ca vei face fata?
+/// Gameplay: Fiecare actiune este realizata pe parcursul unei zile. Dupa un anumit numar se zile se intampla nush ce.
+
+class Jucator {
+private:
+    const char* denumireJucator;
+protected:
+public:
+};
 
 class Casa {
 private:
+    int nivelComfort, venitChirie;
+    float taxe;
+    char nivelReparatii[80];
 protected:
 public:
     /// Afiseaza informatiile despre casa: nivelComfort, nivelReparatii, venitChirie, taxe
@@ -46,6 +57,10 @@ public:
 
 class Teren {
 private:
+    int nivelIngrasamant, nivelProductie;
+    float venit, taxe;
+    long long resurseGrau, resurseCartofi, resurseMorcovi;
+    int* niveleApa;
 protected:
 public:
     /// Afiseaza informatiile despre teren: nivelIngrasamant, nivelProductie, nivelApa, resurseGrau, resurseCartofi, resurse morcovi, venit, taxe
@@ -53,6 +68,8 @@ public:
 
 class Tarc {
 private:
+    int capacitateAnimale, resurseIgiena, resurseHrana;
+    float venit;
 protected:
 public:
     /// Afiseaza informatiile despre tarc: capacitateAnimale, resurseIgiena, resurseHrana, venit
@@ -60,6 +77,8 @@ public:
 
 class Tractor {
 private:
+    int nivelBenzina, itp;
+    char* reparatii[8];
 protected:
 public:
     /// Afiseaza informatiile despre tactor: nivelBenzina, reparatii, itp
