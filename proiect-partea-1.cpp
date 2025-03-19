@@ -1,6 +1,8 @@
 /// Proiect #1 Due March 24, 2025 11:59 PM
 
 #include <iostream>
+#include <cstring>
+#include <limits> /// numeric_limits pentru a goli buffer-ul
 using namespace std;
 
 /// Cerinte
@@ -40,9 +42,29 @@ using namespace std;
 
 class Jucator {
 private:
-    const char* denumireJucator;
+    char denumireJucator[80];
+    int nivelJucator;
 protected:
 public:
+    Jucator() {
+        strcpy(denumireJucator, "Anonim");
+        nivelJucator = 0;
+    }
+    ~Jucator() {
+        cout << denumireJucator << " a iesit din joc avand nivelul " << nivelJucator << endl;
+    }
+    void setName(const char* nume = "Abel Diriclet") {
+        strcpy(denumireJucator, nume);
+    }
+    void showInfo() {
+        cout << "--------------------------------------------\n";
+        cout << "Jucator: " << denumireJucator << " | Nivel: " << nivelJucator << endl;
+        cout << "--------------------------------------------\n";
+    }
+    void levelUp() {
+        nivelJucator++;
+        cout << "Hurray! A mai trecut o zi! Ai atins nivelul " << nivelJucator << endl;
+    }
 };
 
 class Casa {
@@ -84,7 +106,35 @@ public:
     /// Afiseaza informatiile despre tactor: nivelBenzina, reparatii, itp
 };
 
+void initializareJoc() {
+    Jucator j;
+    char numeleTau[80];
+    j.showInfo();
+    cout << "Fiind prima zi, intalnesti un vecin care s-a mutat de curand la ferma..." << endl;
+    cout << "[Noul vecin]: Sal'tare tinere! Care-ti este numele dumitale?" << endl;
+    cin.getline(numeleTau, 80);
+    cout << "============================================\n";
+    j.setName(numeleTau);
+    j.levelUp();
+    j.showInfo();
+}
+
+void introducere() {
+    bool continuaJoc = false;
+    cout << "Bunicul Neculai este plecat intr-o vacanta la munte.\nDe aceea, te-a rugat pe tine sa te ocupi de ferma lui pentru cateva saptamani.\nCrezi ca vei face fata?\nRaspunsul tau (0 - NU; 1 - DA): " << endl;
+    cin >> continuaJoc;
+    cout << "--------------------------------------------\n";
+    cout << "============================================\n";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Curatam buffer-ul, pentru numeric_limits trebuie sa includem biblioteca limits
+    if (continuaJoc) {
+        initializareJoc();
+    } else {
+        cout << "Imi pare rau sa aud asta! In acest caz nu am ce-ti face! Pe curand!\n";
+    }
+}
+
 int main() {
+    introducere();
     
     return 0;
 }
