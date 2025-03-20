@@ -61,8 +61,8 @@ public:
         cout << "Jucator: " << numeJucator << " | Nivel: " << nivelJucator << endl;
         cout << "---------------------------------------------------------------------------------------------------\n";
     }
-    void levelUp() {
-        nivelJucator++;
+    void levelUp(int contor = 1) {
+        nivelJucator += contor;
         cout << "Hurray! A mai trecut o zi! Ai atins nivelul " << nivelJucator << "." << endl;
     }
 };
@@ -133,9 +133,10 @@ int main() {
     cout << "=======================================================================================================\n";
     j.levelUp();
     cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+
     cout << "\n================================================Ziua2================================================\n";
     j.showInfo();
-    cout << "In cea de a doua zi observi ca bunicul Neculai a lasat casa 'vraiste'.\n";
+    cout << "In cea de-a doua zi observi ca bunicul Neculai a lasat casa 'vraiste'.\n";
     cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     cout << "Cumva il intelegi ca era foarte ocupat cu treburile sale si de aceea si-a luat si el o bine-meritata vacanta.\n";
@@ -149,20 +150,25 @@ int main() {
     cout << "=======================================================================================================\n";
     cout << "Cum ai aranja datoriile?\n1 - Spala WC\n2 - Du gunoiul\n3 - Spala aragazul\n4 - Da cu aspiratorul\n(Nota: Scrie nuamrul de ordine al task-urilor separate prin caracterul spatiu!)\n";
     cout << "Ordinea mea: ";
-    int ordineaTa[4] = {0};
+    int ordineaTa[4] = {0}, ordineaMea[4] = {3, 4, 1, 2};;
     int punctajObtinut = 0;
     for (int i = 0; i < 4; i++) {
         cin >> ordineaTa[i];
+        if (ordineaMea[i] == ordineaTa[i]) {
+            punctajObtinut++;
+        }
     }
     cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
-    cout << "Ordinea aleasa de tine este: ";
-    for (int i = 0; i < 4; i++) {
-        cout << ordineaTa[i] << " ";
-    }
-    cout << "\nApasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    cout << "Bravo! Ai reusit sa faci " << punctajObtinut << " din cele 4 taskuri.\n";
+    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     cout << "Chiar daca ziua a doua a fost mai obositoare, s-a meritata sa castigi " << punctajObtinut << " nivel(e)!\n"; 
+    j.levelUp(punctajObtinut);
+    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+
+    cout << "\n================================================Ziua3================================================\n";
+    j.showInfo();
 
     return 0;
 }
