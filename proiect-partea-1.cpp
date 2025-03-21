@@ -65,6 +65,16 @@ public:
         nivelJucator += contor;
         cout << "Hurray! A mai trecut o zi! Ai atins nivelul " << nivelJucator << "." << endl;
     }
+    // TODO: test if it is works;
+    bool continueGame() {
+        bool continuaJoc = false;
+        cout << "Apasa 1 pentru a continua: ";
+        cin >> continuaJoc; 
+        if (!continuaJoc) {
+            return false;
+        }
+        return true;
+    }
 };
 
 class Casa {
@@ -120,7 +130,8 @@ int main() {
     Jucator j;
     char numeleTau[80];
     cout << "Fiind prima zi, intalnesti un vecin care s-a mutat de curand la ferma...\n";
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    // cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if(!j.continueGame()) return 0;
     cin.get(); /// golim buffer-ul
     if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
@@ -129,24 +140,24 @@ int main() {
     j.setName(numeleTau);
     cout << "=======================================================================================================\n";
     cout << "[George]: " << numeleTau << ", ce nume frumos! Imi pare bine sa te intalnesc pe aici, " << numeleTau << "! \nEu sunt George Petru.\n";
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     j.levelUp();
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
 
     cout << "\n================================================Ziua2================================================\n";
     j.showInfo();
     cout << "In cea de-a doua zi observi ca bunicul Neculai a lasat casa 'vraiste'.\n";
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     cout << "Cumva il intelegi ca era foarte ocupat cu treburile sale si de aceea si-a luat si el o bine-meritata vacanta.\n";
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     cout << "Prin urmare, decizi sa dai o mana de ajutor.\n";
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     cout << "Vazand pe usa frigiderului o lista de task-uri, observi, insa, ca nu sunt aranjate.\n";
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     cout << "Cum ai aranja datoriile?\n1 - Spala WC\n2 - Du gunoiul\n3 - Spala aragazul\n4 - Da cu aspiratorul\n(Nota: Scrie nuamrul de ordine al task-urilor separate prin caracterul spatiu!)\n";
     cout << "Ordinea mea: ";
@@ -158,14 +169,14 @@ int main() {
             punctajObtinut++;
         }
     }
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     cout << "Bravo! Ai reusit sa faci " << punctajObtinut << " din cele 4 taskuri.\n";
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
     cout << "=======================================================================================================\n";
     cout << "Chiar daca ziua a doua a fost mai obositoare, s-a meritata sa castigi " << punctajObtinut << " nivel(e)!\n"; 
     j.levelUp(punctajObtinut);
-    cout << "Apasa 1 pentru a continua: "; cin >> continuaJoc; if (!continuaJoc) return 0;
+    if (!continuaJoc) return 0;
 
     cout << "\n================================================Ziua3================================================\n";
     j.showInfo();
