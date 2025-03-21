@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <cstring>
-// #include <limits> /// numeric_limits pentru a goli buffer-ul insa nu mai e nevoie, ne scapa cin.get()
 using namespace std;
 
 /// Cerinte
@@ -15,7 +14,7 @@ using namespace std;
     DONE cel putin doi constructori cu parametrii
     DONE constructorul de copiere
     DONE desconstructorul
-    TODO forma supraincarcata a operatorului =
+    DONE forma supraincarcata a operatorului =
     TODO supraincarcarea operatorilor pentru stream << si >>
     TODO Fiecare clasa trebuie sa respecte principiul incapsularii datelor (cu setteri si getteri)
     DONE Fiecare clasa trebuie sa aiba cel putin trei atribute (proprietati) iar in tot proiectul sa regasim variabile de urmatoarele tipuri:
@@ -54,28 +53,37 @@ public:
         counterContinueGame = 0;
     }
     /// Constructor cu toti parametrii
-    Joc(int ziDefault = 0, bool gameOverDefault = false, long long counterContinueGameDefault = 0) {
+    Joc(int ziDefault, bool gameOverDefault, long long counterContinueGameDefault) {
         zi = ziDefault;
         gameOver = gameOverDefault;
         counterContinueGame = counterContinueGameDefault;
     }
     /// Constructor cu parametrii
-    Joc(int ziDefault = 0, bool gameOverDefault = false) {
+    Joc(int ziDefault, bool gameOverDefault) {
         zi = ziDefault;
         gameOver = gameOverDefault;
         counterContinueGame = 0;
     }
     /// Constructor cu parametrii
-    Joc(bool gameOverDefault = false, long long counterContinueGameDefault = 0) {
+    Joc(bool gameOverDefault, long long counterContinueGameDefault) {
         zi = 0;
         gameOver = gameOverDefault;
         counterContinueGame = counterContinueGameDefault;
     }
     /// Constructor de copiere
-    Joc(const Jucator& altJoc) {
+    Joc(const Joc& altJoc) {
         zi = altJoc.zi;
-        gameOver = altJucator.gameOver;
+        gameOver = altJoc.gameOver;
         counterContinueGame = altJoc.counterContinueGame;
+    }
+    /// Suprascrierea operatorului egal
+    Joc& operator=(const Joc& altJoc) {
+        if(this != &altJoc) { 
+            zi = altJoc.zi;
+            gameOver = altJoc.gameOver;
+            counterContinueGame = altJoc.counterContinueGame;
+        }
+        return *this;
     }
     /// Destructor
     ~Joc() {
@@ -95,6 +103,21 @@ public:
         }
         return true;
     }
+    /// Supraincarcare operator <<
+    friend ostream& operator<<(ostream& out, const Joc& j) {
+        out << "Game Day: " << j.zi << ", Game Over: " << (j.gameOver ? "DA" : "NU") << ", Game Counter: " << j.counterContinueGame;
+        return out;
+    }
+    /// Supraincarcare operator >>
+    friend istream& operator>>(istream& in, Joc& j) {
+        cout << "Introdu ziua curenta: ";
+        in >> j.zi;
+        cout << "Joc terminat? (1 - DA, 0 - NU): ";
+        in >> j.gameOver;
+        cout << "Introdu un numar ce reprezinta un contor al numarului de continuari ale jocului: ";
+        in >> j.counterContinueGame;
+        return in;
+    }
 };
 
 class Jucator {
@@ -111,21 +134,21 @@ public:
         monede = 0;
     }
     /// Constructor cu toti parametrii
-    Jucator(const char* numeJucatorDefault = "Anonimicel", int nivelJucatorDefault = 0; float monedeDefault = 0) {
+    Jucator(const char* numeJucatorDefault, int nivelJucatorDefault, float monedeDefault) {
         numeJucator = new char[strlen(numeJucatorDefault) + 1];
         strcpy(numeJucator, numeJucatorDefault);
         nivelJucator = nivelJucatorDefault;
         monede = monedeDefault;
     }
     /// Constructor cu parametrii
-    Jucator(const char* numeJucatorDefault = "Anonim", int nivelJucatorDefault = 0) {
+    Jucator(const char* numeJucatorDefault, int nivelJucatorDefault) {
         numeJucator = new char[strlen(numeJucatorDefault) + 1];
         strcpy(numeJucator, numeJucatorDefault);
         nivelJucator = nivelJucatorDefault;
         monede = 0;
     }
     /// Constructor cu parametrii
-    Jucator(int nivelJucatorDefault = 0; float monedeDefault = 0) {
+    Jucator(int nivelJucatorDefault, float monedeDefault) {
         strcpy(numeJucator, "Anonimaroi");
         nivelJucator = nivelJucatorDefault;
         monede = monedeDefault;
@@ -169,6 +192,21 @@ public:
         nivelJucator += contor;
         cout << "Hurray! A mai trecut o zi! In plus, ai mai castigat si " << castig << " monede.\n";
     }
+    /// Supraincarcare operator <<
+    friend ostream& operator<<(ostream& out, const Jucator& j) {
+        out << "Name: " << j.numeJucator << ", Level: " << j.nivelJucator << ", Points: " << j.monede;
+        return out;
+    }
+    /// Supraincarcare operator >>
+    friend istream& operator>>(istream& in, Joc& j) {
+        cout << "Introdu numele jucatorului: ";
+        in >> j.numeJucator;
+        cout << "Cate nivele a terminat?: ";
+        in >> j.nivleJucator;
+        cout << "Cate monede a agonisit?: ";
+        in >> j.monede;
+        return in;
+    }
 };
 
 class Casa {
@@ -183,41 +221,67 @@ public:
         nivelComfort = 0;
         venitChirie = 0;
         taxe = 0;
-        listaReparatii = nullptr;
+        listaReparatii[0] = 'e';
     }
     /// Constructor cu toti parametrii
-    Casa(int nivelComfortInitial = 0, int venitChirieInitial = 0, float taxeInitial = 0, char listaReparatiiInitial = nullptr) {
+    Casa(int nivelComfortInitial = 0, int venitChirieInitial = 0, float taxeInitial = 0, char listaReparatiiInitial = 'e') {
         nivelComfort = nivelComfortInitial;
         venitChirie = venitChirieInitial;
         taxe = taxeInitial;
-        listaReparatii = listaReparatiiInitial;
+        listaReparatii[0] = listaReparatiiInitial;
     }
     /// Constructor cu parametrii
     Casa(int nivelComfortInitial = 0, int venitChirieInitial = 0) {
         nivelComfort = nivelComfortInitial;
         venitChirie = venitChirieInitial;
         taxe = 0;
-        listaReparatii = nullptr;
+        listaReparatii[0] = 'e';
     }
     /// Constructor cu parametrii
-    Casa(float taxeInitial = 0, char listaReparatiiInitial = nullptr) {
+    Casa(float taxeInitial = 0, char listaReparatiiInitial = 'e') {
         nivelComfort = 0;
         venitChirie = 0;
         taxe = taxeInitial;
-        listaReparatii = listaReparatiiInitial;
+        listaReparatii[0] = listaReparatiiInitial;
     }
     /// Constructor de copiere
     Casa(const Casa& altaCasa) {
         nivelComfort = altaCasa.nivelComfort;
         venitChirie = altaCasa.venitChirie;
         taxe = altaCasa.taxe;
-        listaReparatii = altaCasa.listaReparatii;
+        listaReparatii[0] = altaCasa.listaReparatii[0];
+    }
+    /// Suprascrierea operatorului egal
+    Casa& operator=(const Casa& altaCasa) {
+        if(this != &altaCasa) { 
+            nivelComfort = altaCasa.nivelComfort;
+            venitChirie = altaCasa.venitChirie;
+            taxe = altaCasa.taxe;
+            listaReparatii[0] = altaCasa.listaReparatii[0];
+        }
+        return *this;
     }
     /// Destructor
     ~Casa() {
         cout << "Casa s-a prabusit.\n";
     }
-    /// Afiseaza informatiile despre casa: nivelComfort, listaReparatii, venitChirie, taxe
+    /// Supraincarcare operator <<
+    friend ostream& operator<<(ostream& out, const Casa& c) {
+        out << "Nivel comfort: " << c.nivelComfort << ", Venit chirie: " << c.venitChirie << ", Taxe: " << c.taxe << ", Lista reparatii: " << c.listaReparatii[0];
+        return out;
+    }
+    /// Supraincarcare operator >>
+    friend istream& operator>>(istream& in, Casa& c) {
+        cout << "Introdu nivelul de comfort: ";
+        in >> c.nivelComfort;
+        cout << "Introdu venit chirie: ";
+        in >> c.venitChirie;
+        cout << "Introdu taxe: ";
+        in >> c.taxe;
+        cout << "Introdu lista reparatii: ";
+        in >> c.listaReparatii[0];
+        return in;
+    }
 };
 
 class Teren {
@@ -241,7 +305,7 @@ public:
     }
     /// Constructor cu toti parametrii
     Teren(int nivelIngrasamantInitial = 0, int nivelProductieInitial = 0, float venitInitial = 0, float taxeInitial = 0, long long resurseGrauInitial = 0, long long resurseCartofiInitial = 0, long long resurseMorcoviInitial = 0, int* niveleApaInitial = nullptr) {
-        nivelIngrasamant = nivelComfortInitial;
+        nivelIngrasamant = nivelIngrasamantInitial;
         nivelProductie = nivelProductieInitial;
         venit = venitInitial;
         taxe = taxeInitial;
@@ -283,11 +347,49 @@ public:
         resurseMorcovi = altTeren.resurseMorcovi;
         niveleApa = altTeren.niveleApa;
     }
+    /// Suprascrierea operatorului egal
+    Teren& operator=(const Teren& altTeren) {
+        if(this != &altTeren) { 
+            nivelIngrasamant = altTeren.nivelIngrasamant;
+            nivelProductie = altTeren.nivelProductie;
+            venit = altTeren.venit;
+            taxe = altTeren.taxe;
+            resurseGrau = altTeren.resurseGrau;
+            resurseCartofi = altTeren.resurseCartofi;
+            resurseMorcovi = altTeren.resurseMorcovi;
+            niveleApa = altTeren.niveleApa;
+        }
+        return *this;
+    }
     /// Destructor
     ~Teren() {
         cout << "Terenul a fost inundat\n";
     }
-    /// Afiseaza informatiile despre teren: nivelIngrasamant, nivelProductie, niveleApa, resurseGrau, resurseCartofi, resurse morcovi, venit, taxe
+    /// Supraincarcare operator <<
+    friend ostream& operator<<(ostream& out, const Teren& t) {
+        out << "Nivel ingrasamant: " << c.nivelIngrasamant << ", nivel productie: " << c.nivelProductie << ", nivlee apa: " << c.niveleApa[0] << ", resurse grau: " << c.resurseGrau << ",resurse cartofi: " << c.resurseCartofi << << ", resurse morcovi: " c.resurseMorcovi << ", venit: " << c.venit << ", taxe: " << c.taxe;
+        return out;
+    }
+    /// Supraincarcare operator >>
+    friend istream& operator>>(istream& in, Casa& c) {
+        cout << "Introdu nivel ingrasamant: ";
+        in >> c.nivelIngrasamant;
+        cout << "Introdu nivel productie: ";
+        in >> c.nivelProductie;
+        cout << "Introdu nivele apa: ";
+        in >> c.niveleApa[0];
+        cout << "Introdu resurse grau: ";
+        in >> c.resurseGrau;
+        cout << "Introdu resurse cartofi: ";
+        in >> c.resurseCartofi;
+        cout << "Introdu resurse morcovi: ";
+        in >> c.resurseMorcovi;
+        cout << "Introdu venit: ";
+        in >> c.venit;
+        cout << "Introdu taxe: ";
+        in >> c.taxe;
+        return in;
+    }
 };
 
 class Tarc {
@@ -331,11 +433,39 @@ public:
         resurseHrana = altTarc.resurseHrana;
         venit = altTarc.venit;
     }
+    /// Suprascrierea operatorului egal
+    Tarc& operator=(const Tarc& altTarc) {
+        if(this != &altTarc) { 
+            capacitateAnimale = altTarc.capacitateAnimale;
+            resurseIgiena = altTarc.resurseIgiena;
+            resurseHrana = altTarc.resurseHrana;
+            venit = altTarc.venit;
+        }
+        return *this;
+    }
     /// Destructor
     ~Tarc() {
         cout << "Tarcul a fost spart.\n";
     }
     /// Afiseaza informatiile despre tarc: capacitateAnimale, resurseIgiena, resurseHrana, venit
+    /// Supraincarcare operator <<
+    friend ostream& operator<<(ostream& out, const Tarc& f) {
+        out << "Capacitate animale: " << f.capacitateAnimale << ", resurse igiena: " << f.resurseIgiena << ", resurse hrana: " << f.resurseHrana << ", venit: " << f.venit;
+        return out;
+    }
+
+    /// Supraincarcare operator >>
+    friend istream& operator>>(istream& in, Joc& j) {
+        cout << "Introdu capacitate animale: ";
+        in >> f.capacitateAnimale;
+        cout << "Introdu resurse igiena: ";
+        in >> f.resurseIgiena;
+        cout << "Introdu resurse hrana: ";
+        in >> f.resurseHrana;
+        cout << "Introdu venit: ";
+        in >> f.venit;
+        return in;
+    }
 };
 
 int main() {
