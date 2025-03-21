@@ -10,17 +10,17 @@ using namespace std;
     DONE Minim patru clase
     DONE Fiecare clasa are cel putin o functionalitate (daca am o clasa de tip Agenda atunci aceasta ar putea afisa datele disponibile dintr-o anumita luna)
     TODO Fiecare clasa trebuie sa implementeaze: 
-    TODO constructorul fara parametrii
-    TODO constructorul cu toti parametrii
-    TODO cel putin doi constructori cu parametrii
-    TODO constructorul de copiere
-    TODO desconstructorul
+    DONE constructorul fara parametrii
+    DONE constructorul cu toti parametrii
+    DONE cel putin doi constructori cu parametrii
+    DONE constructorul de copiere
+    DONE desconstructorul
     TODO forma supraincarcata a operatorului =
     TODO supraincarcarea operatorilor pentru stream << si >>
     TODO Fiecare clasa trebuie sa respecte principiul incapsularii datelor (cu setteri si getteri)
-    TODO Fiecare clasa trebuie sa aiba cel putin trei atribute (proprietati) iar in tot proiectul sa regasim variabile de urmatoarele tipuri:
+    DONE Fiecare clasa trebuie sa aiba cel putin trei atribute (proprietati) iar in tot proiectul sa regasim variabile de urmatoarele tipuri:
     DONE int sau long long
-    TODO bool
+    DONE bool
     DONE char*
     DONE float
     DONE char
@@ -43,11 +43,41 @@ using namespace std;
 class Joc {
 private:
     int zi;
+    bool gameOver;
+    long long counterContinueGame;
 protected:
 public:
+    /// Constructor fara parametrii
     Joc() {
         zi = 0;
+        gameOver = false;
+        counterContinueGame = 0;
     }
+    /// Constructor cu toti parametrii
+    Joc(int ziDefault = 0, bool gameOverDefault = false, long long counterContinueGameDefault = 0) {
+        zi = ziDefault;
+        gameOver = gameOverDefault;
+        counterContinueGame = counterContinueGameDefault;
+    }
+    /// Constructor cu parametrii
+    Joc(int ziDefault = 0, bool gameOverDefault = false) {
+        zi = ziDefault;
+        gameOver = gameOverDefault;
+        counterContinueGame = 0;
+    }
+    /// Constructor cu parametrii
+    Joc(bool gameOverDefault = false, long long counterContinueGameDefault = 0) {
+        zi = 0;
+        gameOver = gameOverDefault;
+        counterContinueGame = counterContinueGameDefault;
+    }
+    /// Constructor de copiere
+    Joc(const Jucator& altJoc) {
+        zi = altJoc.zi;
+        gameOver = altJucator.gameOver;
+        counterContinueGame = altJoc.counterContinueGame;
+    }
+    /// Destructor
     ~Joc() {
         cout << "GameOver!\n";
     }
@@ -69,20 +99,63 @@ public:
 
 class Jucator {
 private:
-    char numeJucator[80];
+    char* numeJucator;
     int nivelJucator;
     float monede;
 protected:
 public:
+    /// Constructor fara parametrii
     Jucator() {
-        strcpy(numeJucator, "Anonim");
+        strcpy(numeJucator, "Anonimus");
         nivelJucator = 0;
         monede = 0;
     }
+    /// Constructor cu toti parametrii
+    Jucator(const char* numeJucatorDefault = "Anonimicel", int nivelJucatorDefault = 0; float monedeDefault = 0) {
+        numeJucator = new char[strlen(numeJucatorDefault) + 1];
+        strcpy(numeJucator, numeJucatorDefault);
+        nivelJucator = nivelJucatorDefault;
+        monede = monedeDefault;
+    }
+    /// Constructor cu parametrii
+    Jucator(const char* numeJucatorDefault = "Anonim", int nivelJucatorDefault = 0) {
+        numeJucator = new char[strlen(numeJucatorDefault) + 1];
+        strcpy(numeJucator, numeJucatorDefault);
+        nivelJucator = nivelJucatorDefault;
+        monede = 0;
+    }
+    /// Constructor cu parametrii
+    Jucator(int nivelJucatorDefault = 0; float monedeDefault = 0) {
+        strcpy(numeJucator, "Anonimaroi");
+        nivelJucator = nivelJucatorDefault;
+        monede = monedeDefault;
+    }
+    /// Constructor de copiere
+    Jucator(const Jucator& altJucator) {
+        numeJucator = new char[strlen(altJucator.numeJucator) + 1];
+        strcpy(numeJucator, altJucator.numeJucator);
+        nivelJucator = altJucator.nivelJucator;
+        monede = altJucator.monede;
+    }
+    /// Suprascrierea operatorului egal
+    Jucator& operator=(const Jucator& altJucator) {
+        if(this != &altJucator) { /// skip pentru j = j, de exemplu
+            delete[] numeJucator;
+            numeJucator = new char[strlen(altJucator.numeJucator) + 1];
+            strcpy(numeJucator, altJucator.numeJucator);
+            nivelJucator = altJucator.nivelJucator;
+            monede = altJucator.monede;
+        }
+        return *this;
+    }
+    /// Destructor
     ~Jucator() {
         cout << numeJucator << " a iesit din joc avand nivelul " << nivelJucator << endl;
+        delete[] numeJucator;
     }
     void setName(const char* nume = "Abel Diriclet") {
+        delete[] numeJucator;
+        numeJucator = new char[strlen(nume) + 1];
         strcpy(numeJucator, nume);
     }
     void showInfo() {
@@ -102,10 +175,49 @@ class Casa {
 private:
     int nivelComfort, venitChirie;
     float taxe;
-    char nivelReparatii[80];
+    char listaReparatii[80];
 protected:
 public:
-    /// Afiseaza informatiile despre casa: nivelComfort, nivelReparatii, venitChirie, taxe
+    /// Constructor fara parametrii
+    Casa() {
+        nivelComfort = 0;
+        venitChirie = 0;
+        taxe = 0;
+        listaReparatii = nullptr;
+    }
+    /// Constructor cu toti parametrii
+    Casa(int nivelComfortInitial = 0, int venitChirieInitial = 0, float taxeInitial = 0, char listaReparatiiInitial = nullptr) {
+        nivelComfort = nivelComfortInitial;
+        venitChirie = venitChirieInitial;
+        taxe = taxeInitial;
+        listaReparatii = listaReparatiiInitial;
+    }
+    /// Constructor cu parametrii
+    Casa(int nivelComfortInitial = 0, int venitChirieInitial = 0) {
+        nivelComfort = nivelComfortInitial;
+        venitChirie = venitChirieInitial;
+        taxe = 0;
+        listaReparatii = nullptr;
+    }
+    /// Constructor cu parametrii
+    Casa(float taxeInitial = 0, char listaReparatiiInitial = nullptr) {
+        nivelComfort = 0;
+        venitChirie = 0;
+        taxe = taxeInitial;
+        listaReparatii = listaReparatiiInitial;
+    }
+    /// Constructor de copiere
+    Casa(const Casa& altaCasa) {
+        nivelComfort = altaCasa.nivelComfort;
+        venitChirie = altaCasa.venitChirie;
+        taxe = altaCasa.taxe;
+        listaReparatii = altaCasa.listaReparatii;
+    }
+    /// Destructor
+    ~Casa() {
+        cout << "Casa s-a prabusit.\n";
+    }
+    /// Afiseaza informatiile despre casa: nivelComfort, listaReparatii, venitChirie, taxe
 };
 
 class Teren {
@@ -116,7 +228,66 @@ private:
     int* niveleApa;
 protected:
 public:
-    /// Afiseaza informatiile despre teren: nivelIngrasamant, nivelProductie, nivelApa, resurseGrau, resurseCartofi, resurse morcovi, venit, taxe
+    /// Constructor fara parametrii
+    Teren() {
+        nivelIngrasamant = 0;
+        nivelProductie = 0;
+        venit = 0;
+        taxe = 0;
+        resurseGrau = 0;
+        resurseCartofi = 0;
+        resurseMorcovi = 0;
+        niveleApa = {0};
+    }
+    /// Constructor cu toti parametrii
+    Teren(int nivelIngrasamantInitial = 0, int nivelProductieInitial = 0, float venitInitial = 0, float taxeInitial = 0, long long resurseGrauInitial = 0, long long resurseCartofiInitial = 0, long long resurseMorcoviInitial = 0, int* niveleApaInitial = nullptr) {
+        nivelIngrasamant = nivelComfortInitial;
+        nivelProductie = nivelProductieInitial;
+        venit = venitInitial;
+        taxe = taxeInitial;
+        resurseGrau = resurseGrauInitial;
+        resurseCartofi = resurseCartofiInitial;
+        resurseMorcovi = resurseMorcoviInitial;
+        niveleApa = niveleApaInitial;
+    }
+    /// Constructor cu parametrii
+    Teren(int nivelIngrasamantInitial = 0, int nivelProductieInitial = 0) {
+        nivelIngrasamant = nivelIngrasamantInitial;
+        nivelProductie = nivelProductieInitial;
+        venit = 0;
+        taxe = 0;
+        resurseGrau = 0;
+        resurseCartofi = 0;
+        resurseMorcovi = 0;
+        niveleApa = {0};
+    }
+    /// Constructor cu parametrii
+    Teren(long long resurseMorcoviInitial = 0, int* niveleApaInitial = nullptr) {
+        nivelIngrasamant = 0;
+        nivelProductie = 0;
+        venit = 0;
+        taxe = 0;
+        resurseGrau = 0;
+        resurseCartofi = 0;
+        resurseMorcovi = resurseMorcoviInitial;
+        niveleApa = nullptr;
+    }
+    /// Constructor de copiere
+    Teren(const Teren& altTeren) {
+        nivelIngrasamant = altTeren.nivelIngrasamant;
+        nivelProductie = altTeren.nivelProductie;
+        venit = altTeren.venit;
+        taxe = altTeren.taxe;
+        resurseGrau = altTeren.resurseGrau;
+        resurseCartofi = altTeren.resurseCartofi;
+        resurseMorcovi = altTeren.resurseMorcovi;
+        niveleApa = altTeren.niveleApa;
+    }
+    /// Destructor
+    ~Teren() {
+        cout << "Terenul a fost inundat\n";
+    }
+    /// Afiseaza informatiile despre teren: nivelIngrasamant, nivelProductie, niveleApa, resurseGrau, resurseCartofi, resurse morcovi, venit, taxe
 };
 
 class Tarc {
@@ -125,16 +296,46 @@ private:
     float venit;
 protected:
 public:
+    /// Constructor fara parametrii
+    Tarc() {
+        capacitateAnimale = 0;
+        resurseIgiena = 0;
+        resurseHrana = 0;
+        venit = 0;
+    }
+    /// Constructor cu toti parametrii
+    Tarc(int capacitateAnimaleInitial = 0, int resurseIgienaInitial = 0, int resurseHranaInitial = 0, float venitInitial = 0) {
+        capacitateAnimale = capacitateAnimaleInitial;
+        resurseIgiena = resurseIgienaInitial;
+        resurseHrana = resurseHranaInitial;
+        venit = venitInitial;
+    }
+    /// Constructor cu parametrii
+    Tarc(int capacitateAnimaleInitial = 0, int resurseIgienaInitial = 0) {
+        capacitateAnimale = capacitateAnimaleInitial;
+        resurseIgiena = resurseIgienaInitial;
+        resurseHrana = 0;
+        venit = 0;
+    }
+    /// Constructor cu parametrii
+    Tarc(int resurseHranaInitial = 0, float venitInitial = 0) {
+        capacitateAnimale = 0;
+        resurseIgiena = 0;
+        resurseHrana = resurseHranaInitial;
+        venit = venitInitial;
+    }
+    /// Constructor de copiere
+    Tarc(const Tarc& altTarc) {
+        capacitateAnimale = altTarc.capacitateAnimale;
+        resurseIgiena = altTarc.resurseIgiena;
+        resurseHrana = altTarc.resurseHrana;
+        venit = altTarc.venit;
+    }
+    /// Destructor
+    ~Tarc() {
+        cout << "Tarcul a fost spart.\n";
+    }
     /// Afiseaza informatiile despre tarc: capacitateAnimale, resurseIgiena, resurseHrana, venit
-};
-
-class Tractor {
-private:
-    int nivelBenzina, itp;
-    char* reparatii[8];
-protected:
-public:
-    /// Afiseaza informatiile despre tactor: nivelBenzina, reparatii, itp
 };
 
 int main() {
@@ -190,6 +391,7 @@ int main() {
     cout << "Bravo! Ai reusit sa faci " << punctajObtinut << " din cele 4 taskuri.\n";
     if(!g.continueGame()) return 0;
     cout << "Chiar daca ziua a doua a fost mai obositoare, s-a meritata sa castigi " << punctajObtinut << " nivel(e)!\n"; 
+    if(!g.continueGame()) return 0;
     j.levelUp(punctajObtinut);
     if(!g.continueGame()) return 0;
     j.showInfo();
