@@ -15,7 +15,7 @@ using namespace std;
     DONE constructorul de copiere
     DONE desconstructorul
     DONE forma supraincarcata a operatorului =
-    TODO supraincarcarea operatorilor pentru stream << si >>
+    DONE supraincarcarea operatorilor pentru stream << si >>
     TODO Fiecare clasa trebuie sa respecte principiul incapsularii datelor (cu setteri si getteri)
     DONE Fiecare clasa trebuie sa aiba cel putin trei atribute (proprietati) iar in tot proiectul sa regasim variabile de urmatoarele tipuri:
     DONE int sau long long
@@ -38,87 +38,6 @@ using namespace std;
 
 /// Ideea jocului: Bunicul Neculai este plecat intr-o vacanta la munte. De aceea, te-a rugat sa te ocupi de ferma lui pentru cateva saptamani. Crezi ca vei face fata?
 /// Gameplay: Fiecare actiune este realizata pe parcursul unei zile. Dupa un anumit numar se zile se intampla nush ce.
-
-class Joc {
-private:
-    int zi;
-    bool gameOver;
-    long long counterContinueGame;
-protected:
-public:
-    /// Constructor fara parametrii
-    Joc() {
-        zi = 0;
-        gameOver = false;
-        counterContinueGame = 0;
-    }
-    /// Constructor cu toti parametrii
-    Joc(int ziDefault, bool gameOverDefault, long long counterContinueGameDefault) {
-        zi = ziDefault;
-        gameOver = gameOverDefault;
-        counterContinueGame = counterContinueGameDefault;
-    }
-    /// Constructor cu parametrii
-    Joc(int ziDefault, bool gameOverDefault) {
-        zi = ziDefault;
-        gameOver = gameOverDefault;
-        counterContinueGame = 0;
-    }
-    /// Constructor cu parametrii
-    Joc(bool gameOverDefault, long long counterContinueGameDefault) {
-        zi = 0;
-        gameOver = gameOverDefault;
-        counterContinueGame = counterContinueGameDefault;
-    }
-    /// Constructor de copiere
-    Joc(const Joc& altJoc) {
-        zi = altJoc.zi;
-        gameOver = altJoc.gameOver;
-        counterContinueGame = altJoc.counterContinueGame;
-    }
-    /// Suprascrierea operatorului egal
-    Joc& operator=(const Joc& altJoc) {
-        if(this != &altJoc) { 
-            zi = altJoc.zi;
-            gameOver = altJoc.gameOver;
-            counterContinueGame = altJoc.counterContinueGame;
-        }
-        return *this;
-    }
-    /// Destructor
-    ~Joc() {
-        cout << "GameOver!\n";
-    }
-    void showDay() {
-        cout << "\n===============================================Ziua" << zi++ << "===============================================\n";
-    }
-    bool continueGame() {
-        bool continuaJoc = false;
-        cout << "Apasa 1 pentru a continua: ";
-        cin >> continuaJoc; 
-        cin.get();
-        cout << "===================================================================================================\n";
-        if (!continuaJoc) {
-            return false;
-        }
-        return true;
-    }
-    /// Supraincarcare operator <<
-    friend ostream& operator<<(ostream& out, const Joc& j) {
-        out << "Game Day: " << j.zi << ", Game Over: " << (j.gameOver ? "DA" : "NU") << ", Game Counter: " << j.counterContinueGame;
-        return out;
-    }
-    /// Supraincarcare operator >>
-    friend istream& operator>>(istream& in, Joc& j) {
-        cout << "Introdu ziua curenta: ";
-        in >> j.zi;
-        cout << "Joc terminat? (1 - DA, 0 - NU): ";
-        in >> j.gameOver;
-        cout << "Introdu un numar ce reprezinta un contor al numarului de continuari ale jocului: ";
-        in >> j.counterContinueGame;
-        return in;
-    }
-};
 
 class Jucator {
 private:
@@ -182,9 +101,9 @@ public:
         strcpy(numeJucator, nume);
     }
     void showInfo() {
-        cout << "---------------------------------------------------------------------------------------------------\n";
-        cout << "Jucator: " << numeJucator << " | Nivel: " << nivelJucator << " | Monede: " << monede << endl;
-        cout << "---------------------------------------------------------------------------------------------------\n";
+        cout << "-Jucator-----------------------------------------------------------------------------------------\n";
+        cout << "Nume: " << numeJucator << " | Nivel: " << nivelJucator << " | Monede: " << monede << endl;
+        cout << "-------------------------------------------------------------------------------------------------\n";
     }
     void levelUp(int contor = 1) {
         int castig = 20 * contor;
@@ -198,13 +117,126 @@ public:
         return out;
     }
     /// Supraincarcare operator >>
-    friend istream& operator>>(istream& in, Joc& j) {
+    friend istream& operator>>(istream& in, Jucator& j) {
         cout << "Introdu numele jucatorului: ";
         in >> j.numeJucator;
         cout << "Cate nivele a terminat?: ";
-        in >> j.nivleJucator;
+        in >> j.nivelJucator;
         cout << "Cate monede a agonisit?: ";
         in >> j.monede;
+        return in;
+    }
+};
+
+class Joc {
+private:
+    int zi;
+    bool gameOver;
+    long long counterContinueGame;
+protected:
+public:
+    /// Constructor fara parametrii
+    Joc() {
+        zi = 0;
+        gameOver = false;
+        counterContinueGame = 0; /// fiecare incrementare ar fi echivalentul a trecerii unei ore, realizez ca nu prea are sens insa trebe folosit si getter-ul, right?
+    }
+    /// Constructor cu toti parametrii
+    Joc(int ziDefault, bool gameOverDefault, long long counterContinueGameDefault) {
+        zi = ziDefault;
+        gameOver = gameOverDefault;
+        counterContinueGame = counterContinueGameDefault;
+    }
+    /// Constructor cu parametrii
+    Joc(int ziDefault, bool gameOverDefault) {
+        zi = ziDefault;
+        gameOver = gameOverDefault;
+        counterContinueGame = 0;
+    }
+    /// Constructor cu parametrii
+    Joc(bool gameOverDefault, long long counterContinueGameDefault) {
+        zi = 0;
+        gameOver = gameOverDefault;
+        counterContinueGame = counterContinueGameDefault;
+    }
+    /// Constructor de copiere
+    Joc(const Joc& altJoc) {
+        zi = altJoc.zi;
+        gameOver = altJoc.gameOver;
+        counterContinueGame = altJoc.counterContinueGame;
+    }
+    /// Suprascrierea operatorului egal
+    Joc& operator=(const Joc& altJoc) {
+        if(this != &altJoc) { 
+            zi = altJoc.zi;
+            gameOver = altJoc.gameOver;
+            counterContinueGame = altJoc.counterContinueGame;
+        }
+        return *this;
+    }
+    /// Destructor
+    ~Joc() {
+        cout << "GameOver!\n";
+    }
+    /// Getter
+    long long getCounterContiuneGame() {
+        return counterContinueGame;
+    }
+    void showDay() {
+        cout << "\n==============================================Ziua" << zi++ << "==============================================\n";
+    }
+    void continueGame() {
+        char continuaJoc = '1';
+        cout << "Apasa 1 pentru a continua jocul: ";
+        cin >> continuaJoc;
+        cin.ignore(1000, '\n'); /// eliminam \n din citirea anterioara 
+        if (continuaJoc != '1') {
+            cout << "Iesire din joc ...\n";
+            exit(0); /// inchidem programul
+        }
+        cout << "=================================================================================================\n";
+    }
+    void menu(Joc& g, Jucator& j) { /// referintele obiectelor
+        bool ruleazaMeniu = true;
+        while (ruleazaMeniu) {
+            int optiune = 0;
+            cout << "\n Meniu-------------------------------------------------------------------------------------------\n";
+            cout << "| 1 - Continua jocul | 2 - Despre jucator | 3 - Afla orele petrecute la ferma | 4 - Iesi din joc |\n";
+            cout << " ------------------------------------------------------------------------------------------------\n";
+            cout << "Alege o optiune din cele de mai sus [1,4]: ";
+            cin >> optiune;
+            switch (optiune) {
+                case 1:
+                    ruleazaMeniu = false;
+                    break;
+                case 2:
+                    j.showInfo();
+                    break;
+                case 3:
+                    cout << "Ai petrecut " << g.getCounterContiuneGame() << " ore la ferma bunicului!\n";
+                    break;
+                case 4:
+                    cout << "Iesire din joc ...\n";
+                    exit(0); /// termina complet programul
+                default:
+                    cout << "Nu inteleg ce vrei sa faci! Alege un numar intre 1 si 4: ";
+            }
+        }
+        cout << "=================================================================================================\n";
+    }
+    /// Supraincarcare operator <<
+    friend ostream& operator<<(ostream& out, const Joc& j) {
+        out << "Game Day: " << j.zi << ", Game Over: " << (j.gameOver ? "DA" : "NU") << ", Game Counter: " << j.counterContinueGame;
+        return out;
+    }
+    /// Supraincarcare operator >>
+    friend istream& operator>>(istream& in, Joc& j) {
+        cout << "Introdu ziua curenta: ";
+        in >> j.zi;
+        cout << "Joc terminat? (1 - DA, 0 - NU): ";
+        in >> j.gameOver;
+        cout << "Introdu un numar ce reprezinta un contor al numarului de continuari ale jocului: ";
+        in >> j.counterContinueGame;
         return in;
     }
 };
@@ -367,27 +399,27 @@ public:
     }
     /// Supraincarcare operator <<
     friend ostream& operator<<(ostream& out, const Teren& t) {
-        out << "Nivel ingrasamant: " << c.nivelIngrasamant << ", nivel productie: " << c.nivelProductie << ", nivlee apa: " << c.niveleApa[0] << ", resurse grau: " << c.resurseGrau << ",resurse cartofi: " << c.resurseCartofi << << ", resurse morcovi: " c.resurseMorcovi << ", venit: " << c.venit << ", taxe: " << c.taxe;
+        out << "Nivel ingrasamant: " << t.nivelIngrasamant << ", nivel productie: " << t.nivelProductie << ", nivlee apa: " << t.niveleApa[0] << ", resurse grau: " << t.resurseGrau << ",resurse cartofi: " << t.resurseCartofi << ", resurse morcovi: " << t.resurseMorcovi << ", venit: " << t.venit << ", taxe: " << t.taxe;
         return out;
     }
     /// Supraincarcare operator >>
-    friend istream& operator>>(istream& in, Casa& c) {
+    friend istream& operator>>(istream& in, Teren& t) {
         cout << "Introdu nivel ingrasamant: ";
-        in >> c.nivelIngrasamant;
+        in >> t.nivelIngrasamant;
         cout << "Introdu nivel productie: ";
-        in >> c.nivelProductie;
+        in >> t.nivelProductie;
         cout << "Introdu nivele apa: ";
-        in >> c.niveleApa[0];
+        in >> t.niveleApa[0];
         cout << "Introdu resurse grau: ";
-        in >> c.resurseGrau;
+        in >> t.resurseGrau;
         cout << "Introdu resurse cartofi: ";
-        in >> c.resurseCartofi;
+        in >> t.resurseCartofi;
         cout << "Introdu resurse morcovi: ";
-        in >> c.resurseMorcovi;
+        in >> t.resurseMorcovi;
         cout << "Introdu venit: ";
-        in >> c.venit;
+        in >> t.venit;
         cout << "Introdu taxe: ";
-        in >> c.taxe;
+        in >> t.taxe;
         return in;
     }
 };
@@ -455,7 +487,7 @@ public:
     }
 
     /// Supraincarcare operator >>
-    friend istream& operator>>(istream& in, Joc& j) {
+    friend istream& operator>>(istream& in, Tarc& f) {
         cout << "Introdu capacitate animale: ";
         in >> f.capacitateAnimale;
         cout << "Introdu resurse igiena: ";
@@ -471,42 +503,44 @@ public:
 int main() {
     /// Ziua 0
     Joc g; /// g de la game, j e luat pentru jucator :)
+    Jucator j; /// j de la jucator, bineinteles :)
+    bool continuaJoc = true;
     g.showDay();
     cout << "Bunicul Neculai este plecat intr-o vacanta la munte.\n";
-    if(!g.continueGame()) return 0;
+    g.continueGame();
     cout << "De aceea, te-a rugat pe tine sa te ocupi de ferma lui pentru cateva saptamani.\n";
-    if(!g.continueGame()) return 0;
+    g.continueGame();
     cout << "Crezi ca vei face fata?\n";
-    if(!g.continueGame()) return 0;
+    g.continueGame();
 
     /// Ziua 1
-    Jucator j;
     char numeleTau[80];
     g.showDay();
     cout << "Fiind prima zi, intalnesti un vecin care s-a mutat de curand la ferma...\n";
-    if(!g.continueGame()) return 0;
-    cout << "[Noul vecin]: Sal'tare tinere! Care-ti este numele dumitale?" << endl;
+    g.continueGame();
+    cout << "[Noul vecin]: Sal'tare tinere! Care-ti este numele dumitale?\n";
     cin.getline(numeleTau, 80); /// getline for "Irimia David" and get for "Irimia", for example
+    cin.get(); /// golim buffer-ul
     j.setName(numeleTau);
-    if(!g.continueGame()) return 0;
+    g.continueGame();
     cout << "[Noul vecin]: " << numeleTau << ", ce nume frumos! Imi pare bine sa te intalnesc pe aici, " << numeleTau << "!\n";
-    if(!g.continueGame()) return 0;
+    g.continueGame();
     cout << "[Noul vecin]: Eu sunt George Petru.\n";
-    if(!g.continueGame()) return 0;
+    g.continueGame();
     j.levelUp();
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     j.showInfo();
 
     /// Ziua 2
     g.showDay();
     cout << "In cea de-a doua zi observi ca bunicul Neculai a lasat casa 'vraiste'.\n";
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     cout << "Cumva il intelegi ca era foarte ocupat cu treburile sale si de aceea si-a luat si el o bine-meritata vacanta.\n";
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     cout << "Prin urmare, decizi sa dai o mana de ajutor.\n";
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     cout << "Vazand pe usa frigiderului o lista de task-uri, observi, insa, ca nu sunt aranjate.\n";
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     cout << "Cum ai aranja datoriile?\n1 - Spala WC\n2 - Du gunoiul\n3 - Spala aragazul\n4 - Da cu aspiratorul\n(Nota: Scrie nuamrul de ordine al task-urilor separate prin caracterul spatiu!)\n";
     cout << "Ordinea mea: ";
     int ordineaTa[4] = {0}, ordineaMea[4] = {3, 4, 1, 2};;
@@ -517,13 +551,13 @@ int main() {
             punctajObtinut++;
         }
     }
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     cout << "Bravo! Ai reusit sa faci " << punctajObtinut << " din cele 4 taskuri.\n";
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     cout << "Chiar daca ziua a doua a fost mai obositoare, s-a meritata sa castigi " << punctajObtinut << " nivel(e)!\n"; 
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     j.levelUp(punctajObtinut);
-    if(!g.continueGame()) return 0;
+    g.menu(g, j);
     j.showInfo();
 
     /// Ziua 3
