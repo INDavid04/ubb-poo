@@ -8,7 +8,7 @@ using namespace std;
 /*
     DONE Minim patru clase
     DONE Fiecare clasa are cel putin o functionalitate (daca am o clasa de tip Agenda atunci aceasta ar putea afisa datele disponibile dintr-o anumita luna)
-    TODO Fiecare clasa trebuie sa implementeaze: 
+    DONE Fiecare clasa trebuie sa implementeaze: 
     DONE constructorul fara parametrii
     DONE constructorul cu toti parametrii
     DONE cel putin doi constructori cu parametrii
@@ -95,10 +95,15 @@ public:
         cout << numeJucator << " a iesit din joc avand nivelul " << nivelJucator << endl;
         delete[] numeJucator;
     }
+    /// Setter
     void setName(const char* nume = "Abel Diriclet") {
-        delete[] numeJucator;
+        // delete[] numeJucator;
         numeJucator = new char[strlen(nume) + 1];
         strcpy(numeJucator, nume);
+    }
+    /// Getter
+    const char* getName() {
+        return numeJucator;
     }
     void showInfo() {
         cout << "-Jucator-----------------------------------------------------------------------------------------\n";
@@ -182,19 +187,23 @@ public:
     long long getCounterContiuneGame() {
         return counterContinueGame;
     }
+    void separator() {
+        cout << "\n=================================================================================================\n\n";
+    }
     void showDay() {
-        cout << "\n==============================================Ziua" << zi++ << "==============================================\n";
+        cout << "\n==============================================Ziua" << zi++ << "==============================================\n\n";
     }
     void continueGame() {
+        counterContinueGame++;
         char continuaJoc = '1';
         cout << "Apasa 1 pentru a continua jocul: ";
         cin >> continuaJoc;
-        cin.ignore(1000, '\n'); /// eliminam \n din citirea anterioara 
+        cin.get();
         if (continuaJoc != '1') {
             cout << "Iesire din joc ...\n";
             exit(0); /// inchidem programul
         }
-        cout << "=================================================================================================\n";
+        cout << "\n=================================================================================================\n\n";
     }
     void menu(Joc& g, Jucator& j) { /// referintele obiectelor
         bool ruleazaMeniu = true;
@@ -205,8 +214,11 @@ public:
             cout << " ------------------------------------------------------------------------------------------------\n";
             cout << "Alege o optiune din cele de mai sus [1,4]: ";
             cin >> optiune;
+            cin.get();
+            cout << "\n=================================================================================================\n\n";
             switch (optiune) {
                 case 1:
+                    counterContinueGame++;
                     ruleazaMeniu = false;
                     break;
                 case 2:
@@ -222,7 +234,9 @@ public:
                     cout << "Nu inteleg ce vrei sa faci! Alege un numar intre 1 si 4: ";
             }
         }
-        cout << "=================================================================================================\n";
+        if (ruleazaMeniu) {
+            cout << "\n=================================================================================================\n";
+        }
     }
     /// Supraincarcare operator <<
     friend ostream& operator<<(ostream& out, const Joc& j) {
@@ -520,22 +534,22 @@ int main() {
     g.continueGame();
     cout << "[Noul vecin]: Sal'tare tinere! Care-ti este numele dumitale?\n";
     cin.getline(numeleTau, 80); /// getline for "Irimia David" and get for "Irimia", for example
-    cin.get(); /// golim buffer-ul
     j.setName(numeleTau);
-    g.continueGame();
+    g.separator();
     cout << "[Noul vecin]: " << numeleTau << ", ce nume frumos! Imi pare bine sa te intalnesc pe aici, " << numeleTau << "!\n";
     g.continueGame();
     cout << "[Noul vecin]: Eu sunt George Petru.\n";
     g.continueGame();
     j.levelUp();
     g.menu(g, j);
-    j.showInfo();
 
     /// Ziua 2
     g.showDay();
     cout << "In cea de-a doua zi observi ca bunicul Neculai a lasat casa 'vraiste'.\n";
     g.menu(g, j);
-    cout << "Cumva il intelegi ca era foarte ocupat cu treburile sale si de aceea si-a luat si el o bine-meritata vacanta.\n";
+    cout << "Cumva il intelegi ca era foarte ocupat cu treburile sale.\n";
+    g.menu(g, j);
+    cout << "Tocmai de aceea si-a luat si el o bine-meritata vacanta.\n";
     g.menu(g, j);
     cout << "Prin urmare, decizi sa dai o mana de ajutor.\n";
     g.menu(g, j);
@@ -547,6 +561,7 @@ int main() {
     int punctajObtinut = 0;
     for (int i = 0; i < 4; i++) {
         cin >> ordineaTa[i];
+        cin.get();
         if (ordineaMea[i] == ordineaTa[i]) {
             punctajObtinut++;
         }
@@ -558,10 +573,21 @@ int main() {
     g.menu(g, j);
     j.levelUp(punctajObtinut);
     g.menu(g, j);
-    j.showInfo();
 
     /// Ziua 3
     g.showDay();
+    cout << "Nici bine nu te-ai trezit in a treia zi, ca iti bate cineva la usa ...\n";
+    g.menu(g, j);
+    cout << "[George]: Vecine, ziua asta nu a inceput deloc bine!\n";
+    g.menu(g, j);
+    cout << "[George]: Azi noapte a luat foc hambarul si focul s-a extins pana ...\n";
+    g.menu(g, j);
+    cout << "[George]: Pana la casa noastra! Iti vine sa crezi asa ceva, " << j.numeJucator << "?\n";
+    g.menu(g, j);
+    cout << "[George]: Ai fi amabil sa ne gazduiesti pe mine si familia mea?\n";
+    g.menu(g, j);
+    cout << "[Goerge]: Bineinteles, contra-cost: 50 monede pe zi!\n";
+    g.menu(g, j);
 
     return 0;
 }
