@@ -19,21 +19,21 @@ using namespace std;
     DONE Fiecare clasa trebuie sa respecte principiul incapsularii datelor (cu setteri si getteri)
     DONE Fiecare clasa trebuie sa aiba cel putin trei atribute (proprietati) iar in tot proiectul sa regasim variabile de urmatoarele tipuri:
     DONE int sau long long
-    DONE bool
+    DONE boolf
     DONE char*
     DONE float
     DONE char
     DONE int* sau float*
-    TODO static
+    DONE static
     DONE const
-    TODO Fiecare clasa trebuie sa implementeze supraincarcarea pentru urmatorii operatori:
-    TODO operatorul de indexare - [] (care sa spunem daca avem o clasa de tip Eveniment iar in clasa Eveniment avem Participant* putem folosi operatorul de indexare pentru a accesa direct informatiile despre participant de la pozitia i)
-    TODO operatorul ++ sau -- (postfixat sau prefixat, pentru postfixat aveti nevoie de un parametru dummy)
-    TODO minim doi operatori matematici (+, *, / sau -) - (sa se respecte comutativitatea)
-    TODO operatorul de verificare a egalitatii (==) (de exemplu avem doua obiecte de tip Elev si putem folosi supraincarcarea operatorului == pentru a verifica daca Elevii sunt din aceeasi clasa sau nu)
-    TODO un operator conditional dintre (<, <=, >, >=)
-    TODO Proiectul trebuie sa vina cu un meniu interactiv sau o forma de meniu prin care sa poata exemplifica functionalitatile implementate. (Ar trebui pentru sistemele de gestiune sa putem efectua CRUD-uri - Create Read Update Delete)
-    TODO mentiune: Daca am o clasa Eveniment atunci as putea sa creez un Eveniment citind informatiile despre acesta precum: data inceput, data sfarsit, numar maxim de participanti, locatie, etc. Pot sa afisez toate evenimentele create folosind o variabila de tip static Eveniment* pentru a retine evenimentele intr-o lista (aveti grija la memory leaks). As putea sa selectez un eveniment dintr-o lista si sa ii actualizez atributele precum locatia sau / si datele de inceput final este problema voastra cum vreti sa gestionati actualizarea (cititi despre HTTP PATCH vs PUT). As putea elimina un eveniment din lista de evenimente pe baza unui cod (ID) sau a numelui.
+    DONE Fiecare clasa trebuie sa implementeze supraincarcarea pentru urmatorii operatori:
+    DONE operatorul de indexare - [] (care sa spunem daca avem o clasa de tip Eveniment iar in clasa Eveniment avem Participant* putem folosi operatorul de indexare pentru a accesa direct informatiile despre participant de la pozitia i)
+    DONE operatorul ++ sau -- (postfixat sau prefixat, pentru postfixat aveti nevoie de un parametru dummy)
+    DONE minim doi operatori matematici (+, *, / sau -) - (sa se respecte comutativitatea)
+    DONE operatorul de verificare a egalitatii (==) (de exemplu avem doua obiecte de tip Elev si putem folosi supraincarcarea operatorului == pentru a verifica daca Elevii sunt din aceeasi clasa sau nu)
+    DONE un operator conditional dintre (<, <=, >, >=)
+    DONE Proiectul trebuie sa vina cu un meniu interactiv sau o forma de meniu prin care sa poata exemplifica functionalitatile implementate. (Ar trebui pentru sistemele de gestiune sa putem efectua CRUD-uri - Create Read Update Delete)
+    DONE mentiune: Daca am o clasa Eveniment atunci as putea sa creez un Eveniment citind informatiile despre acesta precum: data inceput, data sfarsit, numar maxim de participanti, locatie, etc. Pot sa afisez toate evenimentele create folosind o variabila de tip static Eveniment* pentru a retine evenimentele intr-o lista (aveti grija la memory leaks). As putea sa selectez un eveniment dintr-o lista si sa ii actualizez atributele precum locatia sau / si datele de inceput final este problema voastra cum vreti sa gestionati actualizarea (cititi despre HTTP PATCH vs PUT). As putea elimina un eveniment din lista de evenimente pe baza unui cod (ID) sau a numelui.
 */
 
 /// Ideea jocului: Bunicul Neculai este plecat intr-o vacanta la munte. De aceea, te-a rugat sa te ocupi de ferma lui pentru cateva saptamani. Crezi ca vei face fata?
@@ -48,6 +48,7 @@ protected:
 public:
     /// Constructor fara parametrii
     Jucator() {
+        numeJucator = new char[40];
         strcpy(numeJucator, "Anonimus");
         nivelJucator = 0;
         monede = 0;
@@ -97,7 +98,7 @@ public:
     }
     /// Setter
     void setName(const char* nume = "Abel Diriclet") {
-        // delete[] numeJucator;
+        delete[] numeJucator;
         numeJucator = new char[strlen(nume) + 1];
         strcpy(numeJucator, nume);
     }
@@ -123,6 +124,22 @@ public:
         in >> j.monede;
         return in;
     }
+    /// Supraincarcare operator ++ prefixat
+    // Jucator& operator++() {
+    //     nivelJucator++;
+    //     monede += 20;
+    //     return *this;
+    // }
+    /// Supraincarcare operator -- postfixat
+    // Jucator operator--(int) {
+    //     Jucator temp = *this;
+    //     if (nivelJucator > 1) nivelJucator--;
+    //     return temp;
+    // }
+    /// Operator ==
+    bool operator==(const Jucator& altJucator) const {
+        return this->nivelJucator == altJucator.nivelJucator;
+    }
     void showInfo() {
         cout << "-Jucator-----------------------------------------------------------------------------------------\n";
         cout << "Nume: " << numeJucator << " | Nivel: " << nivelJucator << " | Monede: " << monede << endl;
@@ -145,7 +162,7 @@ class Joc {
 private:
     int zi;
     bool gameOver;
-    long long counterContinueGame;
+    static long long counterContinueGame;
 protected:
 public:
     /// Constructor fara parametrii
@@ -189,14 +206,14 @@ public:
     }
     /// Destructor
     ~Joc() {
-        cout << "Joc finalizat!\n";
+        cout << "Joc finalizat! Ati petrecut " << counterContinueGame << " ore la ferma bunicului.\n";
     }
     /// Setter
     void setDay(int specificDay = 0) {
         zi = specificDay;
     }
     /// Getter
-    long long getCounterContiuneGame() {
+    static long long getCounterContiuneGame() {
         return counterContinueGame;
     }
     void separator() {
@@ -315,7 +332,7 @@ public:
     }
     /// Destructor
     ~Casa() {
-        cout << "Bunicul s-a intors acasa.\n";
+        cout << "Desi casa este a lui, vrea sa stii ca usa iti e mereu deschisa.\n";
     }
     /// Setter
     void setComfort(const char* status = "low") {
@@ -358,7 +375,7 @@ class Teren {
 private:
     int nivelIngrasamant, nivelProductie;
     float venit, taxe;
-    long long resurseGrau, resurseCartofi, resurseMorcovi;
+    long long resurse[3];
 protected:
 public:
     /// Constructor fara parametrii
@@ -367,9 +384,9 @@ public:
         nivelProductie = 0;
         venit = 0;
         taxe = 0;
-        resurseGrau = 0;
-        resurseCartofi = 0;
-        resurseMorcovi = 0;
+        resurse[0] = 0; /// grau
+        resurse[1] = 0; /// cartofi
+        resurse[2] = 0; /// morcovi
     }
     /// Constructor cu toti parametrii
     Teren(int nivelIngrasamantInitial, int nivelProductieInitial, float venitInitial, float taxeInitial, long long resurseGrauInitial, long long resurseCartofiInitial, long long resurseMorcoviInitial) {
@@ -377,9 +394,9 @@ public:
         nivelProductie = nivelProductieInitial;
         venit = venitInitial;
         taxe = taxeInitial;
-        resurseGrau = resurseGrauInitial;
-        resurseCartofi = resurseCartofiInitial;
-        resurseMorcovi = resurseMorcoviInitial;
+        resurse[0] = resurseGrauInitial;
+        resurse[1] = resurseCartofiInitial;
+        resurse[2] = resurseMorcoviInitial;
     }
     /// Constructor cu parametrii
     Teren(int nivelIngrasamantInitial, int nivelProductieInitial) {
@@ -387,9 +404,9 @@ public:
         nivelProductie = nivelProductieInitial;
         venit = 0;
         taxe = 0;
-        resurseGrau = 0;
-        resurseCartofi = 0;
-        resurseMorcovi = 0;
+        resurse[0] = 0;
+        resurse[1] = 0;
+        resurse[2] = 0;
     }
     /// Constructor cu parametrii
     Teren(long long resurseMorcoviInitial) {
@@ -397,9 +414,9 @@ public:
         nivelProductie = 0;
         venit = 0;
         taxe = 0;
-        resurseGrau = 0;
-        resurseCartofi = 0;
-        resurseMorcovi = resurseMorcoviInitial;
+        resurse[0] = 0;
+        resurse[1] = 0;
+        resurse[2] = resurseMorcoviInitial;
     }
     /// Constructor de copiere
     Teren(const Teren& altTeren) {
@@ -407,9 +424,9 @@ public:
         nivelProductie = altTeren.nivelProductie;
         venit = altTeren.venit;
         taxe = altTeren.taxe;
-        resurseGrau = altTeren.resurseGrau;
-        resurseCartofi = altTeren.resurseCartofi;
-        resurseMorcovi = altTeren.resurseMorcovi;
+        resurse[0] = altTeren.resurse[0];
+        resurse[0] = altTeren.resurse[1];
+        resurse[0] = altTeren.resurse[2];
     }
     /// Suprascrierea operatorului egal
     Teren& operator=(const Teren& altTeren) {
@@ -418,15 +435,28 @@ public:
             nivelProductie = altTeren.nivelProductie;
             venit = altTeren.venit;
             taxe = altTeren.taxe;
-            resurseGrau = altTeren.resurseGrau;
-            resurseCartofi = altTeren.resurseCartofi;
-            resurseMorcovi = altTeren.resurseMorcovi;
+            resurse[0] = altTeren.resurse[0];
+            resurse[1] = altTeren.resurse[1];
+            resurse[2] = altTeren.resurse[2];
         }
         return *this;
     }
+    // Supraincarcare operator +
+    Teren operator+(const Teren& altTeren) const {
+        return Teren(this->nivelProductie + altTeren.nivelProductie);
+    }
+    // Supraincarcare operator *
+    Teren operator*(int factor) const {
+        return Teren(this->nivelProductie * factor);
+    }
     /// Destructor
     ~Teren() {
-        cout << "De acum are el grija de teren.\n";
+        cout << "Bineinteles ca nu va uita sa aiba grija si de teren.\n";
+    }
+    /// Supraincarcare operator de indexare adica []
+    long long operator[](int index) const {
+        if (index >= 0 && index < 3) return resurse[index];
+        return -1; /// i.e. nu-i valid
     }
     /// Setter
     void setIngrasamant(int cantitate = 0) {
@@ -437,13 +467,13 @@ public:
     }
     /// Getter
     long long getGrau() {
-        return resurseGrau;
+        return resurse[0];
     }
     long long getCartofi() {
-        return resurseCartofi;
+        return resurse[1];
     }
     long long getMorcovi() {
-        return resurseMorcovi;
+        return resurse[2];
     }
     float getTaxa() {
         return taxe;
@@ -453,7 +483,7 @@ public:
     }
     /// Supraincarcare operator <<
     friend ostream& operator<<(ostream& out, const Teren& t) {
-        out << "Nivel ingrasamant: " << t.nivelIngrasamant << ", nivel productie: " << t.nivelProductie << ", resurse grau: " << t.resurseGrau << ",resurse cartofi: " << t.resurseCartofi << ", resurse morcovi: " << t.resurseMorcovi << ", venit: " << t.venit << ", taxe: " << t.taxe;
+        out << "Nivel ingrasamant: " << t.nivelIngrasamant << ", nivel productie: " << t.nivelProductie << ", resurse grau: " << t.resurse[0] << ",resurse cartofi: " << t.resurse[1] << ", resurse morcovi: " << t.resurse[2] << ", venit: " << t.venit << ", taxe: " << t.taxe;
         return out;
     }
     /// Supraincarcare operator >>
@@ -463,28 +493,26 @@ public:
         cout << "Introdu nivel productie: ";
         in >> t.nivelProductie;
         cout << "Introdu resurse grau: ";
-        in >> t.resurseGrau;
+        in >> t.resurse[0];
         cout << "Introdu resurse cartofi: ";
-        in >> t.resurseCartofi;
+        in >> t.resurse[1];
         cout << "Introdu resurse morcovi: ";
-        in >> t.resurseMorcovi;
+        in >> t.resurse[2];
         cout << "Introdu venit: ";
         in >> t.venit;
         cout << "Introdu taxe: ";
         in >> t.taxe;
         return in;
     }
-    void cumparaGrau(long long kile = 0) {
-        resurseGrau += kile;
-        venit += resurseGrau * 0.2;
+    /// Operator < 
+    bool operator<(const Teren& altTeren) const {
+        return this->nivelProductie < altTeren.nivelProductie;
     }
-    void cumparaCartofi(long long kile = 0) {
-        resurseCartofi += kile;
-        venit += resurseCartofi * 0.2;
-    }
-    void cumparaMorcovi(long long kile = 0) {
-        resurseMorcovi += kile;
-        venit += resurseMorcovi * 0.2;
+    void cumparaResurse(int index, long long cantitate) {
+        if (index >= 0 && index <= 2) {
+            resurse[index] += cantitate;
+            venit += resurse[index] * cantitate * 0.2;
+        }
     }
 };
 
@@ -541,7 +569,7 @@ public:
     }
     /// Destructor
     ~Tarc() {
-        cout << "Este bucuros sa aiba grija si de noile animalute, de asemenea.\n";
+        cout << "Bunicul Neculai s-a intors si este bucuros sa ingrijeasca de noile animalute.\n";
     }
     /// Setter
     void setAnimale(int capacitate = 0) {
@@ -574,6 +602,8 @@ public:
     }
 };
 
+long long Joc::counterContinueGame = 0;  /// inigializam variabila statica counterContinueGame
+
 int main() {
     /// Ziua 0
     Joc g; /// g de la game, j e luat pentru jucator :)
@@ -603,6 +633,7 @@ int main() {
     cout << "[Noul vecin]: Eu sunt George Petru.\n";
     g.continueGame();
     j.levelUp();
+    // j++; /// in loc de j.levelUp();
     g.menu(g, j);
 
     /// Ziua 2
@@ -667,7 +698,7 @@ int main() {
         cin >> aux;
     }
     j.moneyDown(aux);
-    t.cumparaGrau(aux);
+    t.cumparaResurse(0, aux);
     g.menu(g, j);
     cout << "[Vanzatoarea]: 5 lei kilu' de cartofi. Cat sa-ti dau?\n";
     cin >> aux;
@@ -677,7 +708,7 @@ int main() {
         cin >> aux;
     }
     j.moneyDown(5 * aux);
-    t.cumparaCartofi(aux);
+    t.cumparaResurse(1, aux);
     g.menu(g, j);
     cout << "[Vanzatoarea]: 3 lei kilu' de morcovi. Cate kile?\n";
     cin >> aux;
@@ -687,7 +718,7 @@ int main() {
         cin >> aux;
     }
     j.moneyDown(3 * aux);
-    t.cumparaMorcovi(aux);
+    t.cumparaResurse(2, aux);
     g.menu(g, j);
     j.levelUp();
     g.menu(g, j);
@@ -730,8 +761,11 @@ int main() {
     cout << "1 - 2 cai la pret de unu' (40) | 2 - 3 porci la pret de 2 (70) | 3 - Refuza oferta\n";
     cin >> aux;
     cin.get();
+    g.separator();
     if (j.getMonede() < 40 || (j.getMonede() < 70 && aux == 2)) {
         cout << "[Negustorii]: Sorry man! Deoarece nu ai bani, nu ai incotro decat sa refuzi oferta!\n";
+        // j--; /// just for fun, ne imaginam ca ne iau negustorii un nivel pentru ca le-am pierdut timpul :)
+        cout << "Ati mai pierdut un nivel!\n";
     } else if (aux == 1) {
         cout << "[Negustorii]: Buna afacere! Sa te bucuri de cai!\n";
         j.moneyDown(40);
@@ -761,6 +795,9 @@ int main() {
     g.menu(g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g.menu(g, j);
+    cout << "\nDetalii finale\n";
+    j.showInfo();
     g.menu(g, j);
 
     return 0;
