@@ -16,7 +16,7 @@ using namespace std;
     DONE desconstructorul
     DONE forma supraincarcata a operatorului =
     DONE supraincarcarea operatorilor pentru stream << si >>
-    TODO Fiecare clasa trebuie sa respecte principiul incapsularii datelor (cu setteri si getteri)
+    DONE Fiecare clasa trebuie sa respecte principiul incapsularii datelor (cu setteri si getteri)
     DONE Fiecare clasa trebuie sa aiba cel putin trei atribute (proprietati) iar in tot proiectul sa regasim variabile de urmatoarele tipuri:
     DONE int sau long long
     DONE bool
@@ -105,16 +105,8 @@ public:
     const char* getName() {
         return numeJucator;
     }
-    void showInfo() {
-        cout << "-Jucator-----------------------------------------------------------------------------------------\n";
-        cout << "Nume: " << numeJucator << " | Nivel: " << nivelJucator << " | Monede: " << monede << endl;
-        cout << "-------------------------------------------------------------------------------------------------\n";
-    }
-    void levelUp(int contor = 1) {
-        int castig = 20 * contor;
-        monede += castig;
-        nivelJucator += contor;
-        cout << "Hurray! A mai trecut o zi! In plus, ai mai castigat si " << castig << " monede.\n";
+    float getMonede() {
+        return monede;
     }
     /// Supraincarcare operator <<
     friend ostream& operator<<(ostream& out, const Jucator& j) {
@@ -130,6 +122,22 @@ public:
         cout << "Cate monede a agonisit?: ";
         in >> j.monede;
         return in;
+    }
+    void showInfo() {
+        cout << "-Jucator-----------------------------------------------------------------------------------------\n";
+        cout << "Nume: " << numeJucator << " | Nivel: " << nivelJucator << " | Monede: " << monede << endl;
+        cout << "-------------------------------------------------------------------------------------------------\n";
+    }
+    void levelUp(int contor = 1) {
+        monede += 20 * contor;
+        nivelJucator++;
+        cout << "Hurray! A mai trecut o zi! In plus, ai mai castigat si " << 20 * contor << " monede.\n";
+    }
+    void moneyUp(float money = 0) {
+        monede += money;
+    }
+    void moneyDown(float money = 0) {
+        monede -= money;
     }
 };
 
@@ -181,7 +189,11 @@ public:
     }
     /// Destructor
     ~Joc() {
-        cout << "GameOver!\n";
+        cout << "Joc finalizat!\n";
+    }
+    /// Setter
+    void setDay(int specificDay = 0) {
+        zi = specificDay;
     }
     /// Getter
     long long getCounterContiuneGame() {
@@ -257,63 +269,77 @@ public:
 
 class Casa {
 private:
-    int nivelComfort, venitChirie;
+    char nivelComfort[10]; 
+    int venitChirie;
     float taxe;
-    char listaReparatii[80];
 protected:
 public:
     /// Constructor fara parametrii
     Casa() {
-        nivelComfort = 0;
+        strcpy(nivelComfort, "low");
         venitChirie = 0;
-        taxe = 0;
-        listaReparatii[0] = 'e';
+        taxe = 10;
     }
     /// Constructor cu toti parametrii
-    Casa(int nivelComfortInitial = 0, int venitChirieInitial = 0, float taxeInitial = 0, char listaReparatiiInitial = 'e') {
-        nivelComfort = nivelComfortInitial;
+    Casa(const char* nivelComfortInitial, int venitChirieInitial, float taxeInitial) {
+        strcpy(nivelComfort, nivelComfortInitial);
         venitChirie = venitChirieInitial;
         taxe = taxeInitial;
-        listaReparatii[0] = listaReparatiiInitial;
     }
     /// Constructor cu parametrii
-    Casa(int nivelComfortInitial = 0, int venitChirieInitial = 0) {
-        nivelComfort = nivelComfortInitial;
+    Casa(const char* nivelComfortInitial, int venitChirieInitial) {
+        strcpy(nivelComfort, nivelComfortInitial);
         venitChirie = venitChirieInitial;
         taxe = 0;
-        listaReparatii[0] = 'e';
     }
     /// Constructor cu parametrii
-    Casa(float taxeInitial = 0, char listaReparatiiInitial = 'e') {
-        nivelComfort = 0;
-        venitChirie = 0;
+    Casa(int venitChirieInitial, float taxeInitial) {
+        strcpy(nivelComfort, "low");
+        venitChirie = venitChirieInitial;
         taxe = taxeInitial;
-        listaReparatii[0] = listaReparatiiInitial;
     }
     /// Constructor de copiere
     Casa(const Casa& altaCasa) {
-        nivelComfort = altaCasa.nivelComfort;
+        strcpy(nivelComfort, altaCasa.nivelComfort);
         venitChirie = altaCasa.venitChirie;
         taxe = altaCasa.taxe;
-        listaReparatii[0] = altaCasa.listaReparatii[0];
     }
     /// Suprascrierea operatorului egal
     Casa& operator=(const Casa& altaCasa) {
         if(this != &altaCasa) { 
-            nivelComfort = altaCasa.nivelComfort;
+            strcpy(nivelComfort, altaCasa.nivelComfort);
             venitChirie = altaCasa.venitChirie;
             taxe = altaCasa.taxe;
-            listaReparatii[0] = altaCasa.listaReparatii[0];
         }
         return *this;
     }
     /// Destructor
     ~Casa() {
-        cout << "Casa s-a prabusit.\n";
+        cout << "Bunicul s-a intors acasa.\n";
+    }
+    /// Setter
+    void setComfort(const char* status = "low") {
+        strcpy(nivelComfort, status);
+    }
+    void setChirie() {
+        if (strcmp(nivelComfort, "low") == 0) {
+            venitChirie = 50;
+        } else if (strcmp(nivelComfort, "medium") == 0) {
+            venitChirie = 100;
+        } else {
+            venitChirie = 200;
+        }
+    }
+    /// Getter
+    int getChirie() {
+        return venitChirie;
+    }
+    float getTaxa() {
+        return taxe;
     }
     /// Supraincarcare operator <<
     friend ostream& operator<<(ostream& out, const Casa& c) {
-        out << "Nivel comfort: " << c.nivelComfort << ", Venit chirie: " << c.venitChirie << ", Taxe: " << c.taxe << ", Lista reparatii: " << c.listaReparatii[0];
+        out << "Nivel comfort: " << c.nivelComfort << ", Venit chirie: " << c.venitChirie << ", Taxe: " << c.taxe;
         return out;
     }
     /// Supraincarcare operator >>
@@ -324,8 +350,6 @@ public:
         in >> c.venitChirie;
         cout << "Introdu taxe: ";
         in >> c.taxe;
-        cout << "Introdu lista reparatii: ";
-        in >> c.listaReparatii[0];
         return in;
     }
 };
@@ -335,7 +359,6 @@ private:
     int nivelIngrasamant, nivelProductie;
     float venit, taxe;
     long long resurseGrau, resurseCartofi, resurseMorcovi;
-    int* niveleApa;
 protected:
 public:
     /// Constructor fara parametrii
@@ -347,10 +370,9 @@ public:
         resurseGrau = 0;
         resurseCartofi = 0;
         resurseMorcovi = 0;
-        niveleApa = {0};
     }
     /// Constructor cu toti parametrii
-    Teren(int nivelIngrasamantInitial = 0, int nivelProductieInitial = 0, float venitInitial = 0, float taxeInitial = 0, long long resurseGrauInitial = 0, long long resurseCartofiInitial = 0, long long resurseMorcoviInitial = 0, int* niveleApaInitial = nullptr) {
+    Teren(int nivelIngrasamantInitial, int nivelProductieInitial, float venitInitial, float taxeInitial, long long resurseGrauInitial, long long resurseCartofiInitial, long long resurseMorcoviInitial) {
         nivelIngrasamant = nivelIngrasamantInitial;
         nivelProductie = nivelProductieInitial;
         venit = venitInitial;
@@ -358,10 +380,9 @@ public:
         resurseGrau = resurseGrauInitial;
         resurseCartofi = resurseCartofiInitial;
         resurseMorcovi = resurseMorcoviInitial;
-        niveleApa = niveleApaInitial;
     }
     /// Constructor cu parametrii
-    Teren(int nivelIngrasamantInitial = 0, int nivelProductieInitial = 0) {
+    Teren(int nivelIngrasamantInitial, int nivelProductieInitial) {
         nivelIngrasamant = nivelIngrasamantInitial;
         nivelProductie = nivelProductieInitial;
         venit = 0;
@@ -369,10 +390,9 @@ public:
         resurseGrau = 0;
         resurseCartofi = 0;
         resurseMorcovi = 0;
-        niveleApa = {0};
     }
     /// Constructor cu parametrii
-    Teren(long long resurseMorcoviInitial = 0, int* niveleApaInitial = nullptr) {
+    Teren(long long resurseMorcoviInitial) {
         nivelIngrasamant = 0;
         nivelProductie = 0;
         venit = 0;
@@ -380,7 +400,6 @@ public:
         resurseGrau = 0;
         resurseCartofi = 0;
         resurseMorcovi = resurseMorcoviInitial;
-        niveleApa = nullptr;
     }
     /// Constructor de copiere
     Teren(const Teren& altTeren) {
@@ -391,7 +410,6 @@ public:
         resurseGrau = altTeren.resurseGrau;
         resurseCartofi = altTeren.resurseCartofi;
         resurseMorcovi = altTeren.resurseMorcovi;
-        niveleApa = altTeren.niveleApa;
     }
     /// Suprascrierea operatorului egal
     Teren& operator=(const Teren& altTeren) {
@@ -403,17 +421,39 @@ public:
             resurseGrau = altTeren.resurseGrau;
             resurseCartofi = altTeren.resurseCartofi;
             resurseMorcovi = altTeren.resurseMorcovi;
-            niveleApa = altTeren.niveleApa;
         }
         return *this;
     }
     /// Destructor
     ~Teren() {
-        cout << "Terenul a fost inundat\n";
+        cout << "De acum are el grija de teren.\n";
+    }
+    /// Setter
+    void setIngrasamant(int cantitate = 0) {
+        nivelIngrasamant = cantitate;
+    }
+    void setTaxa(float monede = 0) {
+        taxe = monede;
+    }
+    /// Getter
+    long long getGrau() {
+        return resurseGrau;
+    }
+    long long getCartofi() {
+        return resurseCartofi;
+    }
+    long long getMorcovi() {
+        return resurseMorcovi;
+    }
+    float getTaxa() {
+        return taxe;
+    }
+    float getVenit() {
+        return venit;
     }
     /// Supraincarcare operator <<
     friend ostream& operator<<(ostream& out, const Teren& t) {
-        out << "Nivel ingrasamant: " << t.nivelIngrasamant << ", nivel productie: " << t.nivelProductie << ", nivlee apa: " << t.niveleApa[0] << ", resurse grau: " << t.resurseGrau << ",resurse cartofi: " << t.resurseCartofi << ", resurse morcovi: " << t.resurseMorcovi << ", venit: " << t.venit << ", taxe: " << t.taxe;
+        out << "Nivel ingrasamant: " << t.nivelIngrasamant << ", nivel productie: " << t.nivelProductie << ", resurse grau: " << t.resurseGrau << ",resurse cartofi: " << t.resurseCartofi << ", resurse morcovi: " << t.resurseMorcovi << ", venit: " << t.venit << ", taxe: " << t.taxe;
         return out;
     }
     /// Supraincarcare operator >>
@@ -422,8 +462,6 @@ public:
         in >> t.nivelIngrasamant;
         cout << "Introdu nivel productie: ";
         in >> t.nivelProductie;
-        cout << "Introdu nivele apa: ";
-        in >> t.niveleApa[0];
         cout << "Introdu resurse grau: ";
         in >> t.resurseGrau;
         cout << "Introdu resurse cartofi: ";
@@ -436,6 +474,18 @@ public:
         in >> t.taxe;
         return in;
     }
+    void cumparaGrau(long long kile = 0) {
+        resurseGrau += kile;
+        venit += resurseGrau * 0.2;
+    }
+    void cumparaCartofi(long long kile = 0) {
+        resurseCartofi += kile;
+        venit += resurseCartofi * 0.2;
+    }
+    void cumparaMorcovi(long long kile = 0) {
+        resurseMorcovi += kile;
+        venit += resurseMorcovi * 0.2;
+    }
 };
 
 class Tarc {
@@ -446,27 +496,27 @@ protected:
 public:
     /// Constructor fara parametrii
     Tarc() {
-        capacitateAnimale = 0;
-        resurseIgiena = 0;
-        resurseHrana = 0;
-        venit = 0;
+        capacitateAnimale = 15;
+        resurseIgiena = 5;
+        resurseHrana = 10;
+        venit = 20;
     }
     /// Constructor cu toti parametrii
-    Tarc(int capacitateAnimaleInitial = 0, int resurseIgienaInitial = 0, int resurseHranaInitial = 0, float venitInitial = 0) {
+    Tarc(int capacitateAnimaleInitial, int resurseIgienaInitial, int resurseHranaInitial, float venitInitial) {
         capacitateAnimale = capacitateAnimaleInitial;
         resurseIgiena = resurseIgienaInitial;
         resurseHrana = resurseHranaInitial;
         venit = venitInitial;
     }
     /// Constructor cu parametrii
-    Tarc(int capacitateAnimaleInitial = 0, int resurseIgienaInitial = 0) {
+    Tarc(int capacitateAnimaleInitial, int resurseIgienaInitial) {
         capacitateAnimale = capacitateAnimaleInitial;
         resurseIgiena = resurseIgienaInitial;
         resurseHrana = 0;
         venit = 0;
     }
     /// Constructor cu parametrii
-    Tarc(int resurseHranaInitial = 0, float venitInitial = 0) {
+    Tarc(int resurseHranaInitial, float venitInitial) {
         capacitateAnimale = 0;
         resurseIgiena = 0;
         resurseHrana = resurseHranaInitial;
@@ -491,15 +541,21 @@ public:
     }
     /// Destructor
     ~Tarc() {
-        cout << "Tarcul a fost spart.\n";
+        cout << "Este bucuros sa aiba grija si de noile animalute, de asemenea.\n";
     }
-    /// Afiseaza informatiile despre tarc: capacitateAnimale, resurseIgiena, resurseHrana, venit
+    /// Setter
+    void setAnimale(int capacitate = 0) {
+        capacitateAnimale = capacitate;
+    }
+    /// Getter
+    float getVenit() {
+        return venit;
+    }
     /// Supraincarcare operator <<
     friend ostream& operator<<(ostream& out, const Tarc& f) {
         out << "Capacitate animale: " << f.capacitateAnimale << ", resurse igiena: " << f.resurseIgiena << ", resurse hrana: " << f.resurseHrana << ", venit: " << f.venit;
         return out;
     }
-
     /// Supraincarcare operator >>
     friend istream& operator>>(istream& in, Tarc& f) {
         cout << "Introdu capacitate animale: ";
@@ -512,6 +568,10 @@ public:
         in >> f.venit;
         return in;
     }
+    void cumparaAnimale(int cantitate = 0) {
+        capacitateAnimale += cantitate;
+        venit += cantitate * 0.2;
+    }
 };
 
 int main() {
@@ -522,7 +582,7 @@ int main() {
     g.showDay();
     cout << "Bunicul Neculai este plecat intr-o vacanta la munte.\n";
     g.continueGame();
-    cout << "De aceea, te-a rugat pe tine sa te ocupi de ferma lui pentru cateva saptamani.\n";
+    cout << "De aceea, te-a rugat pe tine sa te ocupi de ferma lui pentru cateva zile.\n";
     g.continueGame();
     cout << "Crezi ca vei face fata?\n";
     g.continueGame();
@@ -530,13 +590,15 @@ int main() {
     /// Ziua 1
     char numeleTau[80];
     g.showDay();
-    cout << "Fiind prima zi, intalnesti un vecin care s-a mutat de curand la ferma...\n";
+    cout << "Fiind prima zi, intalnesti un vecin care s-a mutat de curand la ferma ...\n";
     g.continueGame();
     cout << "[Noul vecin]: Sal'tare tinere! Care-ti este numele dumitale?\n";
     cin.getline(numeleTau, 80); /// getline for "Irimia David" and get for "Irimia", for example
     j.setName(numeleTau);
-    g.separator();
-    cout << "[Noul vecin]: " << numeleTau << ", ce nume frumos! Imi pare bine sa te intalnesc pe aici, " << numeleTau << "!\n";
+    g.continueGame();
+    cout << "[Noul vecin]: " << numeleTau << ", ce nume frumos!\n";
+    g.continueGame();
+    cout << "Imi pare bine sa te intalnesc pe aici, " << numeleTau << "!\n";
     g.continueGame();
     cout << "[Noul vecin]: Eu sunt George Petru.\n";
     g.continueGame();
@@ -555,7 +617,7 @@ int main() {
     g.menu(g, j);
     cout << "Vazand pe usa frigiderului o lista de task-uri, observi, insa, ca nu sunt aranjate.\n";
     g.menu(g, j);
-    cout << "Cum ai aranja datoriile?\n1 - Spala WC\n2 - Du gunoiul\n3 - Spala aragazul\n4 - Da cu aspiratorul\n(Nota: Scrie nuamrul de ordine al task-urilor separate prin caracterul spatiu!)\n";
+    cout << "Cum ai aranja datoriile?\n1 - Spala WC\n2 - Du gunoiul\n3 - Spala aragazul\n4 - Da cu aspiratorul\n(Nota: Scrie numarul de ordine al task-urilor separate prin caracterul spatiu!)\n";
     cout << "Ordinea mea: ";
     int ordineaTa[4] = {0}, ordineaMea[4] = {3, 4, 1, 2};;
     int punctajObtinut = 0;
@@ -576,17 +638,129 @@ int main() {
 
     /// Ziua 3
     g.showDay();
+    Casa c;
+    Teren t;
+    int aux = 0;
     cout << "Nici bine nu te-ai trezit in a treia zi, ca iti bate cineva la usa ...\n";
     g.menu(g, j);
     cout << "[George]: Vecine, ziua asta nu a inceput deloc bine!\n";
     g.menu(g, j);
     cout << "[George]: Azi noapte a luat foc hambarul si focul s-a extins pana ...\n";
     g.menu(g, j);
-    cout << "[George]: Pana la casa noastra! Iti vine sa crezi asa ceva, " << j.numeJucator << "?\n";
+    cout << "[George]: Pana la casa noastra! Iti vine sa crezi asa ceva, " << j.getName() << "?\n";
     g.menu(g, j);
-    cout << "[George]: Ai fi amabil sa ne gazduiesti pe mine si familia mea?\n";
+    cout << "[George]: Ai fii amabil sa ne gazduiesti pe mine si pe familia mea?\n";
     g.menu(g, j);
-    cout << "[Goerge]: Bineinteles, contra-cost: 50 monede pe zi!\n";
+    cout << "[George]: Bineinteles, contra-cost: 50 monede pe zi!\n";
+    g.menu(g, j);
+    cout << "[George]: Multumim foarte mult, " << j.getName() << "!\n";
+    g.menu(g, j);
+    cout << "Facanduti-se mila de vecin, hotarasti sa ii dai resursele tale de grau, cartofi si morcovi.\n";
+    g.menu(g, j);
+    cout << "Ajuns in piata, vanzatoarea te intreaba ce cantitate doresti din fiecare:\n";
+    g.menu(g, j);
+    cout << "[Vanzatoarea]: 1 leu kilu' de grau. Cate kile vrei, tinere?\n";
+    cin >> aux;
+    while(aux > j.getMonede()) {
+        cout << "[Vanzatoarea]: Nu-ti ajung banii! Nu te arunca prea curand, incearca si tu mai putin :)\n";
+        cout << "[Vanzatoarea]: 1 leu kilu' de grau. Cate kile vrei, tinere?\n";
+        cin >> aux;
+    }
+    j.moneyDown(aux);
+    t.cumparaGrau(aux);
+    g.menu(g, j);
+    cout << "[Vanzatoarea]: 5 lei kilu' de cartofi. Cat sa-ti dau?\n";
+    cin >> aux;
+    while(5 * aux > j.getMonede()) {
+        cout << "[Vanzatoarea]: Nu-ti ajung banii! Nu te arunca prea curand, incearca si tu mai putin :)\n";
+        cout << "[Vanzatoarea]: 5 lei kilu' de cartofi. Cat sa-ti dau?\n";
+        cin >> aux;
+    }
+    j.moneyDown(5 * aux);
+    t.cumparaCartofi(aux);
+    g.menu(g, j);
+    cout << "[Vanzatoarea]: 3 lei kilu' de morcovi. Cate kile?\n";
+    cin >> aux;
+    while(3 * aux > j.getMonede()) {
+        cout << "[Vanzatoarea]: Nu-ti ajung banii! Nu te arunca prea curand, incearca si tu mai putin :)\n";
+        cout << "[Vanzatoarea]: 3 lei kilu' de morcovi. Cate kile?\n";
+        cin >> aux;
+    }
+    j.moneyDown(3 * aux);
+    t.cumparaMorcovi(aux);
+    g.menu(g, j);
+    j.levelUp();
+    g.menu(g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g.menu(g, j);
+    c.setChirie();
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g.menu(g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g.menu(g, j);
+
+    /// Ziua 4
+    g.showDay();
+    Tarc f;
+    cout << "In ziua a patra, planuiesti sa ii faci o bucurie bunicului Neculai.\n";
+    g.menu(g, j);
+    cout << "Ce poate fi mai bun decat niste animale? ... \n";
+    g.menu(g, j);
+    cout << "Mai multe animale :)\n";
+    g.menu(g, j);
+    cout << "Numai bine, ca au trecut niste negustori prin zona cu niste oferte irefuzabile ...\n";
+    g.menu(g, j);
+    cout << "[" << j.getName() << "]: Ziua buna! Mai lasati din pret?\n";
+    g.menu(g, j);
+    cout << "[Negustorii]: Buna sa iti fie si inima! Ti se pare ca avem noi cumva marfa ieftina?\n";
+    g.menu(g, j);
+    cout << "[" << j.getName() << "]: Oh! N-am vrut sa intelegeti gresit! Imi pare rau!\n";
+    g.menu(g, j);
+    cout << "[" << j.getName() << "]: Ce voiam sa zic este ca sunt interesat de o oferta!\n";
+    g.menu(g, j);
+    cout << "[Negustorii]: Aha! Daca vrei oferta ...\n";
+    g.menu(g, j);
+    cout << "[Negustorii]: Uite aici una care n-are cum sa nu iti placa!\n";
+    g.menu(g, j);
+    cout << "[Negustorii]: Ce alegi?\n";
+    cout << "1 - 2 cai la pret de unu' (40) | 2 - 3 porci la pret de 2 (70) | 3 - Refuza oferta\n";
+    cin >> aux;
+    cin.get();
+    if (j.getMonede() < 40 || (j.getMonede() < 70 && aux == 2)) {
+        cout << "[Negustorii]: Sorry man! Deoarece nu ai bani, nu ai incotro decat sa refuzi oferta!\n";
+    } else if (aux == 1) {
+        cout << "[Negustorii]: Buna afacere! Sa te bucuri de cai!\n";
+        j.moneyDown(40);
+        f.cumparaAnimale(2);
+    } else if (aux == 2) {
+        cout << "[Negustorii]: Buna afac1ere! Sa te bucuri de porci!\n";
+        j.moneyDown(70);
+        f.cumparaAnimale(3);
+    } else if (aux == 3) {
+        cout << "[Negustorii]: Nicio problema! Ne mai auzim cand dai de bani!\n";
+    }
+    g.menu(g, j);
+    j.levelUp();
+    g.menu(g, j);
+    t.setTaxa(5);
+    cout << "Taxa pe teren a crescut la " << t.getTaxa() << " monede!\n";
+    g.menu(g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g.menu(g, j);
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g.menu(g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.moneyUp(f.getVenit());
+    cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
     g.menu(g, j);
 
     return 0;
