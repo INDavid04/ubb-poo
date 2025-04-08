@@ -1,11 +1,11 @@
-/// Proiect #1 Due March 24, 2025 11:59 PM
-
+/// Ferma bunicului - Proiect, Programare Orientata pe Obiecte, Irimia David
 #include <iostream>
 #include <cstring>
 using namespace std;
 
-/// Cerinte
+/// Proiect #1 Due March 24, 2025 11:59 PM
 /*
+Cerinte:
     DONE Minim patru clase
     DONE Fiecare clasa are cel putin o functionalitate (daca am o clasa de tip Agenda atunci aceasta ar putea afisa datele disponibile dintr-o anumita luna)
     DONE Fiecare clasa trebuie sa implementeaze: 
@@ -36,10 +36,40 @@ using namespace std;
     DONE mentiune: Daca am o clasa Eveniment atunci as putea sa creez un Eveniment citind informatiile despre acesta precum: data inceput, data sfarsit, numar maxim de participanti, locatie, etc. Pot sa afisez toate evenimentele create folosind o variabila de tip static Eveniment* pentru a retine evenimentele intr-o lista (aveti grija la memory leaks). As putea sa selectez un eveniment dintr-o lista si sa ii actualizez atributele precum locatia sau / si datele de inceput final este problema voastra cum vreti sa gestionati actualizarea (cititi despre HTTP PATCH vs PUT). As putea elimina un eveniment din lista de evenimente pe baza unui cod (ID) sau a numelui.
 */
 
-/// Ideea jocului: Bunicul Neculai este plecat intr-o vacanta la munte. De aceea, te-a rugat sa te ocupi de ferma lui pentru cateva saptamani. Crezi ca vei face fata?
+/// Proiect #2 Due April 13, 2025 11:59 PM
+/*
+Requirements (mandatory):
+    TODO Minim 5 clase care vor avea implementate cel puțin o funcționalitate
+    TODO Exemplifica conceptul de virtualizare
+    TODO Foloseste conceptul de moștenire (minim 3 clase în ierarhie)
+    TODO Foloseste conceptul de polimorfism
+    TODO Minim o clasă abstractă / interfață
+    TODO Moștenirea în diamant (moștenirea multiplă) corect rezolvată
+    TODO Citiți despre HTTP PATCH vs. PUT
+Feedback (nice):
+    TODO Adauga inventar
+    TODO La supraincarcare trebe comutativitate
+    TODO Incearca sa modifici momentul din care contorizezi numarul de ore petrecute la ferma
+    TODO Ajuta utilizatorul sa inteleaga ca trebuie sa ordoneze el treburile din casa in ziua 2
+    TODO Acorda jucatorului posibilitatea de a refuza oferta lui George
+    TODO Afiseaza inventarul, daca e, sau macar cati bani mai are
+    TODO Gandeste-te la intrebarea: Ce sa fac daca nu mai am bani si totusi ma aflu in piata?
+Video (aside):
+    TODO https://www.youtube.com/watch?v=X8nYM8wdNRE
+    TODO https://www.youtube.com/watch?v=7Zpuz4T4SGw
+    TODO https://www.youtube.com/watch?v=VaACMwpNz7k
+    TODO https://www.youtube.com/watch?v=DiUXoiOLZY0
+    TODO https://www.youtube.com/watch?v=NxTyUifYJ74
+    TODO https://www.youtube.com/watch?v=KVREEoovDd4
+    TODO https://www.youtube.com/watch?v=V6vna4lGygk
+    TODO https://www.youtube.com/watch?v=sswTE0u0r7g
+    TODO https://www.youtube.com/watch?v=biZEd8pF4OU
+*/
+
 /// Gameplay: Fiecare actiune este realizata pe parcursul unei zile. Dupa un anumit numar se zile se intampla nush ce.
 
 class Jucator {
+    /// Functionalitate: 
 private:
     char* numeJucator;
     int nivelJucator;
@@ -602,7 +632,7 @@ public:
     }
 };
 
-long long Joc::counterContinueGame = 0;  /// inigializam variabila statica counterContinueGame
+long long Joc::counterContinueGame = 0;  /// initializam variabila statica counterContinueGame
 
 int main() {
     /// Ziua 0
@@ -648,7 +678,7 @@ int main() {
     g.menu(g, j);
     cout << "Vazand pe usa frigiderului o lista de task-uri, observi, insa, ca nu sunt aranjate.\n";
     g.menu(g, j);
-    cout << "Cum ai aranja datoriile?\n1 - Spala WC\n2 - Du gunoiul\n3 - Spala aragazul\n4 - Da cu aspiratorul\n(Nota: Scrie numarul de ordine al task-urilor separate prin caracterul spatiu!)\n";
+    cout << "Cum ai aranja datoriile?\n1 - Spala WC-ul\n2 - Du gunoiul\n3 - Spala aragazul\n4 - Da cu aspiratorul\n(Nota: Scrie numarul de ordine al task-urilor separate prin caracterul spatiu!)\n";
     cout << "Ordinea mea: ";
     int ordineaTa[4] = {0}, ordineaMea[4] = {3, 4, 1, 2};;
     int punctajObtinut = 0;
@@ -757,7 +787,7 @@ int main() {
     g.menu(g, j);
     cout << "[Negustorii]: Uite aici una care n-are cum sa nu iti placa!\n";
     g.menu(g, j);
-    cout << "[Negustorii]: Ce alegi?\n";
+    cout << "[Negustorii]: Ce alegi?\nApasa 1 pentru doi cai la pret de unu'\nApasa 2 pentru trei porci la pret de doi\nApasa 3 pentru a refuza oferta";
     cout << "1 - 2 cai la pret de unu' (40) | 2 - 3 porci la pret de 2 (70) | 3 - Refuza oferta\n";
     cin >> aux;
     cin.get();

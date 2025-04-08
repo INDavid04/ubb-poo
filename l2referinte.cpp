@@ -1,4 +1,5 @@
 /// Laborator #2 - Referințe, funcții (supraîncărcare) și transmitere parametrii, keyword-ul const.
+/// TODO: continue from line 141
 
 #include <iostream>
 using namespace std;
@@ -31,7 +32,6 @@ int f3(int x) {
 }
 
 /// Parametrii impliciti <=> parametrii optionali. Intotdeauna, parametrii impliciti intr-o functie se vor pune de la dreapta spre stanga
-// TODO: continue here;
 
 void salut(const char* name = "anonim") {
     cout << "Salut, " << name << "!" << endl;
@@ -111,28 +111,66 @@ int* hPointerPointer(int* x) {
     return x;
 }
 
-int main() {
-    cout << f3(0x87) << endl;
+void suma(int a, int b = 12); /// prototip
 
-    cout << "De la clasa\n";
+char s[80] = "Hello there\n";
+char &replace(int i) {
+    return s[i];
+}
+
+int main() {
+    replace(5) = 'X';
+    cout << s;
+
+    double x10 = 100.1, y10;
+    int *p10 = (int *)&x10;
+    y10 = *p10;
+    printf("%f", y10);
+    cout << endl;
+
+    const char sir[10] = "ana";
+    // strcpy(sir, "bela"); /// E.C.
+    cout << sir << endl;
+
+    const int c = 100;
+    // int*v = &c; /// E.C.
+    // cout << v << endl;
+
+    int variabiluta = 5;
+    int *pointerut = &variabiluta;
+    cout << pointerut << " " << *pointerut << endl;
+    pointerut++;
+    cout << pointerut << " " << *pointerut << endl;
+    pointerut+7; /// TODO: ce face asta? `pointerut+7;`
+    cout << pointerut << " " << *pointerut << endl;
+    pointerut-4;
+    cout << pointerut << " " << *pointerut << endl;
+    
+    cout << f3(0x87) << endl;
+    cout << "Valoarea de la adresa 0x87 este " << f3(0x87) << endl; /// se apeleaza f3(int &x)
+    cout << "Valoarea 87 este " << f3(87) << endl; /// se apeleaza f3(int x)
+
     salut();
     salut("Max");
+
     int x = 32;
     int &y = x; // op. de referentiere
-
+    cout << "x = " << x << " and &x = " << &x << endl;
+    cout << "y = " << y << " and &y = " << &y << endl;
     y = 42;
     cout << x << endl;
-
     // int &y1 = *x; // EC x nu este de tip int * (pointer la int) deci nu am cum sa ii extrag valoare
     // int &y2 = &x; // EC x este de tip int, dar &x nu este int, ci o adresa de memorie
 
     int n = 1;
     int *p = &n;
     int **pp = &p;
-
+    cout << "(n, p, pp) = (" << n << ", " << p << ", " << pp << ")\n(&n, &p, &&pp) = " << &n << ", " << &p << ", " << &pp << ")\n";
     **pp = 5;
     cout << n << ' ' << *p << ' ' << **pp << endl;
 
+    suma(10);
+    suma(10, 10);
 
     const int x5 = 30;
     // x5 = 50; // EC nu merge sa reatribuim constante
@@ -199,3 +237,7 @@ int main() {
     return 0;
 }
  
+void suma(int a, int b) {
+    cout << a + b << endl;
+    /// Nu mai e nevoie sa scriem si aici b = 12 deoarece am scris deja in prototip
+}
