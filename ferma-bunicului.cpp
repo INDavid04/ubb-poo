@@ -3,7 +3,7 @@
 #include <cstring>
 using namespace std;
 
-/// Proiect #1 Due March 24, 2025 11:59 PM
+/// Partea #1 Due March 24, 2025 11:59 PM
 /*
 Cerinte:
     DONE Minim patru clase
@@ -36,10 +36,10 @@ Cerinte:
     DONE mentiune: Daca am o clasa Eveniment atunci as putea sa creez un Eveniment citind informatiile despre acesta precum: data inceput, data sfarsit, numar maxim de participanti, locatie, etc. Pot sa afisez toate evenimentele create folosind o variabila de tip static Eveniment* pentru a retine evenimentele intr-o lista (aveti grija la memory leaks). As putea sa selectez un eveniment dintr-o lista si sa ii actualizez atributele precum locatia sau / si datele de inceput final este problema voastra cum vreti sa gestionati actualizarea (cititi despre HTTP PATCH vs PUT). As putea elimina un eveniment din lista de evenimente pe baza unui cod (ID) sau a numelui.
 */
 
-/// Proiect #2 Due April 13, 2025 11:59 PM
+/// Partea #2 Due April 13, 2025 11:59 PM
 /*
 Requirements (mandatory):
-    TODO Minim 5 clase care vor avea implementate cel puțin o funcționalitate
+    DONE Minim 5 clase care vor avea implementate cel puțin o funcționalitate
     TODO Exemplifica conceptul de virtualizare
     TODO Foloseste conceptul de moștenire (minim 3 clase în ierarhie)
     TODO Foloseste conceptul de polimorfism
@@ -55,9 +55,9 @@ Feedback (nice):
     TODO Afiseaza inventarul, daca e, sau macar cati bani mai are
     TODO Gandeste-te la intrebarea: Ce sa fac daca nu mai am bani si totusi ma aflu in piata?
 Video (aside):
-    TODO https://www.youtube.com/watch?v=X8nYM8wdNRE
-    TODO https://www.youtube.com/watch?v=7Zpuz4T4SGw
-    TODO https://www.youtube.com/watch?v=VaACMwpNz7k
+    DONE https://www.youtube.com/watch?v=X8nYM8wdNRE (Inheritance in C++ by The Cherno, prea tare finalul clipului :) )
+    DONE https://www.youtube.com/watch?v=7Zpuz4T4SGw (Diamond Inheritance: Animal-Lion-Tiger-Liger "Un ligru este un animal hibrid, rezultat din împerecherea între un leu mascul și o femelă de tigru.", conform https://ro.wikipedia.org/wiki/Ligru)
+    DONE https://www.youtube.com/watch?v=VaACMwpNz7k (Diamond Inheritance: Engine-Car-Robot-Transformer Optimus JR :) )
     TODO https://www.youtube.com/watch?v=DiUXoiOLZY0
     TODO https://www.youtube.com/watch?v=NxTyUifYJ74
     TODO https://www.youtube.com/watch?v=KVREEoovDd4
