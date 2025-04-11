@@ -40,7 +40,7 @@ Cerinte:
 /*
 Requirements (mandatory):
     DONE Minim 5 clase care vor avea implementate cel puțin o funcționalitate
-    TODO Exemplifica conceptul de virtualizare
+    DONE Exemplifica conceptul de virtualizare
     TODO Foloseste conceptul de moștenire (minim 3 clase în ierarhie)
     TODO Foloseste conceptul de polimorfism
     TODO Minim o clasă abstractă / interfață
@@ -63,6 +63,7 @@ Video (aside):
     Diamond inheritance
     DONE https://www.youtube.com/watch?v=X8nYM8wdNRE (Inheritance in C++ by The Cherno, prea tare finalul clipului :) )
     DONE https://www.youtube.com/watch?v=7Zpuz4T4SGw (Diamond Inheritance: Animal-Lion-Tiger-Liger "Un ligru este un animal hibrid, rezultat din împerecherea între un leu mascul și o femelă de tigru.", conform https://ro.wikipedia.org/wiki/Ligru)
+    DONE https://www.youtube.com/watch?v=-W-TYjL0aFE (protected to use a variable in more classes)
     DONE https://www.youtube.com/watch?v=VaACMwpNz7k (Diamond Inheritance: Engine-Car-Robot-Transformer Optimus JR :) )
     TODO https://www.youtube.com/watch?v=DiUXoiOLZY0
     TODO https://www.youtube.com/watch?v=NxTyUifYJ74
@@ -656,6 +657,21 @@ public:
         /// Putem folosi variabila numeStapan intrucat e declarata in clasa de baza in zona protected, iar tipul mosternirii este public, ceea ce face sa ramana protected
         cout << "Calul se uita la " << numeStapan << ", astepand un mar!\n";
     }
+    virtual void afiseazaDescriere() = 0; /// fiind functie virtuala pura, clasa cal devine o clasa abstracta
+};
+
+class Arab : public Cal {
+public:
+    void afiseazaDescriere() {
+        cout << "[Caleb Iosua]: Calul dvs. este un cal arab de culoare alba la 450kg si inaltime de 1.5m.";
+    }
+};
+
+class Mustang : public Cal {
+public:
+    void afiseazaDescriere() {
+        cout << "[Caleb Iosua]: Calul dvs. este un mustang de culoare alba la 400kg si inaltime de 1.3m.";
+    }
 };
 
 class Porc : public Animal {
@@ -879,6 +895,58 @@ int main() {
         animal.faceZgomot();
     }
     g.menu(g, j);
+    cout << "Mai spre seara, venira un ingrijitor de cai, anume Caleb Iosua.\n";
+    g.menu(g, j);
+    if (aux == 2) {
+        char cuv[3];
+        cout << "[Caleb Iosua]: Buna seara! Ce cal frumos aveti! Ce rasa este?\n";
+        g.menu(g, j);
+        cout << "[" << j.getName() << "]: Buna! Sincer sa va zic, nu am nici cea mai mica idee.\n";
+        g.menu(g, j);
+        cout << "[Caleb Iosua]: Nicio problema! Va pot ajuta in schimbul unui targ!\n";
+        g.menu(g, j);
+        cout << "[" << j.getName() << "]: Da, sigur! Despre ce este vorba?\n";
+        g.menu(g, j);
+        cout << "[Caleb Iosua]: Am un mic rebus pe care nu reusesc sa il termin de cateva zile bune.\n";
+        g.menu(g, j);
+        cout << "[Caleb Iosua]: Imi mai lipseste un singur cuvant care incepe cu a si se termina cu r.\n";
+        g.menu(g, j);
+        cout << "Introduceti un cuvant de trei litere:\n";
+        cin >> cuv;
+        g.menu(g, j);
+        if (strcmp(cuv, "aer")) {
+            Cal* rasa = new Arab();
+            rasa -> afiseazaDescriere();
+        } else {
+            Cal* rasa = new Mustang();
+            rasa -> afiseazaDescriere();
+        }
+    } else {
+        cout << "[Caleb Iosua]: Buna seara! Vad ca va lipseste un cal in aceasta frumoasa ferma!\n";
+        g.menu(g, j);
+        cout << "[" << j.getName() << "]:Da, aveti dreptate!\n";
+        g.menu(g, j);
+        cout << "[Caleb Iosua]: Va pot ajuta in schimbul unui favor...\n";
+        g.menu(g, j);
+        cout << "[" << j.getName() << "]: Da, sigur! Despre ce este vorba?\n";
+        g.menu(g, j);
+        cout << "[Caleb Iosua]: Am un mic rebus pe care nu reusesc sa il termin de cateva zile bune.\n";
+        g.menu(g, j);
+        cout << "[Caleb Iosua]: Imi mai lipseste un singur cuvant care incepe cu a si se termina cu r.\n";
+        g.menu(g, j);
+        cout << "Introduceti un cuvant de trei litere:\n";
+        cin >> cuv;
+        g.menu(g, j);
+        if (strcmp(cuv, "aer")) {
+            Cal* rasa = new Arab();
+            rasa -> afiseazaDescriere();
+        } else {
+            Cal* rasa = new Mustang();
+            rasa -> afiseazaDescriere();
+        }
+    }
+    g.menu(g, j);
+    /// TODO: check if the player have enough money to buy the horse;
 
     /// Let's call this section final touches even it is not the best name, currently I like it :)
     cout << "Detalii finale\n";
