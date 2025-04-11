@@ -648,7 +648,6 @@ public:
     virtual void faceZgomot() {
         cout << "Te ia cu intristare vazandu-l gol si incepi sa iti cauti de treaba!\n";
     }
-    virtual ~Animal() {}
 };
 
 class Cal : public Animal {
@@ -661,7 +660,8 @@ public:
 
 class Porc : public Animal {
 public:
-    void faceZgomot(const char* numeStapan = "Ion") {
+    void faceZgomot() {
+        /// Aceeasi poveste ca mai sus
         cout << "Porcul da navala peste " << numeStapan << " trantindu-l la pamant.\n";
     }
 };
@@ -863,6 +863,7 @@ int main() {
     /// Ziua 5 (aici incepe partea a doua a proiectului)
     g.showDay();
     /// In aux am retinut 1 pentru cai, 2 pentru porci si 3 pentru a refuza oferta
+    cout << "DEBUG aux: " << aux << endl;
     cout << "In cea de-a cincea zi ai chef de-o inspectie a hambarului!\n";
     g.menu(g, j);
     cout << "Nici bine nu deschizi usa, ca ...\n";
@@ -878,7 +879,6 @@ int main() {
         animal.faceZgomot();
     }
     g.menu(g, j);
-    /// TODO: try to understand why it shows only the message from the base class, Animal, instead of the previous choice;
 
     /// Let's call this section final touches even it is not the best name, currently I like it :)
     cout << "Detalii finale\n";
