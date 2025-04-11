@@ -55,6 +55,12 @@ Feedback (nice):
     TODO Afiseaza inventarul, daca e, sau macar cati bani mai are
     TODO Gandeste-te la intrebarea: Ce sa fac daca nu mai am bani si totusi ma aflu in piata?
 Video (aside):
+    Virtualization
+    DONE https://www.youtube.com/watch?v=oIV2KchSyGQ (Virtual keyword generates a v table for the following function (v from virtual, may be? yeap! see the fourth video)
+    DONE https://www.youtube.com/watch?v=4NPOIaUxnnk (We can use -> instead of the dot (.) to acces a function)
+    DONE https://www.youtube.com/watch?v=T8f4ajtFU9g (Check the notion Anul I page because it is not space here for romans :))
+    DONE https://www.youtube.com/watch?v=FncNE2vdtwQ (A virtual table is an array which contains the addresses of the virtual functions)
+    Diamond inheritance
     DONE https://www.youtube.com/watch?v=X8nYM8wdNRE (Inheritance in C++ by The Cherno, prea tare finalul clipului :) )
     DONE https://www.youtube.com/watch?v=7Zpuz4T4SGw (Diamond Inheritance: Animal-Lion-Tiger-Liger "Un ligru este un animal hibrid, rezultat din împerecherea între un leu mascul și o femelă de tigru.", conform https://ro.wikipedia.org/wiki/Ligru)
     DONE https://www.youtube.com/watch?v=VaACMwpNz7k (Diamond Inheritance: Engine-Car-Robot-Transformer Optimus JR :) )
@@ -69,7 +75,6 @@ Video (aside):
 /// Gameplay: Fiecare actiune este realizata pe parcursul unei zile. Dupa un anumit numar se zile se intampla nush ce.
 
 class Jucator {
-    /// Functionalitate: 
 private:
     char* numeJucator;
     int nivelJucator;
@@ -632,10 +637,39 @@ public:
     }
 };
 
+class Animal {
+private:
+protected:
+    const char* numeStapan;
+public:
+    Animal (const char* numeStapanInitial = "Ion") {
+        numeStapan = numeStapanInitial;
+    }
+    virtual void faceZgomot() {
+        cout << "Te ia cu intristare vazandu-l gol si incepi sa iti cauti de treaba!\n";
+    }
+    virtual ~Animal() {}
+};
+
+class Cal : public Animal {
+public:
+    void faceZgomot() {
+        /// Putem folosi variabila numeStapan intrucat e declarata in clasa de baza in zona protected, iar tipul mosternirii este public, ceea ce face sa ramana protected
+        cout << "Calul se uita la " << numeStapan << ", astepand un mar!\n";
+    }
+};
+
+class Porc : public Animal {
+public:
+    void faceZgomot(const char* numeStapan = "Ion") {
+        cout << "Porcul da navala peste " << numeStapan << " trantindu-l la pamant.\n";
+    }
+};
+
 long long Joc::counterContinueGame = 0;  /// initializam variabila statica counterContinueGame
 
 int main() {
-    /// Ziua 0
+    /// Ziua 0 (Aici incepe prima parte a proiectului)
     Joc g; /// g de la game, j e luat pentru jucator :)
     Jucator j; /// j de la jucator, bineinteles :)
     bool continuaJoc = true;
@@ -787,8 +821,7 @@ int main() {
     g.menu(g, j);
     cout << "[Negustorii]: Uite aici una care n-are cum sa nu iti placa!\n";
     g.menu(g, j);
-    cout << "[Negustorii]: Ce alegi?\nApasa 1 pentru doi cai la pret de unu'\nApasa 2 pentru trei porci la pret de doi\nApasa 3 pentru a refuza oferta";
-    cout << "1 - 2 cai la pret de unu' (40) | 2 - 3 porci la pret de 2 (70) | 3 - Refuza oferta\n";
+    cout << "[Negustorii]: Ce alegi?\nApasa 1 pentru doi cai la pret de unu'\nApasa 2 pentru trei porci la pret de doi\nApasa 3 pentru a refuza oferta\n";
     cin >> aux;
     cin.get();
     g.separator();
@@ -826,7 +859,29 @@ int main() {
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
     g.menu(g, j);
-    cout << "\nDetalii finale\n";
+
+    /// Ziua 5 (aici incepe partea a doua a proiectului)
+    g.showDay();
+    /// In aux am retinut 1 pentru cai, 2 pentru porci si 3 pentru a refuza oferta
+    cout << "In cea de-a cincea zi ai chef de-o inspectie a hambarului!\n";
+    g.menu(g, j);
+    cout << "Nici bine nu deschizi usa, ca ...\n";
+    g.menu(g, j);
+    if (aux == 1) {
+        Animal* animal = new Cal();
+        animal -> faceZgomot();
+    } else if (aux == 2) {
+        Animal* animal = new Porc();
+        animal -> faceZgomot();
+    } else {
+        Animal animal;
+        animal.faceZgomot();
+    }
+    g.menu(g, j);
+    /// TODO: try to understand why it shows only the message from the base class, Animal, instead of the previous choice;
+
+    /// Let's call this section final touches even it is not the best name, currently I like it :)
+    cout << "Detalii finale\n";
     j.showInfo();
     g.menu(g, j);
 
