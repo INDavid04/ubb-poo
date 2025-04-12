@@ -1,3 +1,4 @@
+#include <iostream>
 using namespace std; /// use this line to fix a lot of errors, sorry, no time time left list them here :)
 
 class Jucator {

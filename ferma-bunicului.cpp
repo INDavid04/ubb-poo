@@ -8,6 +8,7 @@
 #include "ferma-teren.h"
 #include "ferma-tarc.h"
 #include "ferma-animal.h" /// contains also the following classes: Cal, Arab, Mustang, Porc
+#include "ferma-aliment.h"
 using namespace std;
 
 /// NICE: move this comments into a markdown file and organize the code a little bit :)
@@ -49,10 +50,10 @@ Cerinte:
 ## Mandatory
     DONE Minim 5 clase care vor avea implementate cel puțin o funcționalitate
     DONE Exemplifica conceptul de virtualizare
-    TODO Foloseste conceptul de moștenire (minim 3 clase în ierarhie)
-    TODO Foloseste conceptul de polimorfism
+    DONE Foloseste conceptul de moștenire (minim 3 clase în ierarhie)
+    DONE Foloseste conceptul de polimorfism
     DONE Minim o clasă abstractă / interfață
-    TODO Moștenirea în diamant (moștenirea multiplă) corect rezolvată
+    DONE Moștenirea în diamant (moștenirea multiplă) corect rezolvată
     TODO Citiți despre HTTP PATCH vs. PUT
 ## Nice
     TODO Adauga inventar
@@ -282,7 +283,7 @@ int main() {
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
     g.menu(g, j);
 
-    /// Ziua 5 (aici incepe partea a doua a proiectului)
+    /// Ziua 5 (aici incepe partea a doua a proiectului) ///////////////////////////////////////////////////////////////
     char cuv[3];
     g.showDay();
     /// In aux am retinut 1 pentru cai, 2 pentru porci si 3 pentru a refuza oferta sau daca nu am avut bani de cai/porci
@@ -350,6 +351,59 @@ int main() {
             rasa -> afiseazaDescriere();
         }
     }
+    g.menu(g, j);
+    j.levelUp();
+    g.menu(g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g.menu(g, j);
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g.menu(g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.moneyUp(f.getVenit());
+    cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g.menu(g, j);
+
+    /// Ziua 6
+    g.showDay();
+    cout << "In ziua a sasea, sunteti vizitati de un grup de liceeni insotiti de profesorul Luca.\n";
+    g.menu(g, j);
+    cout << "[Luca]: Salutare! Deranjam?\n";
+    g.menu(g, j);
+    cout << "[" << j.getName() << "]: Deloc! Cu ce ocazie, totusi?\n";
+    g.menu(g, j);
+    cout << "[Luca]: In saptamana verde niste prieteni ai lui Neculai ne-au propus o vizita pe aici!\n";
+    g.menu(g, j);
+    cout << "Fiind luat prin surprindere, decizi sa ii lasi pe mana lui George Petru!\n";
+    g.menu(g, j);
+    cout << "Nu de alta dar trebuie sa te ocupi si de masa lor.\n";
+    g.menu(g, j);
+    Placinta p;
+    p.afiseaza();
+    g.menu(g, j);
+    j.levelUp();
+    g.menu(g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g.menu(g, j);
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g.menu(g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.moneyUp(f.getVenit());
+    cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g.menu(g, j);
+
+    /// Ziua 7
+    g.showDay();
+    cout << "In cea de-a saptea zi, te bucuri de realizarile facute pana acum!\n";
     g.menu(g, j);
     j.levelUp();
     g.menu(g, j);
