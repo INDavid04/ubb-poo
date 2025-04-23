@@ -56,14 +56,19 @@ Cerinte:
     DONE Moștenirea în diamant (moștenirea multiplă) corect rezolvată
     TODO Citiți despre HTTP PATCH vs. PUT
 ## Nice
+    TODO diagrama de decizie
     TODO Adauga inventar
-    TODO La supraincarcare trebe comutativitate
+    TODO La supraincarcare trebe comutativitate (forma friend, fie in prima ori in a doua)
     TODO Incearca sa modifici momentul din care contorizezi numarul de ore petrecute la ferma
     TODO Ajuta utilizatorul sa inteleaga ca trebuie sa ordoneze el treburile din casa in ziua 2
     TODO Acorda jucatorului posibilitatea de a refuza oferta lui George
     TODO Afiseaza inventarul, daca e, sau macar cati bani mai are
     TODO Gandeste-te la intrebarea: Ce sa fac daca nu mai am bani si totusi ma aflu in piata?
-    TODO check if the player have enough money to buy the horse;
+    TODO check if the player have enough money to buy the horse
+    TODO try a better order because initially was 3412, from Diana 1342 and from Stefan 1324
+    TODO try to think a better exprimation instead of "tinere" to apply for men and women
+    TODO replace ce cal frumos aveti with ce cai frumosi aveti and other messages because we can have more horses not only one
+    TODO offer feedback after the user gives a 3 characters string whichs starts with a and ends with r
 ## Aside
 ### Virtualization
     DONE https://www.youtube.com/watch?v=oIV2KchSyGQ (Virtual keyword generates a v table for the following function (v from virtual, may be? yeap! see the fourth video)

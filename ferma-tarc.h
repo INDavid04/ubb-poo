@@ -54,7 +54,7 @@ public:
     }
     /// Destructor
     ~Tarc() {
-        cout << "Bunicul Neculai s-a intors si este bucuros sa ingrijeasca de noile animalute.\n";
+        cout << "Bunicul Neculai s-a intors si este bucuros sa se ingrijeasca de noile animalute.\n";
     }
     /// Setter
     void setAnimale(int capacitate = 0) {

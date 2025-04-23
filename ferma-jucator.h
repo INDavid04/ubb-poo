@@ -55,7 +55,7 @@ public:
     }
     /// Destructor
     ~Jucator() {
-        cout << numeJucator << " a iesit din joc avand nivelul " << nivelJucator << endl;
+        cout << numeJucator << " a iesit din joc avand nivelul " << nivelJucator << ".\n";
         delete[] numeJucator;
     }
     /// Setter
