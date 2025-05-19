@@ -4,9 +4,11 @@
 #include <list>
 #include <algorithm>
 using namespace std;
+
 class Drum;
 class Contract;
 
+/// Variabile globale
 vector<Drum*> drumuri;
 list<Contract*> contracte;
 
@@ -59,7 +61,7 @@ public:
         this->nr_judete = nr_judete;
     }
     friend istream& operator>>(istream& in, DrumNational& drum_national) {
-        in >> (Drum&)drum_national;
+        in >> (Drum&)drum_national; /// cast explicit; se citesc mai intai membrii mosteniti: denumire, drum, nr_tronsoane
 
         cout << "Citeste numarul de judete: ";
         in >> drum_national.nr_judete;
