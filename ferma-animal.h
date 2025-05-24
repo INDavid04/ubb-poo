@@ -1,6 +1,17 @@
 #include <iostream>
-#include <set> /// STL
+#include <string>
+#include <set>
 using namespace std;
+
+class Animale {
+private:
+    set<string> setAnimale{};
+protected:
+public:
+    void addAnimal(string denumire) {
+        setAnimale.insert(denumire);
+    }
+};
 
 class Animal {
 private:

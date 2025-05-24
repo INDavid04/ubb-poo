@@ -1,5 +1,5 @@
 #include <iostream>
-using namespace std; /// use this line to fix a lot of errors, sorry, no time time left list them here :)
+using namespace std; /// use this line to fix a lot of errors, sorry, no time time left to list them here :)
 
 class Jucator {
 private:
@@ -110,7 +110,7 @@ public:
     void levelUp(int contor = 1) {
         monede += 20 * contor;
         nivelJucator++;
-        cout << "Hurray! A mai trecut o zi! In plus, ai mai castigat si " << 20 * contor << " monede.\n";
+        cout << "Hurray! Ai mai avansat un nivel, acum avand " << nivelJucator << " nivele! In plus, ai mai castigat si " << 20 * contor << " monede.\n";
     }
     void levelDown() {
         if(nivelJucator) {

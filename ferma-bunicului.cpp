@@ -1,7 +1,12 @@
 /// Ferma bunicului - Proiect, Programare Orientata pe Obiecte, Irimia David
 
 #include <iostream>
+#include <fstream>
 #include <cstring>
+#include <vector>
+#include <list>
+#include <set>
+#include <algorithm>
 #include "ferma-jucator.h"
 #include "ferma-joc.h"
 #include "ferma-casa.h"
@@ -97,22 +102,22 @@ using namespace std;
 /*
 Cerinte:
 ## Mandatory
-    TODO Sa se implementeze din libraria STL cel putin un vector, un set, o lista si un map pentru a gestiona datele aplicatiei
-    TODO Scrierea si citirea din fisier
-    TODO Aplicatia va contine un meniu (in consola) prin care utilizatorul poate alege diverse optiuni (import/export date, citire obiect nou de la tastatura, diverse functionalitati ale aplicatiei) de tip Singletone
-    TODO Folosirea a cel putin o clasa Template
-    TODO Folosirea a cel putin doua metode Template
-    TODO Proiectul trebuie sa trateze toate exceptiile posibile care pot aparea la executarea codului (codul trebuie sa arunce cel putin sase exceptii dintre care minim trei diferite)
-    TODO Exemplificarea conceptelor de upcasting si downcasting (trebuie sa foloseasca si dynamic_cast)
-    TODO Exemplificarea conceptului de mostenire pana la nepot (Parinte -> Copil -> Nepot)
-    TODO Fiecare clasa sa contine:
-        TODO Constructorul fara parametrii
-        TODO Constructorul cu toti parametrii
-        TODO Copy Constructorul
-        TODO Operator egal
-        TODO Destructor
-        TODO Operator de citire
-        TODO Operator de afisare
+    DONE Sa se implementeze din libraria STL cel putin un vector, un set, o lista si un map pentru a gestiona datele aplicatiei
+    DONE Scrierea si citirea din fisier
+    DONE Aplicatia va contine un meniu (in consola) prin care utilizatorul poate alege diverse optiuni (import/export date, citire obiect nou de la tastatura, diverse functionalitati ale aplicatiei) de tip Singletone
+    DONE Folosirea a cel putin o clasa Template
+    DONE Folosirea a cel putin doua metode Template
+    DONE Proiectul trebuie sa trateze toate exceptiile posibile care pot aparea la executarea codului (codul trebuie sa arunce cel putin sase exceptii dintre care minim trei diferite)
+    DONE Exemplificarea conceptelor de upcasting si downcasting (trebuie sa foloseasca si dynamic_cast)
+    DONE Exemplificarea conceptului de mostenire pana la nepot (Parinte -> Copil -> Nepot)
+    DONE Fiecare clasa sa contine:
+        DONE Constructorul fara parametrii
+        DONE Constructorul cu toti parametrii
+        DONE Copy Constructorul
+        DONE Operator egal
+        DONE Destructor
+        DONE Operator de citire
+        DONE Operator de afisare
 ## Aside
 ### Notite pentru cerinta: 'Citiți despre HTTP PATCH vs. PUT' (de data trecuta)
     - API stands for Application Programming Interface
@@ -136,53 +141,94 @@ ostream& operator<<(ostream& out, const set<T>& setAnimale)
             out << ", " << animale;
         }
     );
-    return out << ".";
+    return out << ".\n";
+}
+
+/// Clasa template
+template <typename T>
+class Raport {
+private:
+    vector<T> monede;
+protected:
+public:
+    Raport(const vector<T>& v) : monede(v) {}
+    T calculeazaMedia() const {
+        if (monede.empty()) throw runtime_error("Nu-s date in raport");
+        T suma = 0;
+        for (const T& val : monede) suma += val;
+        return suma / monede.size();
+    }
+    void addMonede(float valoare) {
+        monede.push_back(monede);
+    }
+};
+
+/// Metode template
+
+template <typename T>
+T venitMinim(const vector<T>& lst) {
+    if (lst.empty()) throw runtime_error("Lista este goala.");
+    return *min_element(lst.begin(), lst.end());
+}
+
+template <typename T>
+T venitMaxim(const vector<T>& lst) {
+    if (lst.empty()) throw runtime_error("Lista este goala.");
+    return *max_element(lst.begin(), lst.end());
 }
 
 int main() {
-    /// Ziua 0 (Aici incepe prima parte a proiectului)
-    Joc g; /// g de la game, j e luat pentru jucator :)
+    /// Resetam fisierul ferma-extras in sensul sa ii stergem vechiul continut
+    ofstream fout("ferma-extras.txt");
+    fout << ""; /// empty
+    fout.close();
+
+    /// Ziua 0 (Aici incepe prima parte a proiectului) /////////////////////////////////////////////////////////////////
+    Joc* g = Joc::getInstanta(); /// g de la game, j e luat pentru jucator :)
     Jucator j; /// j de la jucator, bineinteles :)
     bool continuaJoc = true;
-    g.showDay();
+    g->showDay();
     cout << "Bunicul Neculai este plecat intr-o vacanta la munte.\n";
-    g.continueGame();
+    g->continueGame();
     cout << "De aceea, te-a rugat pe tine sa te ocupi de ferma lui pentru cateva zile.\n";
-    g.continueGame();
+    g->continueGame();
     cout << "Crezi ca vei face fata?\n";
-    g.continueGame();
+    g->continueGame();
 
     /// Ziua 1
     char numeleTau[80];
-    g.showDay();
+    g->showDay();
     cout << "Fiind prima zi, intalnesti un vecin care s-a mutat de curand la ferma ...\n";
-    g.continueGame();
+    g->continueGame();
     cout << "[Noul vecin]: Sal'tare tinere! Care-ti este numele dumitale?\n";
     cin.getline(numeleTau, 80); /// getline for "Irimia David" and get for "Irimia", for example
     j.setName(numeleTau);
-    g.continueGame();
+    g->continueGame();
     cout << "[Noul vecin]: " << numeleTau << ", ce nume frumos!\n";
-    g.continueGame();
+    g->continueGame();
     cout << "Imi pare bine sa te intalnesc pe aici, " << numeleTau << "!\n";
-    g.continueGame();
+    g->continueGame();
     cout << "[Noul vecin]: Eu sunt George Petru.\n";
-    g.continueGame();
+    g->continueGame();
     j.levelUp();
     // j++; /// in loc de j.levelUp();
-    g.menu(g, j);
+    ofstream fout1("ferma-extras.txt", ios::app);
+    fout1 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout1.close();
+    g->menu(*g, j);
 
     /// Ziua 2
-    g.showDay();
+    g->showDay();
     cout << "In cea de-a doua zi observi ca bunicul Neculai a lasat casa 'vraiste'.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Cumva il intelegi ca era foarte ocupat cu treburile sale.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Tocmai de aceea si-a luat si el o bine-meritata vacanta.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Prin urmare, decizi sa dai o mana de ajutor.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Vazand pe usa frigiderului o lista de task-uri, observi, insa, ca nu sunt aranjate.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Cum ai aranja datoriile?\n1 - Spala WC-ul\n2 - Du gunoiul\n3 - Spala aragazul\n4 - Da cu aspiratorul\n(Nota: Scrie numarul de ordine al task-urilor separate prin caracterul spatiu!)\n";
     cout << "Ordinea mea: ";
     int ordineaTa[4] = {0}, ordineaMea[4] = {3, 4, 1, 2};;
@@ -194,37 +240,40 @@ int main() {
             punctajObtinut++;
         }
     }
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Bravo! Ai reusit sa faci " << punctajObtinut << " din cele 4 taskuri.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Chiar daca ziua a doua a fost mai obositoare, s-a meritata sa castigi " << punctajObtinut << " nivel(e)!\n"; 
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp(punctajObtinut);
-    g.menu(g, j);
+    ofstream fout2("ferma-extras.txt", ios::app);
+    fout2 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout2.close();
+    g->menu(*g, j);
 
     /// Ziua 3
-    g.showDay();
+    g->showDay();
     Casa c;
     Teren t;
     int aux = 0;
     cout << "Nici bine nu te-ai trezit in a treia zi, ca iti bate cineva la usa ...\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[George]: Vecine, ziua asta nu a inceput deloc bine!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[George]: Azi noapte a luat foc hambarul si focul s-a extins pana ...\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[George]: Pana la casa noastra! Iti vine sa crezi asa ceva, " << j.getName() << "?\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[George]: Ai fii amabil sa ne gazduiesti pe mine si pe familia mea?\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[George]: Bineinteles, contra-cost: 50 monede pe zi!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[George]: Multumim foarte mult, " << j.getName() << "!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Facanduti-se mila de vecin, hotarasti sa ii dai resursele tale de grau, cartofi si morcovi.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Ajuns in piata, vanzatoarea te intreaba ce cantitate doresti din fiecare:\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Vanzatoarea]: 1 leu kilu' de grau. Cate kile vrei, tinere?\n";
     cin >> aux;
     while(aux > j.getMonede()) {
@@ -232,9 +281,10 @@ int main() {
         cout << "[Vanzatoarea]: 1 leu kilu' de grau. Cate kile vrei, tinere?\n";
         cin >> aux;
     }
+    if (j.getMonede() < aux) throw logic_error("Fonduri insuficiente\n");
     j.moneyDown(aux);
     t.cumparaResurse(0, aux);
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Vanzatoarea]: 5 lei kilu' de cartofi. Cat sa-ti dau?\n";
     cin >> aux;
     while(5 * aux > j.getMonede()) {
@@ -244,7 +294,7 @@ int main() {
     }
     j.moneyDown(5 * aux);
     t.cumparaResurse(1, aux);
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Vanzatoarea]: 3 lei kilu' de morcovi. Cate kile?\n";
     cin >> aux;
     while(3 * aux > j.getMonede()) {
@@ -254,49 +304,53 @@ int main() {
     }
     j.moneyDown(3 * aux);
     t.cumparaResurse(2, aux);
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
     j.moneyDown(c.getTaxa());
     j.moneyDown(t.getTaxa());
-    g.menu(g, j);
+    g->menu(*g, j);
     c.setChirie();
     j.moneyUp(c.getChirie());
     cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(t.getVenit());
     cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
-    g.menu(g, j);
-
+    ofstream fout3("ferma-extras.txt", ios::app);
+    fout3 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout3.close();
+    g->menu(*g, j);
+    
     /// Ziua 4
+    Animale a;
     set<string> setAnimale{};
-    g.showDay();
+    g->showDay();
     Tarc f;
     cout << "In ziua a patra, planuiesti sa ii faci o bucurie bunicului Neculai.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Ce poate fi mai bun decat niste animale? ... \n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Mai multe animale :)\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Numai bine, ca au trecut niste negustori prin zona cu niste oferte irefuzabile ...\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[" << j.getName() << "]: Ziua buna! Mai lasati din pret?\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Negustorii]: Buna sa iti fie si inima! Ti se pare ca avem noi cumva marfa ieftina?\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[" << j.getName() << "]: Oh! N-am vrut sa intelegeti gresit! Imi pare rau!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[" << j.getName() << "]: Ce voiam sa zic este ca sunt interesat de o oferta!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Negustorii]: Aha! Daca vrei oferta ...\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Negustorii]: Uite aici una care n-are cum sa nu iti placa!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Negustorii]: Ce alegi?\nApasa 1 pentru doi cai la pret de unu'\nApasa 2 pentru trei porci la pret de doi\nApasa 3 pentru a refuza oferta\n";
     cin >> aux;
     cin.get();
-    g.separator();
+    g->separator();
     if (j.getMonede() < 40 || (j.getMonede() < 70 && aux == 2)) {
         cout << "[Negustorii]: Sorry man! Deoarece nu ai bani, nu ai incotro decat sa refuzi oferta!\n";
         j.levelDown(); /// just for fun, ne imaginam ca ne iau negustorii un nivel pentru ca le-am pierdut timpul :)
@@ -305,6 +359,7 @@ int main() {
         j.moneyDown(40);
         f.cumparaAnimale(2);
         f.addAnimale("cai", 2);
+        a.addAnimal("cai");
         setAnimale.insert("cai");
     } else if (aux == 2) {
         cout << "[Negustorii]: Buna afac1ere! Sa te bucuri de porci!\n";
@@ -314,63 +369,72 @@ int main() {
     } else if (aux == 3) {
         cout << "[Negustorii]: Nicio problema! Ne mai auzim cand dai de bani!\n";
     }
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
+    g->menu(*g, j);
     t.setTaxa(5);
     cout << "Taxa pe teren a crescut la " << t.getTaxa() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
     j.moneyDown(c.getTaxa());
     j.moneyDown(t.getTaxa());
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(c.getChirie());
     cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(t.getVenit());
     cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
-    g.menu(g, j);
-
+    ofstream fout4("ferma-extras.txt", ios::app);
+    fout4 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout4.close();
+    g->menu(*g, j);
+    
     /// Ziua 5 (aici incepe partea a doua a proiectului) ///////////////////////////////////////////////////////////////
     char cuv[3];
-    g.showDay();
+    g->showDay();
     /// In aux am retinut 1 pentru cai, 2 pentru porci si 3 pentru a refuza oferta sau daca nu am avut bani de cai/porci
     cout << "In cea de-a cincea zi ai chef de-o inspectie a hambarului!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Nici bine nu deschizi usa, ca ...\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     if (aux == 1) {
-        Animal* animal = new Frizon();
-        animal -> faceZgomot();
+        Animal* a = new Frizon();
+        Frizon* f = dynamic_cast<Frizon*>(a);  /// downcast cu verificare
+        if (f) {
+            f->faceZgomot();
+        }
+        delete a;
     } else if (aux == 2) {
-        Animal* animal = new Porc();
-        animal -> faceZgomot();
+        Porc* p = new Porc();
+        Animal* a = p;  /// upcast implicit: Porc* → Animal*
+        a->faceZgomot();
+        delete p;
     } else {
         Animal animal;
         animal.faceZgomot();
     }
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Mai spre seara, venira un ingrijitor de cai, anume Caleb Iosua.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     if (aux == 1) {
         cout << "[Caleb Iosua]: Buna seara! Ce cal frumos aveti! Ce rasa este?\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "[" << j.getName() << "]: Buna! Sincer sa va zic, nu am nici cea mai mica idee.\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "[Caleb Iosua]: Nicio problema! Va pot ajuta in schimbul unui targ!\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "[" << j.getName() << "]: Da, sigur! Despre ce este vorba?\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "[Caleb Iosua]: Am un mic rebus pe care nu reusesc sa il termin de cateva zile bune.\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "[Caleb Iosua]: Imi mai lipseste un singur cuvant care incepe cu a si se termina cu r.\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "Introduceti un cuvant de trei litere:\n";
         cin >> cuv;
-        g.menu(g, j);
+        g->menu(*g, j);
         if (strcmp(cuv, "aer")) {
             Cal* rasa = new Arab();
             rasa -> afiseazaDescriere();
@@ -380,20 +444,20 @@ int main() {
         }
     } else {
         cout << "[Caleb Iosua]: Buna seara! Vad ca va lipseste un cal in aceasta frumoasa ferma!\n";
-        g.menu(g, j);
-        cout << "[" << j.getName() << "]:Da, aveti dreptate!\n";
-        g.menu(g, j);
+        g->menu(*g, j);
+        cout << "[" << j.getName() << "]: Da, aveti dreptate!\n";
+        g->menu(*g, j);
         cout << "[Caleb Iosua]: Va pot ajuta in schimbul unui favor...\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "[" << j.getName() << "]: Da, sigur! Despre ce este vorba?\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "[Caleb Iosua]: Am un mic rebus pe care nu reusesc sa il termin de cateva zile bune.\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "[Caleb Iosua]: Imi mai lipseste un singur cuvant care incepe cu a si se termina cu r.\n";
-        g.menu(g, j);
+        g->menu(*g, j);
         cout << "Introduceti un cuvant de trei litere care incepe cu a si se termina cu r:\n";
         cin >> cuv;
-        g.menu(g, j);
+        g->menu(*g, j);
         if (strcmp(cuv, "aer")) {
             Cal* rasa = new Arab();
             rasa -> afiseazaDescriere();
@@ -403,266 +467,402 @@ int main() {
         }
     }
     setAnimale.insert("cai");
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
     j.moneyDown(c.getTaxa());
     j.moneyDown(t.getTaxa());
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(c.getChirie());
     cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(t.getVenit());
     cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
-    g.menu(g, j);
-
+    ofstream fout5("ferma-extras.txt", ios::app);
+    fout5 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout5.close();
+    g->menu(*g, j);
+    
     /// Ziua 6
-    g.showDay();
+    g->showDay();
     cout << "In ziua a sasea, sunteti vizitati de un grup de liceeni insotiti de profesorul Luca.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Luca]: Salutare! Deranjam?\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[" << j.getName() << "]: Deloc! Cu ce ocazie, totusi?\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Luca]: In saptamana verde niste prieteni ai lui Neculai ne-au propus o vizita pe aici!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Fiind luat prin surprindere, decizi sa ii lasi pe mana lui George Petru!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Nu de alta dar trebuie sa te ocupi si de masa lor.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     Placinta p;
     p.afiseaza();
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
     j.moneyDown(c.getTaxa());
     j.moneyDown(t.getTaxa());
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(c.getChirie());
     cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(t.getVenit());
     cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
-    g.menu(g, j);
-
+    ofstream fout6("ferma-extras.txt", ios::app);
+    fout6 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout6.close();
+    g->menu(*g, j);
+    
     /// Ziua 7
-    g.showDay();
+    g->showDay();
     cout << "In cea de-a saptea zi, te bucuri de realizarile facute pana acum!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
     j.moneyDown(c.getTaxa());
     j.moneyDown(t.getTaxa());
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(c.getChirie());
     cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(t.getVenit());
     cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
-
-    /// Ziua 8
-    g.showDay();
+    ofstream fout7("ferma-extras.txt", ios::app);
+    if (!fout7.is_open()) throw runtime_error("Nu s-a putut deschide fisierul pentru scriere!\n");
+    fout7 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout7.close();
+    g->menu(*g, j);
+    
+    /// Ziua 8 (aici incepe partea a treia a proiectului) //////////////////////////////////////////////////////////////
+    g->showDay();
     cout << "In a opta zi, vine inspectia.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "(Efect dramatic) Pam! Pam! Pam!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Inspectia] Prea bine! Hai da sa incepem cu terenul!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[" << j.getName() << "]: Da, sigur! Am " << t.getGrau() << "kg de grau.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[" << j.getName() << "]: Urmate de " << t.getCartofi() << "kg de cartofi.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[" << j.getName() << "]: Si " << t.getMorcovi() << "kg de morcovi.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Inspectia] No, si cu animalele cum o duceti?\n";
-    cout "[" << j.getName() << "]: " << setAnimale << '\n';
+    g->menu(*g, j);
+    cout << "[" << j.getName() << "]: " << setAnimale << '\n';
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "[Inspectia]: Nu aveti probleme, pe moment! Zi minunata!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
     j.moneyDown(c.getTaxa());
     j.moneyDown(t.getTaxa());
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(c.getChirie());
     cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(t.getVenit());
     cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
-
+    ofstream fout8("ferma-extras.txt", ios::app);
+    fout8 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout8.close();
+    g->menu(*g, j);
+    
     /// Ziua 9
     list<string> listaTarc = {"cai", "porci"};
-    g.showDay();
+    g->showDay();
     cout << "Vazand ca in ziua 8 nu prea ai destule animale, in ziua 9 iei atitudine.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Prin urmare mergi la targ pentru a extinde ferma cu mai multe tarcuri.\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     do {
         cout << "Apasa 1 pentru a iesi din targ\n";
         cout << "Apasa 2 pentru a cumpara 2 gaini (10 monede)\n";
         cout << "Apasa 3 pentru a cumpara 3 vaci (30 monede)\n";
         cout << "Apasa 4 pentru a cumpara 4 oi (32 monede)\n";
         cin >> aux;
+        g->menu(*g, j);
         if (aux == 1) {
             cout << "Vroom! Vroom! Tocmai ai ales sa parasesti targul si sa te intorci la ferma.\n";
+            g->menu(*g, j);
         } else if (aux == 2) {
             if (j.getMonede() < 10) {
                 cout << "[Vanzatoarea]: Imi cer mii de scuze! Nu iti pot vinde gainile numai pentru " << j.getMonede() << " monede!\n";
-                g.menu(g, j);
+                g->menu(*g, j);
                 j.levelDown(); /// just for fun, ne imaginam ca ne ia negustoarea un nivel pentru ca i-am pierdut timpul :)
-                g.menu(g, j);
+                g->menu(*g, j);
             } else {
+                int ordineTarc = -1;
                 f.cumparaAnimale(2);
                 f.addAnimale("gaini", 2);
+                a.addAnimal("gaini");
                 cout << "[Vanzatoarea]: Sa te bucuri de cele doua gaini!\n";
+                g->menu(*g, j);
                 j.levelUp();
+                g->menu(*g, j);
                 cout << "Ai vrea gainile la inceputul sau la sfarsitul tarcurilor?\n";
-                g.menu(g, j);
+                g->menu(*g, j);
                 cout << "Apasa 8 pentru a pune gainile la inceputul tarcurilor\n";
                 cout << "Apasa 9 pentru a pune gainile la sfarsitul tarcurilor\n";
-                cin >> aux; /// in acest caz, aux era initial 2 deci nu conteaza daca isi schimba valoare, tot nu va satisface conditia de la final, aux != 1 fie ca e 2, 8 sau 9
-                if (aux == 8) {
+                cin >> ordineTarc;
+                g->menu(*g, j);
+                if (ordineTarc == 8) {
                     listaTarc.push_front("gaini");
-                } else if (aux == 9) {
+                } else if (ordineTarc == 9) {
                     listaTarc.push_back("gaini");
                 } else {
                     cout << "Nu pricep ce ai vrut sa faci! Am intuit alegerea de a pune gainile la final.\n";
                     listaTarc.push_back("gaini");
+                    g->menu(*g, j);
                 }
             }
         } else if (aux == 3) {
             if (j.getMonede() < 30) {
                 cout << "[Vanzatoarea]: Imi cer mii de scuze! Nu iti pot vinde vacile numai pentru " << j.getMonede() << " monede!\n";
-                g.menu(g, j);
+                g->menu(*g, j);
                 j.levelDown(); /// just for fun, ne imaginam ca ne ia negustoarea un nivel pentru ca i-am pierdut timpul :)
-                g.menu(g, j);
+                g->menu(*g, j);
             } else {
+                int ordineTarc = -1;
                 f.cumparaAnimale(3);
                 f.addAnimale("vaci", 3);
+                a.addAnimal("vaci");
                 cout << "[Vanzatoarea]: Sa te bucuri de cele trei vaci!\n";
+                g->menu(*g, j);
                 j.levelUp();
+                g->menu(*g, j);
                 cout << "Ai vrea vacile la inceputul sau la sfarsitul tarcurilor?\n";
-                g.menu(g, j);
+                g->menu(*g, j);
                 cout << "Apasa 8 pentru a pune vacile la inceputul tarcurilor\n";
                 cout << "Apasa 9 pentru a pune vacile la sfarsitul tarcurilor\n";
-                cin >> aux; /// in acest caz, aux era initial 3 deci nu conteaza daca isi schimba valoare, tot nu va satisface conditia de la final, aux != 1 fie ca e 3, 8 sau 9
-                if (aux == 8) {
+                cin >> ordineTarc; 
+                g->menu(*g, j);
+                if (ordineTarc == 8) {
                     listaTarc.push_front("vaci");
-                } else if (aux == 9) {
+                } else if (ordineTarc == 9) {
                     listaTarc.push_back("vaci");
                 } else {
                     cout << "Nu pricep ce ai vrut sa faci! Am intuit alegerea de a pune vacile la final.\n";
                     listaTarc.push_back("vaci");
+                    g->menu(*g, j);
                 }
             }
         } else if (aux == 4) {
             if (j.getMonede() < 32) {
                 cout << "[Vanzatoarea]: Imi cer mii de scuze! Nu iti pot vinde oile numai pentru " << j.getMonede() << " monede!\n";
-                g.menu(g, j);
+                g->menu(*g, j);
                 j.levelDown(); /// just for fun, ne imaginam ca ne ia negustoarea un nivel pentru ca i-am pierdut timpul :)
-                g.menu(g, j);
+                g->menu(*g, j);
             } else {
+                int ordineTarc = -1;
                 f.cumparaAnimale(4);
-                f.addAnimale("ai", 4);
+                f.addAnimale("oi", 4);
+                a.addAnimal("oi");
                 cout << "[Vanzatoarea]: Sa te bucuri de cele patru oi!\n";
+                g->menu(*g, j);
                 j.levelUp();
+                g->menu(*g, j);
                 cout << "Ai vrea oile la inceputul sau la sfarsitul tarcurilor?\n";
-                g.menu(g, j);
+                g->menu(*g, j);
                 cout << "Apasa 8 pentru a pune oile la inceputul tarcurilor\n";
                 cout << "Apasa 9 pentru a pune oile la sfarsitul tarcurilor\n";
-                cin >> aux; /// in acest caz, aux era initial 4 deci nu conteaza daca isi schimba valoare, tot nu va satisface conditia de la final, aux != 1 fie ca e 4, 8 sau 9
-                if (aux == 8) {
+                cin >> ordineTarc; 
+                g->menu(*g, j);
+                if (ordineTarc == 8) {
                     listaTarc.push_front("oi");
-                } else if (aux == 9) {
+                } else if (ordineTarc == 9) {
                     listaTarc.push_back("oi");
                 } else {
                     cout << "Nu pricep ce ai vrut sa faci! Am intuit alegerea de a pune oile la final.\n";
                     listaTarc.push_back("oi");
+                    g->menu(*g, j);
                 }
             }
-        } else {
-            cout << "Ai introdus un numar gresit! Alege un numar intre 1 si 4!\n";
-        }
+        } else if (!(cin >> aux)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            throw invalid_argument("Optiune introdusa gresit! Trebuie sa fie un numar intreg intre 1 si 4.\n");
+        } 
     } while (aux != 1);
     cout << "Ajuns la ferma, primesti 3 porci de la vecinul George Petru.\n";
     f.addAnimale("porci", 3);
-    g.menu(g, j);
+    a.addAnimal("porci");
+    g->menu(*g, j);
     cout << "[George Petru]: Acum esti cu adevarat un fermier!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     for (string animale : listaTarc) {
         cout << "[George Petru]: Ai " << animale << "\n";
-        g.menu(g, j);
+        g->menu(*g, j);
     }
     cout << "[George Petru]: Ce vrei mai mult de atat? Haha! Esti boierul fara b! Ha! Ha!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
     j.moneyDown(c.getTaxa());
     j.moneyDown(t.getTaxa());
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(c.getChirie());
     cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(t.getVenit());
     cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
-
+    ofstream fout9("ferma-extras.txt", ios::app);
+    fout9 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout9.close();
+    g->menu(*g, j);
+    
     /// Ziua 10
+    g->showDay();
     cout << "Iata-ne ajunsi la ziua 10\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Ai reusit sa stragi " << f.getCapacitateAnimale() << " animale\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Dintre care: \n";
-    g.menu();
+    g->menu(*g, j);
     f.cateAnimale();
-    g.menu(g, j);
+    g->menu(*g, j);
     cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
     j.moneyDown(c.getTaxa());
     j.moneyDown(t.getTaxa());
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(c.getChirie());
     cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(t.getVenit());
     cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
-    g.menu(g, j);
+    g->menu(*g, j);
     j.levelUp();
-    g.menu(g, j);
+    ofstream fout10("ferma-extras.txt", ios::app);
+    fout10 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout10.close();
+    g->menu(*g, j);
+    
+    /// Ziua 11
+    string denumireAnimal;
+    vector<float> venituri = {};
+    int ziua = -1;
+    float monede = -1;
+    g->showDay();
+    cout << "In ziua 11 dai peste un politician renumit\n";
+    g->menu(*g, j);
+    cout << "Mai bine spus, el da peste tine cu urmatoarea intrebare:\n";
+    g->menu(*g, j);
+    cout << "[Gimucu Sorpa]: Bine o mai duceti, " << j.getName() <<"!\n";
+    g->menu(*g, j);
+    cout << "[Gimucu Sorpa]: N-ai vrea sa ne dai si noua raportul cu veniturile tale?\n";
+    g->menu(*g, j);
+    cout << "[" << j.getName() << "]: Bineinteles, uit' aci extrasul de pe ultimele zece zile:\n";
+    g->menu(*g, j);
+    ifstream fin("ferma-extras.txt");
+    /// Ziua X - Y monede unde Ziua, - si monede le citim in aux si X = ziua, y = numarul de monede
+    while (fin >> aux >> ziua >> aux >> monede >> aux) {
+        cout << "In ziua " << ziua << " am realizat un venit de " << monede << "monede\n";
+        venituri.push_back(monede);
+    }
+    if (!fin.is_open()) throw runtime_error("Nu s-a putut deschide fisierul pentru citire!\n");
+    fin.close();
+    g->menu(*g, j);
+    cout << "[Gimucu Sorpa]: Hai sa iti arat cat de bun sunt la matematica!\n";
+    g->menu(*g, j);
+    Raport<float> raportVenituri(venituri);
+    cout << "Media veniturilor tale este de " << raportVenituri.calculeazaMedia() << " monede pe zi\n";
+    g->menu(*g, j);
+    cout << "Mai stiu si alte chestii, precum venitul maxim si venitul minim\n";
+    g->menu(*g, j);
+    cout << "Venitul tau maxim este " << venitMaxim(venituri) << " monede intr-o zi\n";
+    g->menu(*g, j);
+    cout << "Venitul tau minim este " << venitMinim(venituri) << " monede intr-o zi\n";
+    g->menu(*g, j);
+    cout << "[" << j.getName() << "]: Hai ca o ai cu matematica! Dar cu biologia cum o duci?\n";
+    g->menu(*g, j);
+    cout << "[Gimucu Sorpa]: Incearca-ma! Scrie mai jos unul dintre animalele tale sa vezi ce stiu despre el!\n";
+    g->menu(*g, j);
+    cin >> denumireAnimal;
+    g->menu(*g, j);
+    if (denumireAnimal != "oi" && denumireAnimal != "vaci" && denumireAnimal != "gaini" && denumireAnimal != "porci" && denumireAnimal != "cai") {
+        throw domain_error("Nici macar nu ai acest animal!\n");
+    } else {
+        cout << "[Gimucu Sorpa]: Ce stiu despre " << denumireAnimal << " e ca-s animale ...\n";
+        g->menu(*g, j);
+        cout << "[Gimucu Sorpa]: Ai dreptate! Nu prea mi-au placut orele de biologie! De aia sunt politician si nu doctor\n";
+    }
+    g->menu(*g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g->menu(*g, j);
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g->menu(*g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g->menu(*g, j);
+    j.moneyUp(f.getVenit());
+    cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g->menu(*g, j);
+    j.levelUp();
+    ofstream fout11("ferma-extras.txt", ios::app);
+    fout11 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout11.close();
+    g->menu(*g, j);
 
-    /// Let's call this section final touches even it is not the best name, currently I like it :)
+    /// Day 12
+    g->showDay();
+    cout << "In ziua 12 iara va odihniti!\n";
+    g->menu(*g, j);
     cout << "Detalii finale\n";
+    g->menu(*g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g->menu(*g, j);
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g->menu(*g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g->menu(*g, j);
+    j.moneyUp(f.getVenit());
+    cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g->menu(*g, j);
+    j.levelUp();
+    ofstream fout12("ferma-extras.txt", ios::app);
+    fout12 << "Ziua " << g->getZi() - 1 << " - " << j.getMonede() << " monede\n";
+    fout12.close();
+    g->menu(*g, j);
     j.showInfo();
-    g.menu(g, j);
+    g->menu(*g, j);
 
     return 0;
 }

@@ -97,8 +97,10 @@ public:
         venit += cantitate * 0.2;
     }
     void cateAnimale() {
-    for (const auto& [key, value] : tarcAnimale) {
-        cout << value << " " << key << "\n";
+        for (const auto& entry : tarcAnimale) {
+            const string& key = entry.first;
+            int value = entry.second;
+            cout << value << " " << key << "\n";
+        }
     }
-}
 };

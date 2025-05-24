@@ -6,8 +6,8 @@ private:
     int zi;
     bool gameOver;
     static long long counterContinueGame;
-protected:
-public:
+    static Joc* instanta; /// instanta unica
+
     /// Constructor fara parametrii
     Joc() {
         zi = 0;
@@ -38,6 +38,14 @@ public:
         gameOver = altJoc.gameOver;
         counterContinueGame = altJoc.counterContinueGame;
     }
+protected:
+public:
+    static Joc* getInstanta() {
+        if (!instanta) {
+            instanta = new Joc();
+        }
+        return instanta;
+    }
     /// Suprascrierea operatorului egal
     Joc& operator=(const Joc& altJoc) {
         if(this != &altJoc) { 
@@ -56,6 +64,9 @@ public:
         zi = specificDay;
     }
     /// Getter
+    int getZi() {
+        return zi;
+    }
     static long long getCounterContiuneGame() {
         return counterContinueGame;
     }
@@ -126,3 +137,5 @@ public:
         return in;
     }
 };
+
+Joc* Joc::instanta = nullptr;
