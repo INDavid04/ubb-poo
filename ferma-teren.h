@@ -1,11 +1,12 @@
 #include <iostream>
+#include <vector> /// STL
 using namespace std;
 
 class Teren {
 private:
     int nivelIngrasamant, nivelProductie;
     float venit, taxe;
-    long long resurse[3];
+    vector<long long> resurse = {};
 protected:
 public:
     /// Constructor fara parametrii
@@ -14,9 +15,9 @@ public:
         nivelProductie = 0;
         venit = 0;
         taxe = 0;
-        resurse[0] = 0; /// grau
-        resurse[1] = 0; /// cartofi
-        resurse[2] = 0; /// morcovi
+        resurse.push_back(0); /// Echivalent cu `resurse[0] = 0;`. Aici avem grau.
+        resurse.push_back(0); /// Echivalent cu `resurse[1] = 0;`. Aici avem cartofi.
+        resurse.push_back(0); /// Echivalent cu `resurse[2] = 0;`. Aici avem morcovi.
     }
     /// Constructor cu toti parametrii
     Teren(int nivelIngrasamantInitial, int nivelProductieInitial, float venitInitial, float taxeInitial, long long resurseGrauInitial, long long resurseCartofiInitial, long long resurseMorcoviInitial) {

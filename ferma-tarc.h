@@ -1,10 +1,14 @@
 #include <iostream>
+#include <map>
+#include <string>
+ 
 using namespace std;
 
 class Tarc {
 private:
     int capacitateAnimale, resurseIgiena, resurseHrana;
     float venit;
+    map<string, int> tarcAnimale{};
 protected:
 public:
     /// Constructor fara parametrii
@@ -60,9 +64,16 @@ public:
     void setAnimale(int capacitate = 0) {
         capacitateAnimale = capacitate;
     }
+    void addAnimale(string nume, int capacitate = 0) {
+        capacitateAnimale += capacitate;
+        tarcAnimale[nume] = capacitate;
+    }
     /// Getter
     float getVenit() {
         return venit;
+    }
+    int getCapacitateAnimale() {
+        return capacitateAnimale;
     }
     /// Supraincarcare operator <<
     friend ostream& operator<<(ostream& out, const Tarc& f) {
@@ -85,4 +96,9 @@ public:
         capacitateAnimale += cantitate;
         venit += cantitate * 0.2;
     }
+    void cateAnimale() {
+    for (const auto& [key, value] : tarcAnimale) {
+        cout << value << " " << key << "\n";
+    }
+}
 };

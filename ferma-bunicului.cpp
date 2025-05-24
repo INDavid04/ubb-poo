@@ -11,10 +11,10 @@
 #include "ferma-aliment.h"
 using namespace std;
 
-/// NICE: move this comments into a markdown file and organize the code a little bit :)
+/// NICE: move this comments into a markdown file and organize the code just a little :)
 /// Partea #1 Due March 24, 2025 11:59 PM
 /*
-Cerinte:
+## Mandatory
     DONE Minim patru clase
     DONE Fiecare clasa are cel putin o functionalitate (daca am o clasa de tip Agenda atunci aceasta ar putea afisa datele disponibile dintr-o anumita luna)
     DONE Fiecare clasa trebuie sa implementeaze: 
@@ -54,9 +54,9 @@ Cerinte:
     DONE Foloseste conceptul de polimorfism
     DONE Minim o clasă abstractă / interfață
     DONE Moștenirea în diamant (moștenirea multiplă) corect rezolvată
-    TODO Citiți despre HTTP PATCH vs. PUT
+    DONE Citiți despre HTTP PATCH vs. PUT
 ## Nice
-    TODO diagrama de decizie
+    TODO Diagrama de decizie
     TODO Adauga inventar
     TODO La supraincarcare trebe comutativitate (forma friend, fie in prima ori in a doua)
     TODO Incearca sa modifici momentul din care contorizezi numarul de ore petrecute la ferma
@@ -64,11 +64,11 @@ Cerinte:
     TODO Acorda jucatorului posibilitatea de a refuza oferta lui George
     TODO Afiseaza inventarul, daca e, sau macar cati bani mai are
     TODO Gandeste-te la intrebarea: Ce sa fac daca nu mai am bani si totusi ma aflu in piata?
-    TODO check if the player have enough money to buy the horse
-    TODO try a better order because initially was 3412, from Diana 1342 and from Stefan 1324
-    TODO try to think a better exprimation instead of "tinere" to apply for men and women
-    TODO replace ce cal frumos aveti with ce cai frumosi aveti and other messages because we can have more horses not only one
-    TODO offer feedback after the user gives a 3 characters string whichs starts with a and ends with r
+    TODO Check if the player have enough money to buy the horse
+    TODO Try a better order because initially was 3412, from Diana 1342 and from Stefan 1324
+    TODO Try to think a better exprimation instead of "tinere" to apply for men and women
+    TODO Replace ce cal frumos aveti with ce cai frumosi aveti and other messages because we can have more horses not only one
+    TODO Offer feedback after the user gives a 3 characters string whichs starts with a and ends with r
 ## Aside
 ### Virtualization
     DONE https://www.youtube.com/watch?v=oIV2KchSyGQ (Virtual keyword generates a v table for the following function (v from virtual, may be? yeap! see the fourth video)
@@ -93,9 +93,51 @@ Cerinte:
     DONE https://www.youtube.com/watch?v=biZEd8pF4OU (one tertiary class derived from two secondary classes derived from one primary class)
 */
 
+/// Partea #3 Due May 26, 2025 12:00 PM
+/*
+Cerinte:
+## Mandatory
+    TODO Sa se implementeze din libraria STL cel putin un vector, un set, o lista si un map pentru a gestiona datele aplicatiei
+    TODO Scrierea si citirea din fisier
+    TODO Aplicatia va contine un meniu (in consola) prin care utilizatorul poate alege diverse optiuni (import/export date, citire obiect nou de la tastatura, diverse functionalitati ale aplicatiei) de tip Singletone
+    TODO Folosirea a cel putin o clasa Template
+    TODO Folosirea a cel putin doua metode Template
+    TODO Proiectul trebuie sa trateze toate exceptiile posibile care pot aparea la executarea codului (codul trebuie sa arunce cel putin sase exceptii dintre care minim trei diferite)
+    TODO Exemplificarea conceptelor de upcasting si downcasting (trebuie sa foloseasca si dynamic_cast)
+    TODO Exemplificarea conceptului de mostenire pana la nepot (Parinte -> Copil -> Nepot)
+    TODO Fiecare clasa sa contine:
+        TODO Constructorul fara parametrii
+        TODO Constructorul cu toti parametrii
+        TODO Copy Constructorul
+        TODO Operator egal
+        TODO Destructor
+        TODO Operator de citire
+        TODO Operator de afisare
+## Aside
+### Notite pentru cerinta: 'Citiți despre HTTP PATCH vs. PUT' (de data trecuta)
+    - API stands for Application Programming Interface
+    - PATCH is used to replace a part of the resource
+    - PUT is used to replace entire resource
+    - From: https://apidog.com/blog/http-put-vs-patch/?utm_term=&gad_campaignid=22062217351
+*/
+
 /// Gameplay: Fiecare actiune este realizata pe parcursul unei zile. Dupa un anumit numar se zile se intampla nush ce.
 
 long long Joc::counterContinueGame = 0;  /// initializam variabila statica counterContinueGame
+
+template<typename T>
+ostream& operator<<(ostream& out, const set<T>& setAnimale)
+{
+    if (setAnimale.empty())
+        return out << "Din nefericire n-am reusit sa achizitionam vreun animal.";
+    out << "Avem " << *setAnimale.begin();
+    for_each (
+        next(setAnimale.begin()), setAnimale.end(), [&out](const T& animale) {
+            out << ", " << animale;
+        }
+    );
+    return out << ".";
+}
 
 int main() {
     /// Ziua 0 (Aici incepe prima parte a proiectului)
@@ -228,6 +270,7 @@ int main() {
     g.menu(g, j);
 
     /// Ziua 4
+    set<string> setAnimale{};
     g.showDay();
     Tarc f;
     cout << "In ziua a patra, planuiesti sa ii faci o bucurie bunicului Neculai.\n";
@@ -261,10 +304,13 @@ int main() {
         cout << "[Negustorii]: Buna afacere! Sa te bucuri de cai!\n";
         j.moneyDown(40);
         f.cumparaAnimale(2);
+        f.addAnimale("cai", 2);
+        setAnimale.insert("cai");
     } else if (aux == 2) {
         cout << "[Negustorii]: Buna afac1ere! Sa te bucuri de porci!\n";
         j.moneyDown(70);
         f.cumparaAnimale(3);
+        setAnimale.insert("porci");
     } else if (aux == 3) {
         cout << "[Negustorii]: Nicio problema! Ne mai auzim cand dai de bani!\n";
     }
@@ -356,6 +402,7 @@ int main() {
             rasa -> afiseazaDescriere();
         }
     }
+    setAnimale.insert("cai");
     g.menu(g, j);
     j.levelUp();
     g.menu(g, j);
@@ -424,6 +471,192 @@ int main() {
     g.menu(g, j);
     j.moneyUp(f.getVenit());
     cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.levelUp();
+    g.menu(g, j);
+
+    /// Ziua 8
+    g.showDay();
+    cout << "In a opta zi, vine inspectia.\n";
+    g.menu(g, j);
+    cout << "(Efect dramatic) Pam! Pam! Pam!\n";
+    g.menu(g, j);
+    cout << "[Inspectia] Prea bine! Hai da sa incepem cu terenul!\n";
+    g.menu(g, j);
+    cout << "[" << j.getName() << "]: Da, sigur! Am " << t.getGrau() << "kg de grau.\n";
+    g.menu(g, j);
+    cout << "[" << j.getName() << "]: Urmate de " << t.getCartofi() << "kg de cartofi.\n";
+    g.menu(g, j);
+    cout << "[" << j.getName() << "]: Si " << t.getMorcovi() << "kg de morcovi.\n";
+    g.menu(g, j);
+    j.levelUp();
+    g.menu(g, j);
+    cout << "[Inspectia] No, si cu animalele cum o duceti?\n";
+    cout "[" << j.getName() << "]: " << setAnimale << '\n';
+    j.levelUp();
+    g.menu(g, j);
+    cout << "[Inspectia]: Nu aveti probleme, pe moment! Zi minunata!\n";
+    g.menu(g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g.menu(g, j);
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g.menu(g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.moneyUp(f.getVenit());
+    cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.levelUp();
+    g.menu(g, j);
+
+    /// Ziua 9
+    list<string> listaTarc = {"cai", "porci"};
+    g.showDay();
+    cout << "Vazand ca in ziua 8 nu prea ai destule animale, in ziua 9 iei atitudine.\n";
+    g.menu(g, j);
+    cout << "Prin urmare mergi la targ pentru a extinde ferma cu mai multe tarcuri.\n";
+    g.menu(g, j);
+    do {
+        cout << "Apasa 1 pentru a iesi din targ\n";
+        cout << "Apasa 2 pentru a cumpara 2 gaini (10 monede)\n";
+        cout << "Apasa 3 pentru a cumpara 3 vaci (30 monede)\n";
+        cout << "Apasa 4 pentru a cumpara 4 oi (32 monede)\n";
+        cin >> aux;
+        if (aux == 1) {
+            cout << "Vroom! Vroom! Tocmai ai ales sa parasesti targul si sa te intorci la ferma.\n";
+        } else if (aux == 2) {
+            if (j.getMonede() < 10) {
+                cout << "[Vanzatoarea]: Imi cer mii de scuze! Nu iti pot vinde gainile numai pentru " << j.getMonede() << " monede!\n";
+                g.menu(g, j);
+                j.levelDown(); /// just for fun, ne imaginam ca ne ia negustoarea un nivel pentru ca i-am pierdut timpul :)
+                g.menu(g, j);
+            } else {
+                f.cumparaAnimale(2);
+                f.addAnimale("gaini", 2);
+                cout << "[Vanzatoarea]: Sa te bucuri de cele doua gaini!\n";
+                j.levelUp();
+                cout << "Ai vrea gainile la inceputul sau la sfarsitul tarcurilor?\n";
+                g.menu(g, j);
+                cout << "Apasa 8 pentru a pune gainile la inceputul tarcurilor\n";
+                cout << "Apasa 9 pentru a pune gainile la sfarsitul tarcurilor\n";
+                cin >> aux; /// in acest caz, aux era initial 2 deci nu conteaza daca isi schimba valoare, tot nu va satisface conditia de la final, aux != 1 fie ca e 2, 8 sau 9
+                if (aux == 8) {
+                    listaTarc.push_front("gaini");
+                } else if (aux == 9) {
+                    listaTarc.push_back("gaini");
+                } else {
+                    cout << "Nu pricep ce ai vrut sa faci! Am intuit alegerea de a pune gainile la final.\n";
+                    listaTarc.push_back("gaini");
+                }
+            }
+        } else if (aux == 3) {
+            if (j.getMonede() < 30) {
+                cout << "[Vanzatoarea]: Imi cer mii de scuze! Nu iti pot vinde vacile numai pentru " << j.getMonede() << " monede!\n";
+                g.menu(g, j);
+                j.levelDown(); /// just for fun, ne imaginam ca ne ia negustoarea un nivel pentru ca i-am pierdut timpul :)
+                g.menu(g, j);
+            } else {
+                f.cumparaAnimale(3);
+                f.addAnimale("vaci", 3);
+                cout << "[Vanzatoarea]: Sa te bucuri de cele trei vaci!\n";
+                j.levelUp();
+                cout << "Ai vrea vacile la inceputul sau la sfarsitul tarcurilor?\n";
+                g.menu(g, j);
+                cout << "Apasa 8 pentru a pune vacile la inceputul tarcurilor\n";
+                cout << "Apasa 9 pentru a pune vacile la sfarsitul tarcurilor\n";
+                cin >> aux; /// in acest caz, aux era initial 3 deci nu conteaza daca isi schimba valoare, tot nu va satisface conditia de la final, aux != 1 fie ca e 3, 8 sau 9
+                if (aux == 8) {
+                    listaTarc.push_front("vaci");
+                } else if (aux == 9) {
+                    listaTarc.push_back("vaci");
+                } else {
+                    cout << "Nu pricep ce ai vrut sa faci! Am intuit alegerea de a pune vacile la final.\n";
+                    listaTarc.push_back("vaci");
+                }
+            }
+        } else if (aux == 4) {
+            if (j.getMonede() < 32) {
+                cout << "[Vanzatoarea]: Imi cer mii de scuze! Nu iti pot vinde oile numai pentru " << j.getMonede() << " monede!\n";
+                g.menu(g, j);
+                j.levelDown(); /// just for fun, ne imaginam ca ne ia negustoarea un nivel pentru ca i-am pierdut timpul :)
+                g.menu(g, j);
+            } else {
+                f.cumparaAnimale(4);
+                f.addAnimale("ai", 4);
+                cout << "[Vanzatoarea]: Sa te bucuri de cele patru oi!\n";
+                j.levelUp();
+                cout << "Ai vrea oile la inceputul sau la sfarsitul tarcurilor?\n";
+                g.menu(g, j);
+                cout << "Apasa 8 pentru a pune oile la inceputul tarcurilor\n";
+                cout << "Apasa 9 pentru a pune oile la sfarsitul tarcurilor\n";
+                cin >> aux; /// in acest caz, aux era initial 4 deci nu conteaza daca isi schimba valoare, tot nu va satisface conditia de la final, aux != 1 fie ca e 4, 8 sau 9
+                if (aux == 8) {
+                    listaTarc.push_front("oi");
+                } else if (aux == 9) {
+                    listaTarc.push_back("oi");
+                } else {
+                    cout << "Nu pricep ce ai vrut sa faci! Am intuit alegerea de a pune oile la final.\n";
+                    listaTarc.push_back("oi");
+                }
+            }
+        } else {
+            cout << "Ai introdus un numar gresit! Alege un numar intre 1 si 4!\n";
+        }
+    } while (aux != 1);
+    cout << "Ajuns la ferma, primesti 3 porci de la vecinul George Petru.\n";
+    f.addAnimale("porci", 3);
+    g.menu(g, j);
+    cout << "[George Petru]: Acum esti cu adevarat un fermier!\n";
+    g.menu(g, j);
+    for (string animale : listaTarc) {
+        cout << "[George Petru]: Ai " << animale << "\n";
+        g.menu(g, j);
+    }
+    cout << "[George Petru]: Ce vrei mai mult de atat? Haha! Esti boierul fara b! Ha! Ha!\n";
+    g.menu(g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g.menu(g, j);
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g.menu(g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.moneyUp(f.getVenit());
+    cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.levelUp();
+    g.menu(g, j);
+
+    /// Ziua 10
+    cout << "Iata-ne ajunsi la ziua 10\n";
+    g.menu(g, j);
+    cout << "Ai reusit sa stragi " << f.getCapacitateAnimale() << " animale\n";
+    g.menu(g, j);
+    cout << "Dintre care: \n";
+    g.menu();
+    f.cateAnimale();
+    g.menu(g, j);
+    cout << "Au fost platite taxele pentru casa si teren in valoare de " << c.getTaxa() + t.getTaxa() << " monede.\n";
+    j.moneyDown(c.getTaxa());
+    j.moneyDown(t.getTaxa());
+    g.menu(g, j);
+    j.moneyUp(c.getChirie());
+    cout << "Ati primit " << c.getChirie() << " monede din partea lui George!\n";
+    g.menu(g, j);
+    j.moneyUp(t.getVenit());
+    cout << "In urma recoltei ai realizat un venit de " << t.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.moneyUp(f.getVenit());
+    cout << "Animalele ti-au adus un venit de " << f.getVenit() << " monede!\n";
+    g.menu(g, j);
+    j.levelUp();
     g.menu(g, j);
 
     /// Let's call this section final touches even it is not the best name, currently I like it :)
