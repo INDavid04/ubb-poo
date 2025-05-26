@@ -1,6 +1,8 @@
 /// TODO: Understand polymorphism up casting and down casting 
 
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
 /////////////////////////////////////////
@@ -75,6 +77,42 @@ public:
 
 /// Problema 3: Echipa sportiva
 /// Cerinta: Creeaza o clasa Jucator si una derivata JucatorFotbal. Creeaza un vector de Jucator* si stocheaza in el obiecte de tip JucatorFotbal (up-cast implicit). Apeleaza o metoda virtuala descriere().
+
+class Jucator {
+private:
+protected:
+    string nume;
+    int varsta;
+public:
+    Jucator (string nume, int varsta) {
+        this->nume = nume;
+        this->varsta = varsta;
+    }
+    virtual void afiseazaDetalii () const {
+        cout << "Jucator: " << nume << " are varsta: " << varsta << "\n";
+    }
+    virtual ~Jucator() {
+        cout << "Jucatorul " << nume << " a iesit de tot\n";
+    }
+};
+
+class JucatorFotbal : public Jucator {
+private:
+    string echipa;
+protected:
+public:
+    JucatorFotbal(string nume, int varsta, string echipa) : Jucator(nume, varsta) {
+        this->echipa = echipa;
+    }
+    void afiseazaDetalii() const override {
+        cout << "Jucator: " << nume << " are varsta: " << varsta << " si este in echipa: " << echipa << "\n";
+    }
+    ~JucatorFotbal() {
+        cout << "Jucatorul " << nume << " a iesit din echipa " << echipa << "\n";
+    }
+};
+
+/// Take out: Daca lucrezi cu clase polimorfice, metodele ce trebuies suprascrise trebuie sa fie virtuale si destructorul sa fie virtual, de asemenea.
 
 /// Problema 4: Angajati
 /// Cerinta: Ai o clasa Angajat si o clasa derivata Manager. Fa o functie care primeste pointer la Angajat si primeste ca parametru un Manager*. Foloseste up-casting pentru a apela metode comune.
@@ -248,6 +286,77 @@ int main() {
     //     f[i]->arie();
     //     delete f[i];
     // }
+
+    ///////////////////////////////////////////////////
+    /// 2. Up-casting > Problema 3: Echipa sportiva ///
+    ///////////////////////////////////////////////////
+
+    vector<Jucator*> echipa; /// vector de pointeri la baza - upcasting
+    echipa.push_back(new JucatorFotbal("Popescu", 24, "FC Universitatea"));
+    echipa.push_back(new JucatorFotbal("Vlad", 20, "Dinamo"));
+    echipa.push_back(new JucatorFotbal("Olaru", 39, "FC Arges"));
+    echipa.push_back(new JucatorFotbal("Mircea", 23, "Real Madrid"));
+
+    for (Jucator* j : echipa) {
+        j->afiseazaDetalii(); /// apel virtual; se executa functia din clasa derivata
+        // delete j;
+    }
+
+    for (Jucator* j : echipa) {
+        delete j;
+    }
+
+    ////////////////////////////////////////////
+    /// 2. Up-casting > Problema 4: Angajati ///
+    ////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////
+    /// 3. Down-casting > Problema 5: Joc video cu iteme ///
+    ////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////
+    /// 3. Down-casting > Problema 6: Vehicule ///
+    //////////////////////////////////////////////
+
+    //////////////////////////////////////
+    /// 4.1 C-style cast: > Problema 7 ///
+    //////////////////////////////////////
+
+    //////////////////////////////////////
+    /// 4.1 C-style cast: > Problema 8 ///
+    //////////////////////////////////////
+
+    /////////////////////////////////////
+    /// 4.2 dynamic_cast > Problema 9 ///
+    /////////////////////////////////////
+
+    //////////////////////////////////////
+    /// 4.2 dynamic_cast > Problema 10 ///
+    //////////////////////////////////////
+
+    /////////////////////////////////////
+    /// 4.3 static_cast > Problema 11 ///
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    /// 4.3 static_cast > Problema 12 ///
+    /////////////////////////////////////
+
+    ////////////////////////////////////
+    /// 4.4 const_cast > Problema 13 ///
+    ////////////////////////////////////
+
+    ////////////////////////////////////
+    /// 4.4 const_cast > Problema 14 ///
+    ////////////////////////////////////
+
+    //////////////////////////////////////////
+    /// 4.5 reinterpret_cast > Problema 15 ///
+    //////////////////////////////////////////
+
+    //////////////////////////////////////////
+    /// 4.5 reinterpret_cast > Problema 16 ///
+    //////////////////////////////////////////
 
     return 0;
 }
