@@ -117,6 +117,40 @@ public:
 /// Problema 4: Angajati
 /// Cerinta: Ai o clasa Angajat si o clasa derivata Manager. Fa o functie care primeste pointer la Angajat si primeste ca parametru un Manager*. Foloseste up-casting pentru a apela metode comune.
 
+class Angajat {
+private:
+protected:
+    string nume;
+    int varsta;
+public:
+    Angajat(string nume, int varsta) {
+        this->nume = nume;
+        this->varsta = varsta;
+    }
+    virtual void afiseaza() const {
+        cout << "Angajatul " << nume << " are " << varsta << " ani\n";
+    }
+    virtual ~Angajat() {
+        cout << "Angajatul " << nume << " a iesit de tot\n";
+    }
+};
+
+class Manager : public Angajat {
+private:
+    string numeCompanie;
+protected:
+public:
+    Manager(string nume, int varsta, string numeCompanie) : Angajat(nume, varsta) {
+        this->numeCompanie = numeCompanie;
+    }
+    void afiseaza() const override {
+        cout << "Angajatul " << nume << " este manager peste " << numeCompanie << "\n";
+    }
+    ~Manager() {
+        cout << "Managerul " << nume << " a iesit din functie\n";
+    }
+};
+
 ////////////////////////////////////////////////
 /// 3. Down-casting (din baza spre derivata) ///
 ////////////////////////////////////////////////
@@ -291,24 +325,37 @@ int main() {
     /// 2. Up-casting > Problema 3: Echipa sportiva ///
     ///////////////////////////////////////////////////
 
-    vector<Jucator*> echipa; /// vector de pointeri la baza - upcasting
-    echipa.push_back(new JucatorFotbal("Popescu", 24, "FC Universitatea"));
-    echipa.push_back(new JucatorFotbal("Vlad", 20, "Dinamo"));
-    echipa.push_back(new JucatorFotbal("Olaru", 39, "FC Arges"));
-    echipa.push_back(new JucatorFotbal("Mircea", 23, "Real Madrid"));
+    // vector<Jucator*> echipa; /// vector de pointeri la baza - upcasting
+    // echipa.push_back(new JucatorFotbal("Popescu", 24, "FC Universitatea"));
+    // echipa.push_back(new JucatorFotbal("Vlad", 20, "Dinamo"));
+    // echipa.push_back(new JucatorFotbal("Olaru", 39, "FC Arges"));
+    // echipa.push_back(new JucatorFotbal("Mircea", 23, "Real Madrid"));
 
-    for (Jucator* j : echipa) {
-        j->afiseazaDetalii(); /// apel virtual; se executa functia din clasa derivata
-        // delete j;
-    }
+    // for (Jucator* j : echipa) {
+    //     j->afiseazaDetalii(); /// apel virtual; se executa functia din clasa derivata
+    //     // delete j;
+    // }
 
-    for (Jucator* j : echipa) {
-        delete j;
-    }
+    // for (Jucator* j : echipa) {
+    //     delete j;
+    // }
 
     ////////////////////////////////////////////
     /// 2. Up-casting > Problema 4: Angajati ///
     ////////////////////////////////////////////
+
+    vector<Angajat*> listaAngajati;
+    listaAngajati.push_back(new Manager("Marcel", 40, "eClean"));
+    listaAngajati.push_back(new Manager("Grigore", 22, "Wanta"));
+    listaAngajati.push_back(new Manager("Samuel", 25, "Listenario"));
+
+    for (Angajat* a : listaAngajati) {
+        a->afiseaza(); /// se apeleaza functia din clasa derivata
+    }
+
+    for (Angajat* a : listaAngajati) {
+        delete a;
+    }
 
     ////////////////////////////////////////////////////////
     /// 3. Down-casting > Problema 5: Joc video cu iteme ///
