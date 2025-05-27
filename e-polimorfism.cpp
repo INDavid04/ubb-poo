@@ -1,8 +1,9 @@
 /// TODO: Understand polymorphism up casting and down casting 
 
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
+#include <list>
 
 using namespace std;
 
@@ -214,6 +215,56 @@ void verificaDacaItemEsteArma(Item* i) {
 /// Problema 6: Vehicule
 /// Cerinta: Creeaza o clasa Vehicul si deriva clasele Bicicleta, Masina. Ai o lista de Vehicul*. Pentru fiecare, incearca un dynamic_cast la Masina* si, daca reuseste, afiseaza numarul de cai putere.
 
+class Vehicul {
+private:
+protected:
+public:
+    virtual void afiseaza() const {
+        cout << "Vehicul\n";
+    }
+    ~Vehicul() {
+        cout << "Vehicul distrus\n";
+    }
+};
+
+class Bicicleta : public Vehicul {
+private:
+protected:
+public:
+    void afiseaza() const override {
+        cout << "Bicicleta\n";
+    }
+    ~Bicicleta() {
+        cout << "Bicicleta distrusa\n";
+    }
+};
+
+class Masina : public Vehicul {
+private:
+    int numar_cai_putere;
+protected:
+public:
+    Masina(int numar_cai_putere) {
+        this->numar_cai_putere = numar_cai_putere;
+    }
+    void afiseaza() const override {
+        cout << "Masina are " << numar_cai_putere << " cai putere\n";
+    }
+    ~Masina() {
+        cout << "Masian distrusa\n";
+    }
+};
+
+void vehiculEsteMasina(Vehicul* vehicul) {
+    vehicul->afiseaza();
+    Masina* masina = dynamic_cast<Masina*>(vehicul);
+    if (masina) {
+        masina->afiseaza();
+    } else {
+        cout << "Vehiculul nu este masina\n";
+    }
+}
+
 ////////////////////////////////////////
 /// 4. Operatori de cast             ///
 /// 4.1 C-style cast: (Tip)variabila ///
@@ -414,16 +465,29 @@ int main() {
     /// 3. Down-casting > Problema 5: Joc video cu iteme ///
     ////////////////////////////////////////////////////////
 
-    Item* i1 = new Item();
-    Item* i2 = new Arma("prastie", 10);
-    verificaDacaItemEsteArma(i1);
-    verificaDacaItemEsteArma(i2);
-    delete i1;
-    delete i2;
+    // Item* i1 = new Item();
+    // Item* i2 = new Arma("prastie", 10);
+    // verificaDacaItemEsteArma(i1);
+    // verificaDacaItemEsteArma(i2);
+    // delete i1;
+    // delete i2;
 
     //////////////////////////////////////////////
     /// 3. Down-casting > Problema 6: Vehicule ///
     //////////////////////////////////////////////
+
+    list<Vehicul*> listaVehicule = {};
+    listaVehicule.push_back(new Vehicul());
+    listaVehicule.push_back(new Bicicleta());
+    listaVehicule.push_back(new Masina(70));
+    listaVehicule.push_back(new Bicicleta());
+    listaVehicule.push_back(new Masina(54));
+    for (Vehicul* vehicul : listaVehicule) {
+        vehiculEsteMasina(vehicul);
+    }
+    for (Vehicul* vehicul : listaVehicule) {
+        delete vehicul;
+    }
 
     //////////////////////////////////////
     /// 4.1 C-style cast: > Problema 7 ///
