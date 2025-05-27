@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -157,6 +158,58 @@ public:
 
 /// Problema 5: Joc video cu iteme
 /// Cerinta: Ai o clasa Item si o clasa derivata Arma. Intr-o functie care primeste un Item*, verifica daca acel Item este o Arma (folosing dynamic_cast), apoi afiseaza detalii doar daca conversia reuseste.
+
+class Item {
+private:
+protected:
+public:
+    virtual void descriere() const {
+        cout << "Item generic\n";
+    }
+    virtual ~Item() {
+        cout << "Item distrus\n";
+    }
+};
+
+class Arma : public Item {
+private:
+    string nume;
+    int damage;
+protected:
+public:
+    Arma(string nume, int damage) {
+        this->nume = nume;
+        this->damage = damage;
+    }
+
+    void descriere() const override {
+        cout << "Arma: " << nume << ", damage: " << damage << "\n";
+    }
+
+    string getNume() const {
+        return nume;
+    }
+
+    int getDamage() const {
+        return damage;
+    }
+
+    ~Arma() {
+        cout << "Arma " << nume << " distrusa\n";
+    }
+};
+
+void verificaDacaItemEsteArma(Item* i) {
+    i->descriere();
+    Arma* a = dynamic_cast<Arma*>(i);
+    // cout << "DEBUG: a = " << a << "\n";
+    /// a retine 0 daca nu i nu este arma; a retine adresa catre obiectul i daca este arma
+    if(a) {
+        a->descriere();
+    } else {
+        cout << "Itemul nu este o arma\n";
+    }
+}
 
 /// Problema 6: Vehicule
 /// Cerinta: Creeaza o clasa Vehicul si deriva clasele Bicicleta, Masina. Ai o lista de Vehicul*. Pentru fiecare, incearca un dynamic_cast la Masina* si, daca reuseste, afiseaza numarul de cai putere.
@@ -344,22 +397,29 @@ int main() {
     /// 2. Up-casting > Problema 4: Angajati ///
     ////////////////////////////////////////////
 
-    vector<Angajat*> listaAngajati;
-    listaAngajati.push_back(new Manager("Marcel", 40, "eClean"));
-    listaAngajati.push_back(new Manager("Grigore", 22, "Wanta"));
-    listaAngajati.push_back(new Manager("Samuel", 25, "Listenario"));
+    // vector<Angajat*> listaAngajati;
+    // listaAngajati.push_back(new Manager("Marcel", 40, "eClean"));
+    // listaAngajati.push_back(new Manager("Grigore", 22, "Wanta"));
+    // listaAngajati.push_back(new Manager("Samuel", 25, "Listenario"));
 
-    for (Angajat* a : listaAngajati) {
-        a->afiseaza(); /// se apeleaza functia din clasa derivata
-    }
+    // for (Angajat* a : listaAngajati) {
+    //     a->afiseaza(); /// se apeleaza functia din clasa derivata
+    // }
 
-    for (Angajat* a : listaAngajati) {
-        delete a;
-    }
+    // for (Angajat* a : listaAngajati) {
+    //     delete a;
+    // }
 
     ////////////////////////////////////////////////////////
     /// 3. Down-casting > Problema 5: Joc video cu iteme ///
     ////////////////////////////////////////////////////////
+
+    Item* i1 = new Item();
+    Item* i2 = new Arma("prastie", 10);
+    verificaDacaItemEsteArma(i1);
+    verificaDacaItemEsteArma(i2);
+    delete i1;
+    delete i2;
 
     //////////////////////////////////////////////
     /// 3. Down-casting > Problema 6: Vehicule ///
