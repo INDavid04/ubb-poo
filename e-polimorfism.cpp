@@ -374,7 +374,50 @@ public:
 /// 4.3 static_cast ///
 ///////////////////////
 
-/// Problema 11: Ai o clasa Metru si o clasa Centimetru. Creeaza un constructor care permite conversia intre elece cu static_cast. Fa conversii bidirectionale.
+/// Problema 11: Ai o clasa Metru si o clasa Centimetru. Creeaza un constructor care permite conversia intre ele cu static_cast. Fa conversii bidirectionale.
+
+class Centimetru;
+
+class Metru {
+private:
+    float valoare;
+protected:
+public:
+    Metru(float valoare) {
+        this->valoare = valoare;
+    }
+    Metru(const Centimetru& cm);
+    // this->valoare = cm.getValoare() / 100.0f;
+    float getValoare () const {
+        return valoare;
+    }
+    void afiseaza() const {
+        cout << valoare << " metrii\n";
+    }
+};
+
+class Centimetru {
+private:
+    float valoare;
+protected:
+public:
+    Centimetru(float valoare) {
+        this->valoare = valoare;
+    }
+    Centimetru(const Metru& m) {
+        this->valoare = m.getValoare() * 100.0f;
+    }
+    float getValoare() const {
+        return valoare;
+    }
+    void afiseaza() {
+        cout << valoare << " centimetrii\n";
+    }
+};
+
+Metru::Metru(const Centimetru& cm) {
+    this->valoare = cm.getValoare() / 100.0f;
+}
 
 /// Problema 12: Creeaza o ierarhie Forma -> Cerc. Intr-o functie, primeste Forma* si foloseste static_cast<Cerc*> pentru a accesa raza. Observa ca, spre deosebire de dynamic_cast, nu verifica tipul la runtime!
 
@@ -608,26 +651,33 @@ int main() {
     /// 4.2 dynamic_cast > Problema 10 ///
     //////////////////////////////////////
 
-    vector<Obiect*> vectorObiecte = {};
-    vectorObiecte.push_back(new Obiect());
-    vectorObiecte.push_back(new Electronic(true));
-    vectorObiecte.push_back(new Electronic(false));
-    vectorObiecte.push_back(new Obiect());
-    for (Obiect* o : vectorObiecte) {
-        Electronic* e = dynamic_cast <Electronic*> (o);
-        if (e) {
-            e->verificaGarantie();
-        } else {
-            o->detalii();
-        }
-    }
-    for (Obiect* o : vectorObiecte) {
-        delete o;
-    }
+    // vector<Obiect*> vectorObiecte = {};
+    // vectorObiecte.push_back(new Obiect());
+    // vectorObiecte.push_back(new Electronic(true));
+    // vectorObiecte.push_back(new Electronic(false));
+    // vectorObiecte.push_back(new Obiect());
+    // for (Obiect* o : vectorObiecte) {
+    //     Electronic* e = dynamic_cast <Electronic*> (o);
+    //     if (e) {
+    //         e->verificaGarantie();
+    //     } else {
+    //         o->detalii();
+    //     }
+    // }
+    // for (Obiect* o : vectorObiecte) {
+    //     delete o;
+    // }
 
     /////////////////////////////////////
     /// 4.3 static_cast > Problema 11 ///
     /////////////////////////////////////
+
+    Metru m1(12.4f);
+    m1.afiseaza();
+    Centimetru cm = static_cast <Centimetru> (m1);
+    cm.afiseaza();
+    Metru m2 = static_cast <Metru> (cm);
+    m2.afiseaza();
 
     /////////////////////////////////////
     /// 4.3 static_cast > Problema 12 ///
