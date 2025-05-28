@@ -341,6 +341,35 @@ void verificaDacaEstePisica(Animalut* a) {
 
 /// Problema 10: Ai o baza Obiect, din care deriva Electronic. Intr-un vector de Obiect*, unele sunt Electronic, altele nu. Parcurgi vectorul: afisezi descrierea fiecarui obiect; daca e electronic, folosesti dynamic_cast si apelezi verificaGarantie().
 
+class Obiect {
+private:
+protected:
+public:
+    virtual void detalii() const {
+        cout << "Acesta este un obiect\n";
+    }
+    virtual ~Obiect() {
+        cout << "Obiect distrus\n";
+    }
+};
+
+class Electronic : public Obiect {
+private:
+    bool areGarantie;
+protected:
+public:
+    Electronic(bool areGarantie) {
+        this->areGarantie = areGarantie;
+    }
+    void verificaGarantie() const {
+        if (areGarantie) {
+            cout << "Electronicul are garantie\n";
+        } else {
+            cout << "Electronicul nu are garantie\n";
+        }
+    }
+};
+
 ///////////////////////
 /// 4.3 static_cast ///
 ///////////////////////
@@ -568,16 +597,33 @@ int main() {
     /// 4.2 dynamic_cast > Problema 9 ///
     /////////////////////////////////////
 
-    Animalut* a1 = new Pisicuta();
-    Animalut* a2 = new Animalut();
-    verificaDacaEstePisica(a1);
-    verificaDacaEstePisica(a2);
-    delete a1;
-    delete a2;
+    // Animalut* a1 = new Pisicuta();
+    // Animalut* a2 = new Animalut();
+    // verificaDacaEstePisica(a1);
+    // verificaDacaEstePisica(a2);
+    // delete a1;
+    // delete a2;
 
     //////////////////////////////////////
     /// 4.2 dynamic_cast > Problema 10 ///
     //////////////////////////////////////
+
+    vector<Obiect*> vectorObiecte = {};
+    vectorObiecte.push_back(new Obiect());
+    vectorObiecte.push_back(new Electronic(true));
+    vectorObiecte.push_back(new Electronic(false));
+    vectorObiecte.push_back(new Obiect());
+    for (Obiect* o : vectorObiecte) {
+        Electronic* e = dynamic_cast <Electronic*> (o);
+        if (e) {
+            e->verificaGarantie();
+        } else {
+            o->detalii();
+        }
+    }
+    for (Obiect* o : vectorObiecte) {
+        delete o;
+    }
 
     /////////////////////////////////////
     /// 4.3 static_cast > Problema 11 ///
