@@ -287,6 +287,21 @@ public:
 
 /// Problema 8: Creeaza o clasa Bani cu o valoare interna in float. Foloseste un cast C-style pentru a o converti intr-un int, pierzand fractia.
 
+class Bani {
+private:
+    float teanc;
+protected:
+public:
+    Bani(float teanc) {
+        this->teanc = teanc;
+    }
+    operator int() const {
+        int teancRotunjit;
+        teancRotunjit = teanc;
+        return teancRotunjit;
+    }
+};
+
 ////////////////////////
 /// 4.2 dynamic_cast ///
 ////////////////////////
@@ -506,13 +521,17 @@ int main() {
     /// 4.1 C-style cast: > Problema 7 ///
     //////////////////////////////////////
 
-    Temperatura t(38.9f);
-    float valoare = float(t);
-    cout << "Valoarea temperaturii este " << valoare << " grade celsius\n";
+    // Temperatura t(38.9f);
+    // float valoare = float(t);
+    // cout << "Valoarea temperaturii este " << valoare << " grade celsius\n";
 
     //////////////////////////////////////
     /// 4.1 C-style cast: > Problema 8 ///
     //////////////////////////////////////
+
+    Bani b(100.89f);
+    int rotunjit = int(b);
+    cout << "Teancul rotunjit este " << rotunjit << "RON\n";
 
     /////////////////////////////////////
     /// 4.2 dynamic_cast > Problema 9 ///
