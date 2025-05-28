@@ -308,6 +308,37 @@ public:
 
 /// Problema 9: Ai o clasa Animal cu metode virtuale si derivezi Pisica. Creeaza o functie care primeste un Animal* si verifica daca e Pisica* - daca da, apeleaza metoda toarce().
 
+class Animalut {
+private:
+protected:
+public:
+    virtual void toarce() const {
+        cout << "Animalul toarce\n";
+    }
+    virtual ~Animalut() {
+        cout << "Animalul a fugit\n";
+    }
+};
+
+class Pisicuta : public Animalut {
+private:
+protected:
+public:
+    void toarce() const override {
+        cout << "Pisica toarce\n";
+    }
+};
+
+void verificaDacaEstePisica(Animalut* a) {
+    a->toarce();
+    Pisicuta* p = dynamic_cast <Pisicuta*> (a);
+    if (p) {
+        p->toarce();
+    } else {
+        cout << "Acest animal nu este o pisica\n";
+    }
+}
+
 /// Problema 10: Ai o baza Obiect, din care deriva Electronic. Intr-un vector de Obiect*, unele sunt Electronic, altele nu. Parcurgi vectorul: afisezi descrierea fiecarui obiect; daca e electronic, folosesti dynamic_cast si apelezi verificaGarantie().
 
 ///////////////////////
@@ -529,13 +560,20 @@ int main() {
     /// 4.1 C-style cast: > Problema 8 ///
     //////////////////////////////////////
 
-    Bani b(100.89f);
-    int rotunjit = int(b);
-    cout << "Teancul rotunjit este " << rotunjit << "RON\n";
+    // Bani b(100.89f);
+    // int rotunjit = int(b);
+    // cout << "Teancul rotunjit este " << rotunjit << "RON\n";
 
     /////////////////////////////////////
     /// 4.2 dynamic_cast > Problema 9 ///
     /////////////////////////////////////
+
+    Animalut* a1 = new Pisicuta();
+    Animalut* a2 = new Animalut();
+    verificaDacaEstePisica(a1);
+    verificaDacaEstePisica(a2);
+    delete a1;
+    delete a2;
 
     //////////////////////////////////////
     /// 4.2 dynamic_cast > Problema 10 ///
