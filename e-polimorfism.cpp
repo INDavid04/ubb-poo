@@ -272,6 +272,19 @@ void vehiculEsteMasina(Vehicul* vehicul) {
 
 /// Problema 7: Creeaza o clasa Temperatura care are un float in Celsius. Supraincarca operatorul float() pentru a permite conversia in float. In main, converteste un Temperatura in float folosind (float)obj.
 
+class Temperatura {
+private:
+    float celsius;
+protected:
+public:
+    Temperatura(float celsius) {
+        this->celsius = celsius;
+    }
+    operator float() const {
+        return celsius;
+    }
+};
+
 /// Problema 8: Creeaza o clasa Bani cu o valoare interna in float. Foloseste un cast C-style pentru a o converti intr-un int, pierzand fractia.
 
 ////////////////////////
@@ -476,22 +489,26 @@ int main() {
     /// 3. Down-casting > Problema 6: Vehicule ///
     //////////////////////////////////////////////
 
-    list<Vehicul*> listaVehicule = {};
-    listaVehicule.push_back(new Vehicul());
-    listaVehicule.push_back(new Bicicleta());
-    listaVehicule.push_back(new Masina(70));
-    listaVehicule.push_back(new Bicicleta());
-    listaVehicule.push_back(new Masina(54));
-    for (Vehicul* vehicul : listaVehicule) {
-        vehiculEsteMasina(vehicul);
-    }
-    for (Vehicul* vehicul : listaVehicule) {
-        delete vehicul;
-    }
+    // list<Vehicul*> listaVehicule = {};
+    // listaVehicule.push_back(new Vehicul());
+    // listaVehicule.push_back(new Bicicleta());
+    // listaVehicule.push_back(new Masina(70));
+    // listaVehicule.push_back(new Bicicleta());
+    // listaVehicule.push_back(new Masina(54));
+    // for (Vehicul* vehicul : listaVehicule) {
+    //     vehiculEsteMasina(vehicul);
+    // }
+    // for (Vehicul* vehicul : listaVehicule) {
+    //     delete vehicul;
+    // }
 
     //////////////////////////////////////
     /// 4.1 C-style cast: > Problema 7 ///
     //////////////////////////////////////
+
+    Temperatura t(38.9f);
+    float valoare = float(t);
+    cout << "Valoarea temperaturii este " << valoare << " grade celsius\n";
 
     //////////////////////////////////////
     /// 4.1 C-style cast: > Problema 8 ///
