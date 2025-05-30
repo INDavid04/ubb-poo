@@ -485,6 +485,10 @@ void problema15() {
 
 /// Problema 16: Converteste un pointer catre o functie intr-un void* si invers cu reinterpret_cast. Observa comportamentul platform-dependent.
 
+void salutProblema16() {
+    cout << "Salut, Problema 16!\n";
+}
+
 int main() {
     ////////////////////////////////////////////////////
     /// 1. Polimorfism > Problema 1: Afisare animale ///
@@ -753,11 +757,23 @@ int main() {
     /// 4.5 reinterpret_cast > Problema 15 ///
     //////////////////////////////////////////
 
-    problema15();
+    // problema15();
 
     //////////////////////////////////////////
     /// 4.5 reinterpret_cast > Problema 16 ///
     //////////////////////////////////////////
+
+    // 1. Pointer catre functie
+    void (*pf)() = salutProblema16;
+
+    // 2. Convertim pointerul catre functie intr-un void*
+    void* genericPtr = reinterpret_cast<void*>(pf);
+
+    // 3. Convertim inapoi din void* in pointer la functie
+    void (*pf2)() = reinterpret_cast<void(*)()>(genericPtr);
+
+    // 4. Apelam functia prin pointerul reconvertit
+    pf2();  // Ar trebui sa afiseze mesajul
 
     return 0;
 }
