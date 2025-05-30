@@ -421,6 +421,30 @@ Metru::Metru(const Centimetru& cm) {
 
 /// Problema 12: Creeaza o ierarhie Forma -> Cerc. Intr-o functie, primeste Forma* si foloseste static_cast<Cerc*> pentru a accesa raza. Observa ca, spre deosebire de dynamic_cast, nu verifica tipul la runtime!
 
+class FormaProblema12 {
+private:
+protected:
+public:
+};
+
+class CercProblema12 : public FormaProblema12 {
+private:
+    int raza;
+protected:
+public:
+    CercProblema12(int raza) {
+        this->raza = raza;
+    }
+    int getRaza() const {
+        return raza;
+    }
+};
+
+void afiseazaRaza(FormaProblema12* f) {
+    CercProblema12* c = static_cast <CercProblema12*> (f);
+    cout << "Raza are dimensiunea " << c->getRaza() << "\n";
+}
+
 //////////////////////
 /// 4.4 const_cast ///
 //////////////////////
@@ -672,16 +696,19 @@ int main() {
     /// 4.3 static_cast > Problema 11 ///
     /////////////////////////////////////
 
-    Metru m1(12.4f);
-    m1.afiseaza();
-    Centimetru cm = static_cast <Centimetru> (m1);
-    cm.afiseaza();
-    Metru m2 = static_cast <Metru> (cm);
-    m2.afiseaza();
+    // Metru m1(12.4f);
+    // m1.afiseaza();
+    // Centimetru cm = static_cast <Centimetru> (m1);
+    // cm.afiseaza();
+    // Metru m2 = static_cast <Metru> (cm);
+    // m2.afiseaza();
 
     /////////////////////////////////////
     /// 4.3 static_cast > Problema 12 ///
     /////////////////////////////////////
+
+    FormaProblema12* f = new CercProblema12(109);
+    afiseazaRaza(f);
 
     ////////////////////////////////////
     /// 4.4 const_cast > Problema 13 ///
