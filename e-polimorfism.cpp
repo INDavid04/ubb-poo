@@ -1,6 +1,7 @@
 /// TODO: Understand polymorphism up casting and down casting 
 
 #include <iostream>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <list>
@@ -451,6 +452,15 @@ void afiseazaRaza(FormaProblema12* f) {
 
 /// Problema 13: Ai o functie care primeste un const char*. Creeaza o variabila char*, transmite-o prin const_cast, apoi modifica continutul daca e permis.
 
+void modificaConstanta(const char* cuvant) {
+    char cuvantInitial[4];
+    strncpy(cuvantInitial, cuvant, 3);
+    cuvantInitial[3] = '\0';
+    char* cuvantModificat = const_cast <char*> (cuvant);
+    cuvantModificat[1] = 'e';
+    cout << cuvantInitial << " este schimbat in " << cuvantModificat << "\n";
+}
+
 /// Problema 14: Ai o functie void afisare(const int* p) care afiseaza o valoare. In main, transmite un int* prin const_cast pentru a apela functia.
 
 ////////////////////////////
@@ -707,12 +717,15 @@ int main() {
     /// 4.3 static_cast > Problema 12 ///
     /////////////////////////////////////
 
-    FormaProblema12* f = new CercProblema12(109);
-    afiseazaRaza(f);
+    // FormaProblema12* f = new CercProblema12(109);
+    // afiseazaRaza(f);
 
     ////////////////////////////////////
     /// 4.4 const_cast > Problema 13 ///
     ////////////////////////////////////
+
+    char cuvant[] = "aur";
+    modificaConstanta(cuvant);
 
     ////////////////////////////////////
     /// 4.4 const_cast > Problema 14 ///
