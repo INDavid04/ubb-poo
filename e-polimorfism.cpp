@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <iomanip> /// hex, setw
 
 using namespace std;
 
@@ -473,6 +474,15 @@ void afisareProblema14(const int* p) {
 
 /// Problema 15: Ai un int, dar vrei sa-l interpretezi ca char* (periculos, dar posibil cu reinterpret_cast). Creeaza un exemplu care afiseaza byte cu byte valoarea unui int.
 
+void problema15() {
+    int valoare = 0x12345678;
+    unsigned char* bytes = reinterpret_cast <unsigned char*> (&valoare);
+    for (int i = 0; i < sizeof(int); ++i) {
+        cout << "0x" << hex << setw(2) << setfill('0') << (int)bytes[i] << " ";
+    }
+    cout << "\n";
+}
+
 /// Problema 16: Converteste un pointer catre o functie intr-un void* si invers cu reinterpret_cast. Observa comportamentul platform-dependent.
 
 int main() {
@@ -735,13 +745,15 @@ int main() {
     /// 4.4 const_cast > Problema 14 ///
     ////////////////////////////////////
 
-    int valoare = 14;
-    int* pointer = &valoare;
-    afisareProblema14(const_cast <const int *> (pointer));
+    // int valoare = 14;
+    // int* pointer = &valoare;
+    // afisareProblema14(const_cast <const int *> (pointer));
 
     //////////////////////////////////////////
     /// 4.5 reinterpret_cast > Problema 15 ///
     //////////////////////////////////////////
+
+    problema15();
 
     //////////////////////////////////////////
     /// 4.5 reinterpret_cast > Problema 16 ///
