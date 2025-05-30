@@ -463,6 +463,10 @@ void modificaConstanta(const char* cuvant) {
 
 /// Problema 14: Ai o functie void afisare(const int* p) care afiseaza o valoare. In main, transmite un int* prin const_cast pentru a apela functia.
 
+void afisareProblema14(const int* p) {
+    cout << "Valoarea este " << *p << "\n";
+}
+
 ////////////////////////////
 /// 4.5 reinterpret_cast ///
 ////////////////////////////
@@ -724,12 +728,16 @@ int main() {
     /// 4.4 const_cast > Problema 13 ///
     ////////////////////////////////////
 
-    char cuvant[] = "aur";
-    modificaConstanta(cuvant);
+    // char cuvant[] = "aur";
+    // modificaConstanta(cuvant);
 
     ////////////////////////////////////
     /// 4.4 const_cast > Problema 14 ///
     ////////////////////////////////////
+
+    int valoare = 14;
+    int* pointer = &valoare;
+    afisareProblema14(const_cast <const int *> (pointer));
 
     //////////////////////////////////////////
     /// 4.5 reinterpret_cast > Problema 15 ///
