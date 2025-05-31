@@ -1,12 +1,33 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <algorithm>
 using namespace std;
 
 class Object;
 
 static int userPoints = 50000;
 list<Object*> objects;
+static void cleanUp();
+
+class Object {
+protected:
+    static int idGenerator;
+    const int id;
+public:
+    virtual int computeUpgradeCost() const = 0;
+    virtual void upgrade() = 0;
+    Object() : id(idGenerator++) {}
+    virtual ~Object() = default;
+    int getId() const {
+        return id;
+    }
+    virtual void write() const {
+        cout << "ID: " << id << endl;
+    }
+};
+int Object::idGenerator = 1000;
+
 static void cleanUp() {
     for (auto object : objects) {
         if (object != nullptr) {
@@ -17,24 +38,6 @@ static void cleanUp() {
     objects.clear();
 }
 
-class Object {
-protected:
-    static int idGenerator;
-    const int id;
-public:
-    virtual int computeUpgradeCost() = 0;
-    virtual void upgrade() = 0;
-    Object() : id(idGenerator++) {}
-    virtual ~Object() = default;
-    int getId() const {
-        return id;
-    }
-    virtual void write() {
-        cout << "ID: " << id << endl;
-    }
-};
-int Object::idGenerator = 1000;
-
 class Zid : public Object {
     static int createCost;
     double l, h, w;
@@ -44,7 +47,7 @@ public:
     static int getCreateCost() {
         return createCost;
     }
-    int computeUpgradeCost() override {
+    int computeUpgradeCost() const override {
         return (int)(100 * l * h * w);
     }
     void upgrade() override {
@@ -52,8 +55,8 @@ public:
         h = h + 1.0;
         w = w + 1.0;
     }
-    void write() override {
-        ((Object*)this)->write();
+    void write() const override {
+        Object::write();
         cout << "H, L, W = " << h << " " << l << " " << w << endl;
         cout << "Cost upgrade: " << this->computeUpgradeCost() << endl;
     }
@@ -69,14 +72,14 @@ public:
     static int getCreateCost() {
         return createCost;
     }
-    int computeUpgradeCost() override {
+    int computeUpgradeCost() const override {
         return (int)(500 * radius);
     }
     void upgrade() override {
         radius += 500;
     }
-    void write() override {
-        ((Object*)this)->write();
+    void write() const override {
+        Object::write();
         cout << "Radius = " << radius << endl;
         cout << "Cost upgrade: " << this->computeUpgradeCost() << endl;
     }
@@ -88,11 +91,10 @@ protected:
     double damage, hp;
     long long level;
 public:
-    Robot(double damage = 0.0, double hp = 100.0, long long level = 1)
-    : damage(damage), hp(hp), level(level) {}
+    Robot(double damage = 0.0, double hp = 100.0, long long level = 1) : damage(damage), hp(hp), level(level) {}
 
-    void write() override {
-        ((Object*)this)->write();
+    void write() const override {
+        Object::write();
         cout << "Damage = " << damage << endl;
         cout << "Level = " << level << endl;
         cout << "HP = " << hp << endl;
@@ -107,7 +109,7 @@ public:
     static int getCreateCost() {
         return createCost;
     }
-    int computeUpgradeCost() override {
+    int computeUpgradeCost() const override {
         return (int)(50 * aut);
     }
     void upgrade() override {
@@ -115,7 +117,7 @@ public:
         level += 1;
         damage = damage + 25.0;
     }
-    void write() override {
+    void write() const override {
         ((Robot*)this)->write();
         cout << "Flight Autonomy = " << aut << endl;
         cout << "Cost upgrade: " << this->computeUpgradeCost() << endl;
@@ -132,7 +134,7 @@ public:
     static int getCreateCost() {
         return createCost;
     }
-    int computeUpgradeCost() override {
+    int computeUpgradeCost() const override {
         return (int)(10 * bullets);
     }
     void upgrade() override {
@@ -145,7 +147,7 @@ public:
             hp = hp + 50.0;
         }
     }
-    void write() override {
+    void write() const override {
         ((Robot*)this)->write();
         cout << "Bullets = " << bullets << endl;
         cout << "Has shield = " << (hasShield ? "yes" : "no") << endl;
@@ -162,24 +164,25 @@ int main() {
         cout << "2. Actualizeaza un element" << endl;
         cout << "3. Afiseaza elementele din inventar crescator dupa costul de upgrade" << endl;
         cout << "4. Afiseaza elementele din inventar de tip robot" << endl;
-        cout << "5. Vinde (+500 puncte)";
-        cout << "Introdu optiunea ta (1-5) sau altceva pentru a iesi din program.";
+        cout << "5. Vinde (+500 puncte)" << endl;
+        cout << "Introdu optiunea ta (1-5) sau altceva pentru a iesi din program: ";
 
         cin >> option;
+        if (cin.fail()) {
+            cin.clear();            
+            cin.ignore(1000, '\n');  
+            cout << "Optiune invalida! Introdu un numar intre 1 si 5." << endl;
+            continue;
+        }
         try {
             switch (option) {
                 case 1: {
                     string selection;
                     cout << "Selecteaza ce doresti sa inserezi (zid / turn / robot_aerian / robot_terestru): ";
+                    cin >> selection;
 
-                    if (
-                            selection != "zid" &&
-                            selection != "turn" &&
-                            selection != "robot_aerian" &&
-                            selection != "robot_terestru"
-                            ) {
-                        throw runtime_error(
-                                "Eroare: Selectia este invalida te rog sa selectezi intre optiunile disponibile (zid / turn / robot_aerian / robot_terestru).");
+                    if (selection != "zid" && selection != "turn" && selection != "robot_aerian" && selection != "robot_terestru" ) {
+                        throw runtime_error("Eroare: Selectia este invalida te rog sa selectezi intre optiunile disponibile (zid / turn / robot_aerian / robot_terestru).");
                     }
 
                     if (selection == "zid") {
@@ -215,7 +218,7 @@ int main() {
                     cin >> selectedId;
 
                     auto it = find_if(objects.begin(), objects.end(), [selectedId](Object *object) -> bool {
-                        object->getId() == selectedId;
+                        return object->getId() == selectedId;
                     });
                     if (it == objects.end()) {
                         throw runtime_error("Nu exista un obiect cu id-ul mentionat.");
@@ -232,11 +235,15 @@ int main() {
                     break;
                 }
                 case 3: {
-                    objects.sort([](Object *a, Object *b) -> bool {
-                        return a->computeUpgradeCost() < b->computeUpgradeCost();
-                    });
-                    for (auto object: objects) {
-                        object->write();
+                    if (objects.empty()) {
+                        cout << "Inventarul este gol\n";
+                    } else {
+                        objects.sort([](Object *a, Object *b) -> bool {
+                            return a->computeUpgradeCost() < b->computeUpgradeCost();
+                        });
+                        for (auto object: objects) {
+                            object->write();
+                        }
                     }
                     break;
                 }
@@ -255,7 +262,7 @@ int main() {
                     cin >> selectedId;
 
                     auto it = find_if(objects.begin(), objects.end(), [selectedId](Object *object) -> bool {
-                        object->getId() == selectedId;
+                        return object->getId() == selectedId;
                     });
                     if (it == objects.end()) {
                         throw runtime_error("Nu exista un obiect cu id-ul mentionat.");
@@ -272,9 +279,11 @@ int main() {
                     break;
                 }
                 default: {
-                    cleanUp();
-                    cout << "Ai selectat iesirea din program." << endl;
-                    return 0;
+                    if (option < 1 || option > 5) {
+                        cleanUp();
+                        cout << "Ai selectat iesirea din program." << endl;
+                        return 0;
+                    }
                 }
             }
         } catch (exception& error) {
