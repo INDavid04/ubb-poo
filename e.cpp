@@ -1,27 +1,36 @@
 #include <iostream>
-#include <string>
-
 using namespace std;
-
-// 🚀 Now, try defining your own class for a Person with attributes like name and age! 🎉
-
-class Person {
-private:
-    string name;
-    int age;
-public:
-    Person(string name, int age) { 
-        this->name = name;
-        this->age = age;
+int f(int y)
+{
+    if (y < 0)
+        throw y;
+    return y / 2;
+}
+int f(int y, int z)
+{
+    if (y < z)
+        throw z - y;
+    return y / 2;
+}
+float f(int& y) /// modificam in float f1(int &y)
+{
+    cout <<" y este referinta";
+    return (float)y / 2;
+}
+int main()
+{
+    int x;
+    try {
+        cout <<"Da - mi un numar par : ";
+        cin >> x;
+        if (x % 2)
+            x = f(x, 0);
+        else
+            x = f(x); /// linia asta genereaza eroarea
+        cout <<"Numarul "<< x <<" e bun !"<< endl;
     }
-    void get() const {
-        cout << "Hello, " << name << "! You are " << age << " years old! God bless you!\n";
+    catch (int i) {
+        cout <<"Numarul "<< i <<" nu e bun !"<< endl;
     }
-};
-
-int main() {
-    Person p1("Dina", 24);
-    p1.get();
-
     return 0;
 }
