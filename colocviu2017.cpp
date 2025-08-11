@@ -12,49 +12,57 @@ class Candidat {
 private:
     string nume;
     int serie;
-    int numarCI;
+    string numarCI;
     float medieBAC;
     string categorie;
 protected:
 public:
-    Candidat(string nume, int serie, int numarCI, float medieBAC, string categorie) {
-        nume = this->nume;
-        serie = this->serie;
-        numarCI = this->numarCI;
-        medieBAC = this->medieBAC;
-        categorie = this->categorie;
+    Candidat(string nume, int serie, string numarCI, float medieBAC, string categorie) {
+        this->nume = nume;
+        this->serie = serie;
+        this->numarCI = numarCI;
+        this->medieBAC = medieBAC;
+        this->categorie = categorie;
+    }
+    void afisare() const {
+        cout << nume << " " << serie << " " << numarCI << " " << medieBAC << " " << categorie << "\n";
     }
 };
 
-class Formular : public Candidat {
+class Formular {
 private:
     static int cnt;
     int nr_inregistrare;
-    list<Formular*> listaIF1;
-    list<Formular*> listaIF2;
-    list<Formular*> listaID1;
-    list<Formular*> listaID2;
+    list<Candidat> listaIF1, listaIF2, listaID1, listaID2;
 protected:
 public:  
-    Formular(int n = 1) {
+    void adaugaCandidati(int n = 1) {
         for (int i = 0; i < n; i++) {
             string nume_candidat;
             int serie_candidat;
-            int numarCI_candidat;
-            float medieBac_candidat;
+            string numarCI_candidat;
+            float medieBAC_candidat;
             string categorie_candidat;
 
+            /// TODO: fix: infinite loop
             nr_inregistrare = cnt++;
-            cin >> nume_candidat >> serie_candidat >> numarCI_candidat >> medieBac_candidat >> categorie_candidat;
-            
+            if (i == 0) {
+                cin.ignore(); /// curatam bufferul doar la primul candidat
+            }
+            cout << "Nume: "; getline(cin, nume_candidat);
+            cout << "Serie: "; cin >> serie_candidat; 
+            cout << "Numar CI: "; cin >> numarCI_candidat;
+            cout << "Medie BAC: "; cin >> medieBAC_candidat;
+            cout << "Categorie: "; cin >> categorie_candidat;
+
             if (categorie_candidat == "if1") {
-                listaIF1.push_back(new Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBac_candidat, categorie_candidat));
+                listaIF1.push_back(Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBAC_candidat, categorie_candidat));
             } else if (categorie_candidat == "if2") {
-                listaIF2.push_back(new Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBac_candidat, categorie_candidat));
+                listaIF2.push_back(Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBAC_candidat, categorie_candidat));
             } else if (categorie_candidat == "id1") {
-                listaID1.push_back(new Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBac_candidat, categorie_candidat));
+                listaID1.push_back(Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBAC_candidat, categorie_candidat));
             } else if (categorie_candidat == "id2") {
-                listaID2.push_back(new Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBac_candidat, categorie_candidat));
+                listaID2.push_back(Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBAC_candidat, categorie_candidat));
             } else {
                 cout << "Categorie gresita! Alege intre: if1, if2, id1 si id2!";
             }
@@ -62,22 +70,22 @@ public:
     }
 
     void afisareListe() const {
-        int dimListaIF1 = listaIF1.length(), dimListaIF2 = listaIF2.length(), dimListaID1 = listaID1.length(), dimListaID2 = listaID2.length();
+        int dimListaIF1 = listaIF1.size(), dimListaIF2 = listaIF2.size(), dimListaID1 = listaID1.size(), dimListaID2 = listaID2.size();
         cout << "Lista IF1 are " << dimListaIF1 << " candidati:\n";
-        for (int i = 0; i < dimListaIF1; i++) {
-            cout << listaIF1[i] << " ";
+        for (auto &candidat : listaIF1) {
+            candidat.afisare();
         }
         cout << "\nLista IF2 are " << dimListaIF2 << " candidati:\n";
-        for (int i = 0; i < dimListaIF2; i++) {
-            cout << listaIF2[i] << " ";
+        for (auto &candidat : listaIF2) {
+            candidat.afisare();
         }
         cout << "\nLista ID1 are " << dimListaID1 << " candidati:\n";
-        for (int i = 0; i < dimListaID1; i++) {
-            cout << listaID1[i] << " ";
+        for (auto &candidat : listaID1) {
+            candidat.afisare();
         }
         cout << "\nLista ID2 are " << dimListaID2 << " candidati:\n";
-        for (int i = 0; i < dimListaID2; i++) {
-            cout << listaID[i] << " ";
+        for (auto &candidat : listaID2) {
+            candidat.afisare();
         }
         cout << "\nIn total: " << dimListaIF1 + dimListaIF2 + dimListaID1 + dimListaID2 << " candidati\n";
     }
@@ -102,18 +110,25 @@ int main() {
             int numarCandidati;
 
             try {
+                cout << "Numar candidati: ";
                 cin >> numarCandidati;
-                throw numarCandidati;
-            } catch (int numarCandidati) {
-                if (numarCandidati < 1) {
-                    cout << "Nu pot adauga " << numarCandidati << " candidati!\n";
-                    break;
+                if (cin.fail()) {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    throw string("Input invalid: Introdu un numar intreg!\n");
                 }
-                f.Formular(numarCandidati);
+                if (numarCandidati < 1) {
+                    throw numarCandidati;
+                }
+                f.adaugaCandidati(numarCandidati);
+            } catch (int numarCandidati) {
+                cout << "Nu pot adauga " << numarCandidati << " candidati!\n";
+            } catch (string &errorString) {
+                cout << errorString;
             }
         } else if (optiune == 2) {
             f.afisareListe();
-        } else if (opiune == 3) {
+        } else if (optiune == 3) {
             cout << "3\n";
         } else if (optiune == 4) {
             cout << "4\n";
