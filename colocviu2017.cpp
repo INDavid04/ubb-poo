@@ -1,141 +1,229 @@
-// 2025-08-11-14-02-15-25
-
 #include <iostream>
+#include <vector>
 #include <string>
-#include <list>
+#include <algorithm>
+#include <memory>
+#include <stdexcept> // [Barem] pentru exceptii
+#include <typeinfo>  // [Barem] pentru RTTI (dynamic_cast, typeid)
 
 using namespace std;
 
-/// Candidat: nume, seria, numarCI, medieBAC, categorie (la categorie putem avea 1 pentru prima si 2 pentru a doua facultate)
-
+// =============================================================
+// [Barem] 2p - ierarhie de clase
+// Clasa abstractă Candidat este baza pentru toate tipurile de candidați
+// =============================================================
 class Candidat {
-private:
+protected:
     string nume;
-    int serie;
-    string numarCI;
-    float medieBAC;
-    string categorie;
-protected:
+    string serieCI;
+    int numarCI;
+    double medieBac;
+    int numarInregistrare;
+    static int contorGeneral; // [Barem] atribut static pentru ID auto-increment
 public:
-    Candidat(string nume, int serie, string numarCI, float medieBAC, string categorie) {
-        this->nume = nume;
-        this->serie = serie;
-        this->numarCI = numarCI;
-        this->medieBAC = medieBAC;
-        this->categorie = categorie;
+    // [Barem] constructor + validare (aruncă excepție dacă numele e gol)
+    Candidat(const string& nume_, const string& serie, int nr, double medie)
+        : nume(nume_), serieCI(serie), numarCI(nr), medieBac(medie) 
+    {
+        if (nume.empty()) 
+            throw invalid_argument("Nume invalid"); // [Barem] exceptia se propaga
+        numarInregistrare = ++contorGeneral; // [Barem] ID comanda incrementat automat
     }
-    void afisare() const {
-        cout << nume << " " << serie << " " << numarCI << " " << medieBAC << " " << categorie << "\n";
+
+    // [Barem] destructor virtual
+    virtual ~Candidat() {}
+
+    // [Barem] metoda const
+    int getNumarInregistrare() const { return numarInregistrare; }
+
+    // [Barem] abstract - functie virtuala pura
+    virtual double calculMedie() const = 0;
+
+    // [Barem] metoda virtuala pentru afisare
+    virtual void afiseaza() const {
+        cout << "Nume: " << nume << ", CI: " << serieCI << " " << numarCI 
+             << ", Medie Bac: " << medieBac << ", Nr. inregistrare: " << numarInregistrare;
+    }
+};
+int Candidat::contorGeneral = 0; // initializare atribut static
+
+// =============================================================
+// [Barem] mostenire - IF fara a doua facultate
+// =============================================================
+class CandidatIF : public Candidat {
+    double notaProba;
+public:
+    CandidatIF(const string& nume_, const string& serie, int nr, double medie, double notaProba_)
+        : Candidat(nume_, serie, nr, medie), notaProba(notaProba_) {}
+
+    double calculMedie() const override { // rescriere metoda abstracta
+        return 0.8 * notaProba + 0.2 * medieBac;
+    }
+
+    void afiseaza() const override {
+        Candidat::afiseaza(); // [Barem] apel functie clasa de baza
+        cout << ", Tip: IF, Nota proba: " << notaProba << ", MA: " << calculMedie() << "\n";
     }
 };
 
-class Formular {
+// =============================================================
+// [Barem] mostenire - ID fara a doua facultate
+// =============================================================
+class CandidatID : public Candidat {
+    double notaProba;
+    double notaMateBac;
+public:
+    CandidatID(const string& nume_, const string& serie, int nr, double medie, double notaProba_, double notaMate_)
+        : Candidat(nume_, serie, nr, medie), notaProba(notaProba_), notaMateBac(notaMate_) {}
+
+    double calculMedie() const override {
+        return 0.6 * notaProba + 0.4 * notaMateBac;
+    }
+
+    void afiseaza() const override {
+        Candidat::afiseaza();
+        cout << ", Tip: ID, Nota proba: " << notaProba << ", Nota mate Bac: " << notaMateBac 
+             << ", MA: " << calculMedie() << "\n";
+    }
+};
+
+// =============================================================
+// [Barem] mostenire - IF pentru a 2-a facultate
+// =============================================================
+class CandidatIF2 : public Candidat {
+    double notaProba;
+    double mediePrimaFac;
+public:
+    CandidatIF2(const string& nume_, const string& serie, int nr, double medie, double notaProba_, double medieFac_)
+        : Candidat(nume_, serie, nr, medie), notaProba(notaProba_), mediePrimaFac(medieFac_) {}
+
+    double calculMedie() const override {
+        return 0.6 * notaProba + 0.4 * mediePrimaFac;
+    }
+
+    void afiseaza() const override {
+        Candidat::afiseaza();
+        cout << ", Tip: IF2, Nota proba: " << notaProba << ", Medie prima facultate: " << mediePrimaFac
+             << ", MA: " << calculMedie() << "\n";
+    }
+};
+
+// =============================================================
+// [Barem] mostenire - ID pentru a 2-a facultate
+// =============================================================
+class CandidatID2 : public Candidat {
+    double notaProba;
+    double mediePrimaFac;
+public:
+    CandidatID2(const string& nume_, const string& serie, int nr, double medie, double notaProba_, double medieFac_)
+        : Candidat(nume_, serie, nr, medie), notaProba(notaProba_), mediePrimaFac(medieFac_) {}
+
+    double calculMedie() const override {
+        return 0.6 * notaProba + 0.4 * mediePrimaFac;
+    }
+
+    void afiseaza() const override {
+        Candidat::afiseaza();
+        cout << ", Tip: ID2, Nota proba: " << notaProba << ", Medie prima facultate: " << mediePrimaFac
+             << ", MA: " << calculMedie() << "\n";
+    }
+};
+
+// =============================================================
+// [Barem] clasa Factory - creeaza candidati pe baza tipului
+// =============================================================
+class FactoryCandidati {
+public:
+    static Candidat* creeaza(const string& tip) {
+        if (tip == "IF") 
+            return new CandidatIF("Popescu", "AB", 12345, 9.5, 8.7);
+        if (tip == "ID") 
+            return new CandidatID("Ionescu", "CJ", 54321, 8.2, 7.5, 9.0);
+        if (tip == "IF2") 
+            return new CandidatIF2("Georgescu", "B", 11111, 7.5, 7.0, 8.0);
+        if (tip == "ID2") 
+            return new CandidatID2("Marinescu", "BV", 22222, 8.0, 7.2, 8.5);
+        throw invalid_argument("Tip necunoscut");
+    }
+};
+
+// =============================================================
+// [Barem] Singleton - aplicatie cu meniu
+// =============================================================
+class Aplicatie {
 private:
-    static int cnt;
-    int nr_inregistrare;
-    list<Candidat> listaIF1, listaIF2, listaID1, listaID2;
-protected:
-public:  
-    void adaugaCandidati(int n = 1) {
-        for (int i = 0; i < n; i++) {
-            string nume_candidat;
-            int serie_candidat;
-            string numarCI_candidat;
-            float medieBAC_candidat;
-            string categorie_candidat;
+    static Aplicatie* instanta;
+    vector<Candidat*> candidati; // [Barem] STL container vector
+    Aplicatie() {}
+public:
+    static Aplicatie* getInstanta() {
+        if (!instanta) instanta = new Aplicatie();
+        return instanta;
+    }
 
-            /// TODO: fix: infinite loop
-            nr_inregistrare = cnt++;
-            if (i == 0) {
-                cin.ignore(); /// curatam bufferul doar la primul candidat
-            }
-            cout << "Nume: "; getline(cin, nume_candidat);
-            cout << "Serie: "; cin >> serie_candidat; 
-            cout << "Numar CI: "; cin >> numarCI_candidat;
-            cout << "Medie BAC: "; cin >> medieBAC_candidat;
-            cout << "Categorie: "; cin >> categorie_candidat;
+    void adaugaCandidat(Candidat* c) {
+        candidati.push_back(c);
+    }
 
-            if (categorie_candidat == "if1") {
-                listaIF1.push_back(Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBAC_candidat, categorie_candidat));
-            } else if (categorie_candidat == "if2") {
-                listaIF2.push_back(Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBAC_candidat, categorie_candidat));
-            } else if (categorie_candidat == "id1") {
-                listaID1.push_back(Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBAC_candidat, categorie_candidat));
-            } else if (categorie_candidat == "id2") {
-                listaID2.push_back(Candidat(nume_candidat, serie_candidat, numarCI_candidat, medieBAC_candidat, categorie_candidat));
-            } else {
-                cout << "Categorie gresita! Alege intre: if1, if2, id1 si id2!";
-            }
+    void afiseazaTot() const {
+        for (auto c : candidati) {
+            c->afiseaza();
         }
     }
 
-    void afisareListe() const {
-        int dimListaIF1 = listaIF1.size(), dimListaIF2 = listaIF2.size(), dimListaID1 = listaID1.size(), dimListaID2 = listaID2.size();
-        cout << "Lista IF1 are " << dimListaIF1 << " candidati:\n";
-        for (auto &candidat : listaIF1) {
-            candidat.afisare();
+    void afiseazaDoarIF() const {
+        for (auto c : candidati) {
+            if (dynamic_cast<CandidatIF*>(c)) // [Barem] RTTI cu dynamic_cast
+                c->afiseaza();
         }
-        cout << "\nLista IF2 are " << dimListaIF2 << " candidati:\n";
-        for (auto &candidat : listaIF2) {
-            candidat.afisare();
-        }
-        cout << "\nLista ID1 are " << dimListaID1 << " candidati:\n";
-        for (auto &candidat : listaID1) {
-            candidat.afisare();
-        }
-        cout << "\nLista ID2 are " << dimListaID2 << " candidati:\n";
-        for (auto &candidat : listaID2) {
-            candidat.afisare();
-        }
-        cout << "\nIn total: " << dimListaIF1 + dimListaIF2 + dimListaID1 + dimListaID2 << " candidati\n";
+    }
+
+    // [Barem] STL sort
+    void afiseazaSortatDupaMedie() {
+        vector<Candidat*> copie = candidati;
+        sort(copie.begin(), copie.end(), [](Candidat* a, Candidat* b) {
+            return a->calculMedie() > b->calculMedie();
+        });
+        for (auto c : copie) c->afiseaza();
     }
 };
+Aplicatie* Aplicatie::instanta = nullptr;
 
-int Formular::cnt = 1;
+// =============================================================
+// [Barem] template - functie generica de afisare
+// =============================================================
+template<typename T>
+void afiseazaVector(const vector<T>& v) {
+    for (auto& elem : v) {
+        cout << elem << " ";
+    }
+    cout << "\n";
+}
 
+// =============================================================
+// main - cu meniu si try-catch
+// =============================================================
 int main() {
-    Formular f;
-    int optiune;
-    do {
-        cout << "Apasa 0 pentru a iesi din meniu\n";
-        cout << "Apasa 1 pentru a adauga n candidati\n";
-        cout << "Apasa 2 pentru a afisa numarul si listele cu toti candidatii inscrisi la fiecare sectiune de admitere, in ordinea depunerii dosarelor\n";
-        cout << "Apasa 3 pentru a afisa listele cu toti candidatii declarati admisi la fiecare sectiune de admitere (daca media >= 5 si pozitia <= numar de locuri, descrescator dupa media de admitere)\n";
-        cout << "Apasa 4 pentru a afisa toti candidatii care s-au inscris la ambele forme de invatamant si au fost declarati admisi macar la una\n";   
-        cin >> optiune;
-        if (optiune == 0) {
-            cout << "Iesire...\n";
-            break;
-        } else if (optiune == 1) {
-            int numarCandidati;
+    Aplicatie* app = Aplicatie::getInstanta();
 
-            try {
-                cout << "Numar candidati: ";
-                cin >> numarCandidati;
-                if (cin.fail()) {
-                    cin.clear();
-                    cin.ignore(10000, '\n');
-                    throw string("Input invalid: Introdu un numar intreg!\n");
-                }
-                if (numarCandidati < 1) {
-                    throw numarCandidati;
-                }
-                f.adaugaCandidati(numarCandidati);
-            } catch (int numarCandidati) {
-                cout << "Nu pot adauga " << numarCandidati << " candidati!\n";
-            } catch (string &errorString) {
-                cout << errorString;
-            }
-        } else if (optiune == 2) {
-            f.afisareListe();
-        } else if (optiune == 3) {
-            cout << "3\n";
-        } else if (optiune == 4) {
-            cout << "4\n";
-        } else {
-            cout << "Nu pricep ce vrei sa fac! Alege un numar intre zero si patru!\n";
-        }
-    } while (optiune != 0);
+    try {
+        app->adaugaCandidat(FactoryCandidati::creeaza("IF"));
+        app->adaugaCandidat(FactoryCandidati::creeaza("ID"));
+        app->adaugaCandidat(FactoryCandidati::creeaza("IF2"));
+        app->adaugaCandidat(FactoryCandidati::creeaza("ID2"));
+    }
+    catch (const exception& e) { // [Barem] exceptia este prinsa
+        cout << "Eroare: " << e.what() << "\n";
+    }
+
+    cout << "\n--- Toti candidatii ---\n";
+    app->afiseazaTot();
+
+    cout << "\n--- Candidati IF ---\n";
+    app->afiseazaDoarIF();
+
+    cout << "\n--- Sortati dupa medie ---\n";
+    app->afiseazaSortatDupaMedie();
 
     return 0;
 }
