@@ -1,36 +1,21 @@
 #include <iostream>
 using namespace std;
-int f(int y)
-{
-    if (y < 0)
-        throw y;
-    return y / 2;
-}
-int f(int y, int z)
-{
-    if (y < z)
-        throw z - y;
-    return y / 2;
-}
-float f(int& y) /// modificam in float f1(int &y)
-{
-    cout <<" y este referinta";
-    return (float)y / 2;
-}
+class A {
+    static int x;
+
+public:
+    A(int i = 0) { x = i; }
+    int get_x() { return x; }
+    int& set_x(int i) { x = i; }
+    A operator=(A a1)
+    {
+        set_x(a1.get_x());
+        return a1;
+    }
+};
 int main()
 {
-    int x;
-    try {
-        cout <<"Da - mi un numar par : ";
-        cin >> x;
-        if (x % 2)
-            x = f(x, 0);
-        else
-            x = f(x); /// linia asta genereaza eroarea
-        cout <<"Numarul "<< x <<" e bun !"<< endl;
-    }
-    catch (int i) {
-        cout <<"Numarul "<< i <<" nu e bun !"<< endl;
-    }
+    A a(212), b;
+    cout << (b = a).get_x();
     return 0;
 }
