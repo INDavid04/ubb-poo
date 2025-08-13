@@ -27,7 +27,13 @@ public:
         cout << "Produsul cu id-ul: " << idProdus << " a fost scos\n";
     }
 
-    virtual void afiseaza() const = 0; /// functie virtuala pura
+    /// Functie virtuala pura
+    virtual void afiseaza() const = 0; 
+
+    /// Functie statica
+    static int getNumarProduse() {
+        return idGenerator;
+    }
 };
 int Produs::idGenerator = 0;
 
@@ -155,10 +161,18 @@ public:
             string tip;
             cout << "Tip produs (carte/dvd_muzica/dvd_filme/figurina/poster): "; cin >> tip; cin.get();
 
+            if (tip != "carte" && tip != "dvd_muzica" && tip != "dvd_filme" && tip != "figurina" && tip != "poster") {
+                throw invalid_argument("Nu exista produsul acesta!\n");
+            }
+
             double pret;
             int cantitate;
             cout << "Pret: "; cin >> pret; cin.get();
             cout << "Cantitate: "; cin >> cantitate; cin.get();
+
+            if (pret < 0 || cantitate < 0) {
+                throw invalid_argument("Pretul sau cantitatea nu pot fi negative\n");
+            }
 
             if (tip == "carte") {
                 string titlu, editura, raspuns;
@@ -204,8 +218,6 @@ public:
                 cout << "Denumire: "; getline(cin, denumire);
                 cout << "Format: "; getline(cin, format);
                 listaProduse.push_back(new Poster(pret, cantitate, denumire, format));
-            } else {
-                cout << "Nu exista produsul: " << tip << ". Prin urmare, lista ramane la fel.\n";
             }
         }
     }
@@ -273,10 +285,18 @@ int main() {
                 m->op7();
             }
 
+        } catch (const invalid_argument& e) {
+            cout << "Eroare la introducerea datelor pentru un produs: " << e.what();
+        } catch (const out_of_range& e) {
+            cout << "Eroare la meniu: " << e.what();
         } catch (const exception& e) {
-            cout << e.what();
+            cout << "Alta eroare: " << e.what();
         }
     } while (optiune != 7);
+
+    /// Exemplu in care folosim functia statica getNumarProduse
+    cout << "Intr-un final ai ajuns sa ai " << Produs::getNumarProduse() << " produs(e)!\n";
+    delete m;
 
     return 0;
 }
