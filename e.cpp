@@ -1,26 +1,31 @@
-#include <iostream>
-using namespace std;
-class A {
-    static int x;
-    // int x; 
+// Suprascrie operatorul + pentru adunarea a doua numere complexe
 
+#include <iostream>
+
+using namespace std;
+
+class ComplexNumber {
+private:
+    int a, b; /// complex_number = a + bi
+protected:
 public:
-    A(int i = 0) { x = i; }
-    int get_x() { return x; }
-    int& set_x(int i) { x = i; }
-    // int& set_x(int i) { x = i; return x; }
-    A operator=(A a1)
-    {
-        set_x(a1.get_x());
-        return a1;
+    ComplexNumber(int a = 0, int b = 0) : a(a), b(b) {}
+    ~ComplexNumber() {}
+    int getA() const {
+        return a;
+    }
+    int getB() const {
+        return b;
+    }
+    ComplexNumber operator+(const ComplexNumber obj) {
+        return ComplexNumber(a + obj.getA(), b + obj.getB());
     }
 };
 
-// int A::x = 0;
+int main() {
+    ComplexNumber a(2,5), b(5, 2), c;
+    c = a + b;
+    cout << c.getA() << " + " << c.getB() << "i\n";
 
-int main()
-{
-    A a(212), b; /// a.x = 212, b.x = 0. x e static. prin urmare, a.x = b.x = 0
-    cout << (b = a).get_x();
     return 0;
 }
