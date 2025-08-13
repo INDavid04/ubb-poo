@@ -27,7 +27,7 @@ public:
         cout << "Produsul cu id-ul: " << idProdus << " a fost scos\n";
     }
 
-    virtual void afiseaza() = 0; /// functie virtuala pura
+    virtual void afiseaza() const = 0; /// functie virtuala pura
 };
 int Produs::idGenerator = 0;
 
@@ -51,12 +51,12 @@ public:
 
 class DVD : public Produs {
 private:
-    int minute;
 protected:
+    int minute;
 public:
     DVD(double pret, int cantitate, int minute) : Produs(pret, cantitate), minute(minute) {}
 
-    virtual void afiseaza() = 0;
+    virtual void afiseaza() const = 0;
 };
 
 class DVDMuzica : public DVD {
@@ -90,12 +90,12 @@ public:
 
 class ObiectColectie : public Produs {
 private:
-    string denumire;
 protected:
+    string denumire;
 public:
     ObiectColectie(double pret, int cantitate, const string &denumire) : Produs(pret, cantitate), denumire(denumire) {}
 
-    virtual void afiseaza() = 0;
+    virtual void afiseaza() const = 0;
 };
 
 class Figurina : public ObiectColectie {
@@ -146,6 +146,7 @@ public:
         }
         return instanta;
     }
+
     void op1() {
         cout << "Citesc n produse...\n";
         int n;
@@ -162,70 +163,80 @@ public:
             if (tip == "carte") {
                 string titlu, editura, raspuns;
                 vector<string> autori;
-                cout << "Titlu: "; cin >> titlu; cin.get();
+                cout << "Titlu: "; getline(cin, titlu);
                 do {
                     string autor;
-                    cout << "Autor: "; cin >> autor; cin.get();
+                    cout << "Autor: "; getline(cin, autor);
                     autori.push_back(autor);
                     cout << "Mai adaugi un autor? (da/nu): "; cin >> raspuns; cin.get();
                 } while (raspuns == "da");
-                cout << "Editura: "; cin >> editura; cin.get();
-                listaProduse.push_back(Carte(pret, cantitate, titlu, autori, editura));
+                cout << "Editura: "; getline(cin, editura);
+                listaProduse.push_back(new Carte(pret, cantitate, titlu, autori, editura));
             } else if (tip == "dvd_muzica") {
                 int minute;
                 string album, raspuns;
                 vector<string> interpreti;
                 cout << "Minute: "; cin >> minute; cin.get();
-                cout << "Album: "; cin >> album; cin.get();
+                cout << "Album: "; getline(cin, album);
                 do {
                     string interpret;
-                    cout << "Interpret: "; cin >> interpret; cin.get();
-                    interpreti.push_back(interpreti);
+                    cout << "Interpret: "; getline(cin, interpret);
+                    interpreti.push_back(interpret);
                     cout << "Mai adaugi un interpret? (da/nu): "; cin >> raspuns; cin.get();
                 } while (raspuns == "da");
-                listaProduse.push_back(DVDMuzica(pret, cantitate, minute, album, interpreti));
+                listaProduse.push_back(new DVDMuzica(pret, cantitate, minute, album, interpreti));
             } else if (tip == "dvd_filme") {
                 int minute;
                 string film, gen;
                 cout << "Minute: "; cin >> minute; cin.get();
-                cout << "Film: "; cin >> film; cin.get();
-                cout << "Gen: "; cin >> gen; cin.get();
-                listaProduse.push_back(DVDFilme(pret, cantitate, minute, film, gen));
+                cout << "Film: "; getline(cin, film);
+                cout << "Gen: "; getline(cin, gen);
+                listaProduse.push_back(new DVDFilme(pret, cantitate, minute, film, gen));
             } else if (tip == "figurina") {
                 string denumire, categorie, brand, material;
-                cout << "Denumire: "; cin >> denumire; cin.get();
-                cout << "Categorie: "; cin >> categorie; cin.get();
-                cout << "Brand: "; cin >> brand; cin.get();
-                cout << "Material: "; cin >> material; cin.get();
-                listaProduse.push_back(Figurina(pret, cantitate, denumire, categorie, brand, material));
+                cout << "Denumire: "; getline(cin, denumire);
+                cout << "Categorie: "; getline(cin, categorie);
+                cout << "Brand: "; getline(cin, brand);
+                cout << "Material: "; getline(cin, material);
+                listaProduse.push_back(new Figurina(pret, cantitate, denumire, categorie, brand, material));
             } else if (tip == "poster") {
                 string denumire, format;
-                cout << "Denumire: "; cin >> denumire; cin.get();
-                cout << "Format: "; cin >> format; cin.get();
-                listaProduse.push_back(Poster(pret, cantitate, denumire, format));
+                cout << "Denumire: "; getline(cin, denumire);
+                cout << "Format: "; getline(cin, format);
+                listaProduse.push_back(new Poster(pret, cantitate, denumire, format));
             } else {
                 cout << "Nu exista produsul: " << tip << ". Prin urmare, lista ramane la fel.\n";
             }
         }
     }
+
     void op2() {
         cout << "Afisez produsele citite...\n";
-        for (auto produs : listaProduse) {
-            produs.afiseaza();
+        if (listaProduse.empty()) {
+            cout << "Lista este goala.\n";
+        } else {
+            for (auto produs : listaProduse) {
+                produs->afiseaza();
+            }
         }
     }
+
     void op3() {
         cout << "Editez un produs...\n";
     }
+    
     void op4() {
         cout << "Ordonez crescator produsele dupa pret...\n";
     }
+    
     void op5() {
         cout << "Caut o carte dupa titlu...\n";
     }
+    
     void op6() {
         cout << "Afisez produsul cu cea mai mare cantitate disponibila...\n";
     }
+    
     void op7() {
         cout << "Ies din meniu...\n";
     }
@@ -244,7 +255,7 @@ int main() {
             cin >> optiune;
             cin.get();
             if (optiune < 1 || optiune > 7) {
-                throw "Optiunea nu exista. Alege intre 1 si 7!\n";
+                throw out_of_range("Optiunea nu exista. Alege intre 1 si 7!\n");
             }
             if (optiune == 1) {
                 m->op1();
@@ -262,8 +273,8 @@ int main() {
                 m->op7();
             }
 
-        } catch (const char* errorString) {
-            cout << errorString;
+        } catch (const exception& e) {
+            cout << e.what();
         }
     } while (optiune != 7);
 
