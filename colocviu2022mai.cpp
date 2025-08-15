@@ -48,6 +48,10 @@ public:
     virtual ~Bilet() {
         cout << "Bilet aruncat la gunoi\n";
     }
+
+    virtual void afiseaza() const {
+        cout << "\t- Bilet de " << tip << " cu taxa de " << taxa << " lei folosit pentru " << folosire << "\n";
+    }
 };
 
 class BiletSuprafata : public virtual Bilet {
@@ -86,8 +90,11 @@ public:
     }
 };
 
+/// Clasa abstracta
 class Card {
 private:
+    static int idCardGenerator;
+    int idCard;
     string tipulUltimuluiBiletFolosit;
     double sumaBileteNeutilizate;
     list<Bilet*> listaBilete;
@@ -97,12 +104,46 @@ public:
         this->tipulUltimuluiBiletFolosit = tipulUltimuluiBiletFolosit;
         this->listaBilete = listaBilete;
         this->sumaBileteNeutilizate = sumaBileteNeutilizate;
+        idCard = idCardGenerator++;
     }
 
     virtual ~Card() {
         cout << "Card distrus\n";
+        for (auto *bilet : listaBilete) {
+            delete bilet;
+        }
+    }
+
+    virtual void afiseaza() const = 0; /// functie virtuala pura
+
+    virtual void adaugaBilet() = 0; /// functie virtuala pura
+
+    const int getIdCard() const {
+        return idCard;
+    }
+
+    void setTipulUltimuluiBiletFolosit(const string &tip) {
+        tipulUltimuluiBiletFolosit = tip;
+    }
+
+    string getTipulUltimulBiletFolosit() const {
+        return tipulUltimuluiBiletFolosit;
+    }
+
+    const double getSumaBileteNeutilizate() const {
+        return sumaBileteNeutilizate;
+    }
+
+    list<Bilet*> &getListaBilete() {
+        return listaBilete;
+    }
+
+    const list<Bilet*> &getListaBilete() const {
+        return listaBilete;
     }
 };
+
+int Card::idCardGenerator = 1;
 
 class CardSuprafata : public Card {
 private:    
@@ -113,6 +154,27 @@ public:
 
     ~CardSuprafata() {
         cout << "Card de suprafata distrus\n";
+    }
+
+    void afiseaza() const override {
+        cout << "Card #" << getIdCard() << ": de " << tip << "; tipul ultimului bilet folosit: " << getTipulUltimulBiletFolosit() << "; suma bilete neutilizate: " << getSumaBileteNeutilizate() << "; lista bilete: \n";
+        for (auto *bilet : getListaBilete()) {
+            bilet->afiseaza();
+        }
+    }
+
+    void adaugaBilet() override {
+        string tip;
+        cout << "Tip bilet (suprafata/metrou): ";
+        cin >> tip;
+        if (tip != "suprafata" && tip != "metrou") {
+            throw invalid_argument("Nu pot adauga biletul precizat\n");
+        } else if (tip == "suprafata") {
+            getListaBilete().push_back(new BiletSuprafata());
+        } else { /// tip == "metrou"
+            getListaBilete().push_back(new BiletMetrou());
+        }
+        setTipulUltimuluiBiletFolosit(tip);
     }
 };
 
@@ -126,6 +188,27 @@ public:
     ~CardSubteran() {
         cout << "Card subteran distrus\n";
     }
+
+    void afiseaza() const override {
+        cout << "Card #" << getIdCard() << ": de " << tip << "; tipul ultimului bilet folosit: " << getTipulUltimulBiletFolosit() << "; suma bilete neutilizate: " << getSumaBileteNeutilizate() << "; lista bilete: \n";
+        for (auto *bilet : getListaBilete()) {
+            bilet->afiseaza();
+        }
+    }
+
+    void adaugaBilet() override {
+        string tip;
+        cout << "Tip bilet (suprafata/metrou): ";
+        cin >> tip;
+        if (tip != "suprafata" && tip != "metrou") {
+            throw invalid_argument("Nu pot adauga biletul precizat\n");
+        } else if (tip == "suprafata") {
+            getListaBilete().push_back(new BiletSuprafata());
+        } else { /// tip == "metrou"
+            getListaBilete().push_back(new BiletMetrou());
+        }
+        setTipulUltimuluiBiletFolosit(tip);
+    }
 };
 
 class CardTranzit : public Card {
@@ -137,6 +220,18 @@ public:
 
     ~CardTranzit() {
         cout << "Card de tranzit distrus\n";
+    }
+
+    void afiseaza() const override {
+        cout << "Card #" << getIdCard() << ": de " << tip << "; tipul ultimului bilet folosit: " << getTipulUltimulBiletFolosit() << "; suma bilete neutilizate: " << getSumaBileteNeutilizate() << "; lista bilete: \n";
+        for (auto *bilet : getListaBilete()) {
+            bilet->afiseaza();
+        }
+    }
+
+    void adaugaBilet() override {
+        getListaBilete().push_back(new BiletTranzit());
+        setTipulUltimuluiBiletFolosit(tip);
     }
 };
 
@@ -159,6 +254,12 @@ private:
     }
 protected:
 public:
+    ~SingletonMenu() {
+        for (auto *card : carduri) {
+            delete card;
+        }
+    }
+
     static SingletonMenu* getInstanta() {
         if (instanta == nullptr) {
             instanta = new SingletonMenu();
@@ -166,24 +267,15 @@ public:
         return instanta;
     }
 
+    static void removeInstanta() {
+        delete instanta;
+        instanta = nullptr;
+    }
+
     void op1() {
         string tip;
         cout << "Creez un card...\n";
-
-/// BiletSuprafata: taxa 2 lei, folosit pentru tramvaie si autobuze
-/// BiletMetrou: taxa 2.5 lei, folosit pentru metrou
-/// BiletTranzit: taxa 3 lei, folosit 90 minute atat la suprafata cat si la metrou
-
-/// CardSuprafata: poate fi incarcat cu BiletSuprafata si BiletMetrou
-/// CardSubteran: poate fi incarcat cu BiletSuprafata si BiletMetrou
-/// CardTranzit: poate fi incarcat doar cu BiletTranzit
-
-/// Card: tipulUltimuluiBiletFolosit, momentulValidarii, sumaBileteNeutilizate
-/// BiletTranzit: fie numarul de minute fie "expirat" daca a fost depasit
-/// AparatValidare: numarScanari, locatie(suprafata/subteran)
-
-/// Card(const string &tipulUltimuluiBiletFolosit, const list<Bilet*> listaBilete, const double sumaBileteNeutilizate = 0)
-        cout << "Tip(suprafata/subteran/tanzit): ";
+        cout << "Tip(suprafata/subteran/tranzit): ";
         cin >> tip;
         cin.get();
 
@@ -203,7 +295,25 @@ public:
     }
     
     void op3() {
+        if (carduri.empty()) {
+            throw length_error("Nu exista niciu card\n");
+        }
+        
+        int idCard;
         cout << "Adaug un bilet la un card...\n";
+        cout << "Id card: ";
+        cin >> idCard;
+        cin.get();
+        bool gasit = false;
+        for (auto *card : carduri) {
+            if (card->getIdCard() == idCard) {
+                card->adaugaBilet();
+                gasit = true;
+            }
+        }
+        if (!gasit) {
+            throw invalid_argument("Nu exista cardul cu id-ul precizat\n");
+        }
     }
 
     void op4() const {
@@ -215,7 +325,25 @@ public:
     }
     
     void op6() const {
+        if (carduri.empty()) {
+            throw length_error("Nu exista niciu card\n");
+        }
+        
+        int idCard;
         cout << "Afisez detaliile unui card...\n";
+        cout << "Id card: ";
+        cin >> idCard;
+        cin.get();
+        bool gasit = false;
+        for (auto *card : carduri) {
+            if (card->getIdCard() == idCard) {
+                card->afiseaza();
+                gasit = true;
+            }
+        }
+        if (!gasit) {
+            throw invalid_argument("Nu exista cardul cu id-ul precizat\n");
+        }
     }
     
     void op7() const {
@@ -227,7 +355,7 @@ public:
     }
 };
 
-SingletonMenu* :: SingletonMenu::instanta = nullptr;
+SingletonMenu* SingletonMenu::instanta = nullptr;
 
 int main() {
     int optiune;
@@ -259,9 +387,13 @@ int main() {
         cout << "Out of range exception: " << e.what();
     } catch (const invalid_argument &e) {
         cout << "Invalid argument exception: " << e.what();
+    } catch (const length_error &e) {
+        cout << "Length error: " << e.what();
     } catch (const exception &e) {
         cout << "Exception: " << e.what();
     }
+
+    SingletonMenu::removeInstanta();
 
     return 0;
 }
