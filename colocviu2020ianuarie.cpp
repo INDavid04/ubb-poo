@@ -2,6 +2,10 @@
 /// Grupa 141
 /// g++ .\colocviu2020simulare.cpp -o e.exe
 
+////////////////////////////////////////
+/// Simulare in timpul laboratorului ///
+////////////////////////////////////////
+
 #include <iostream>
 #include <cmath>
 #include <string>
