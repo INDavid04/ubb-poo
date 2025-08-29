@@ -49,10 +49,8 @@ int MaterialBibliografic::id = 0;
 
 ///     MaterialTiparit: autori, an, nume
 class MaterialTiparit : public MaterialBibliografic {
-private:
     int an;
     string nume;
-protected:
     vector<vector<string>> autori;
 public:
     MaterialTiparit(const string &titlu, const vector<vector<string>> &autori, const int an, const string &nume) : MaterialBibliografic(titlu), autori(autori), an(an), nume(nume) {
@@ -60,10 +58,12 @@ public:
     }
 
     virtual ~MaterialTiparit() {
-        cout << "Material tiparit #" << getId() << " scos\n";
+        /// Feat: getIdMaterial() instead of getId()
+        cout << "Material tiparit #" << getIdMaterial() << " scos\n";
     }
 
-    // vector<vector<string>> &getAutori() const () { return autori; }
+    /// Fix: 'getAutori' declared as function returning a function
+    const vector<vector<string>> &getAutori() const { return autori; }
     const int getAn() const { return an; }
     const string getNume() const { return nume; }
 
@@ -80,14 +80,15 @@ public:
     }
 
     virtual ~Articol() {
-        cout << "Articol #" << getId() << " scos\n";
+        /// Feat: getIdMaterial() instead of getId()
+        cout << "Articol #" << getIdMaterial() << " scos\n";
     }
 
     virtual void afiseaza() const override {
         bool first = true;
         /// Anderson, O., Grew, P.: Stress corrosion theory of crack propagation with applications to geophysics. Reviews of Geophysics and Space Physics, 1977, 15, 77-104.
         cout << getIdMaterial() << ". ";
-        for (auto &autor : autori) {
+        for (auto &autor : getAutori()) {
             if (first) {
                 bool firstName = true;
                 for (auto &nume : autor) {
@@ -142,7 +143,7 @@ public:
         bool first = true;
         /// Bakhvalov, N., Panasenko, G.: Homogenisation: Averaging Processes in Periodic Media. Kluwer Academic Publisher Group, Dordrecht, 1989.
         cout << getIdMaterial() << ". ";
-        for (auto &autor : autori) {
+        for (auto &autor : getAutori()) {
             if (first) {
                 bool firstName = true;
                 for (auto &nume : autor) {
@@ -179,7 +180,8 @@ public:
     }
 
     virtual ~MaterialElectronic() {
-        cout << "Material electronic #" << getId() << " scos\n";
+        /// Feat: getIdMaterial() instead of getId()
+        cout << "Material electronic #" << getIdMaterial() << " scos\n";
     }
 
     virtual void afiseaza() const override = 0;
@@ -194,7 +196,8 @@ public:
     }
 
     virtual ~PaginaWeb() {
-        cout << "Pagina web #" << getId() << " scoasa\n";
+        /// Feat: getIdMaterial() instead of getId()
+        cout << "Pagina web #" << getIdMaterial() << " scoasa\n";
     }
 
     virtual void afiseaza() const override {
@@ -263,14 +266,19 @@ public:
             throw invalid_argument("Tip invalid\n");
         } else if (tip == "articol") {
             /// Articol: titlu, autori, an, nume, numar, numere
-            string titlu, n, autor, raspuns, nume;
+            string titlu, n, numeAutor, prenumeAutor, raspuns, nume;
             int numar, an;
-            vector<string> numere, autori;
+            vector<vector<string>> autori;
+            vector<string> numere, autor;
             cout << "Titlu: ";
             getline(cin, titlu);
             do {
-                cout << "Autor: ";
-                getline(cin, autor);
+                cout << "Nume autor: ";
+                getline(cin, numeAutor);
+                autor.push_back(numeAutor);
+                cout << "Prenume autor: ";
+                getline(cin, prenumeAutor);
+                autor.push_back(prenumeAutor);
                 autori.push_back(autor);
                 cout << "Adauga autor (da/nu): ";
                 getline(cin, raspuns);
@@ -292,17 +300,23 @@ public:
             cout << "Pagina de sfarsit: ";
             getline(cin, n);
             numere.push_back(n);
-            // materiale.push_back(new Articol(titlu, autori, an, nume, numar, numere));
+            /// Fix: no known conversion for argument 2 from vector<string> to const vector<vector<string>>
+            materiale.push_back(new Articol(titlu, autori, an, nume, numar, numere));
         } else if (tip == "carte") {
             /// Carte: titlu, autori, an, nume, oras
-            string titlu, oras, raspuns, autor, nume;
+            string titlu, oras, raspuns, numeAutor, prenumeAutor, nume;
             int an;
-            vector<string> autori;
+            vector<string> autor;
+            vector<vector<string>> autori;
             cout << "Titlu: ";
             getline(cin, titlu);
             do {
-                cout << "Autor: ";
-                getline(cin, autor);
+                cout << "Nume autor: ";
+                getline(cin, numeAutor);
+                autor.push_back(numeAutor);
+                cout << "Prenume autor: ";
+                getline(cin, prenumeAutor);
+                autor.push_back(prenumeAutor);
                 autori.push_back(autor);
                 cout << "Adauga autor (da/nu): ";
                 getline(cin, raspuns);
@@ -317,12 +331,13 @@ public:
             getline(cin, nume);
             cout << "Oras: ";
             getline(cin, oras);
-            // materiale.push_back(new Carte(titlu, autori, an, nume, oras));
+            /// Fix: no known conversion for argument 2 from vector<string> to const vector<vector<string>>
+            materiale.push_back(new Carte(titlu, autori, an, nume, oras));
         } else {
             /// tip == "pagina web"
             /// PaginaWeb: titlu, proprietar, url, data
             string titlu, proprietar, url, data;
-            cout << "Tilu: ";
+            cout << "Titlu: ";
             getline(cin, titlu);
             cout << "Proprietar: ";
             getline(cin, proprietar);
