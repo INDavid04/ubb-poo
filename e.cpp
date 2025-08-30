@@ -8,9 +8,126 @@ using namespace std;
 /// UP: Feel free to comment/uncomment following functions and classes ///
 //////////////////////////////////////////////////////////////////////
 
+// class cls {
+// public:
+//     cls() { cout << "Inside constructor 1" << endl; }
+//     ~cls(){ cout << "Inside destructor 1" << endl; }
+// };
+// class clss {
+//     cls xx;   // compoziție
+// public:
+//     clss() { cout << "Inside constructor 2" << endl; }
+//     ~clss() { cout << "Inside destructor 2" << endl; }
+// };
+// class clss2 {
+//     clss xx;  // compoziție
+//     cls xxx;  // compoziție
+// public:
+//     clss2() { cout << "Inside constructor 3" << endl; }
+//     ~clss2() { cout << "Inside destructor 3" << endl; }
+// };
+
+// class Afixed {
+//     int *v;
+// public:
+//     /// Constructor
+//     Afixed() { v = new int[10]; cout << "C"; } 
+//     /// Constructor de copiere
+//     Afixed(const Afixed &other) { 
+//         v = new int[10]; 
+//         for(int i = 0; i < 10; i++) { 
+//             v[i] = other.v[i]; 
+//         } 
+//         cout << "CC";
+//     }
+//     /// Operator de atribuire
+//     Afixed &operator=(const Afixed &other) {
+//         if (this != &other) {
+//             delete[] v;
+//             v = new int[10];
+//             for (int i = 0; i < 10; i++) {
+//                 v[i] = other.v[i];
+//             }
+//         }
+//         cout << "=";
+//         return *this;
+//     }
+//     /// Destructor
+//     ~Afixed() { delete[] v; cout << "D"; }
+//     void afis() const { cout << v[3]; }
+// };
+// void afisare(Afixed ob) { ob.afis(); }
+
+// class A {
+//     int *v;
+// public:
+//     A() { v = new int[10]; cout << "C"; }
+//     ~A() { delete[] v; cout << "D"; }
+//     void afis() const { cout << v[3]; }
+// };
+// void afisare(A ob) { ob.afis(); }
+
+// class A { int x; float y; string z; };
+
+// class ImplicitInline {
+//     int a, b;
+// public:
+//     /// Automatica inline
+//     void init(int i, int j) {
+//         a = i;
+//         b = j;
+//     }
+    
+//     void show() const {
+//         cout << a << " " << b << "\n";
+//     }
+// };
+
+// class ExplicitInline {
+//     int a, b;
+// public:
+//     void init(int i, int j);
+//     void show() const;
+// };
+
+// inline void ExplicitInline::init(int i, int j) {
+//     a = i;
+//     b = j;
+// }
+
+// inline void ExplicitInline::show() const {
+//     cout << a << " " << b << "\n";
+// }
+
+// inline int max(int a, int b) { 
+//     return (a > b) ? a : b;
+// }
+
+// class X {
+//     int x;
+// public:
+//     friend class Y;
+// };
+// class Y {
+// public:
+//     void set_x(int val, X &ob) { ob.x = val; }
+//     int get_x(X ob) const { return ob.x; }
+// };
+
+// class myclass {
+//     int a, b;
+// public:
+//     friend int sum(myclass x); /// poate accesa direct a si b private
+//     void setAB(int x, int y) { a = x; b = y; }
+// };
+// int sum(myclass x) { return x.a + x.b; }
+
 // class Animal { public: virtual void sound() { cout << "Sound\n"; } };
+
 // class Cat : public Animal { public: void sound() override { cout << "Miau!\n"; } };
+
 // class Dog : public Animal { public: void sound() override { cout << "Woof!\n"; } };
+
 // int f() { return 10; }
 
 int main() {
@@ -289,6 +406,286 @@ int main() {
     //     auto int x; /// nu
     //     register int y; /// nu
     // }
+
+    /**************************************************************************************************/
+
+    ////////////////////////////////
+    /// 3. Union, friend, inline ///
+    ////////////////////////////////
+
+    /**************************************************************************************************/
+
+    /// Union
+    ///     - Nu poate mosteni
+    ///     - Nu se poate mosteni din union
+    ///     - Nu poate avea functii virtuale
+    ///     - Nu avem variabile de instanta statice
+    ///     - Nu avem referinte in union
+    ///     - Nu avem obiecte care fac overload pe =
+    ///     - Obiecte cu constructori/destructori definiti nu pot fi membri in union
+
+    /// Union anonime
+    ///     - Nu au nume pentru tip
+    ///     - Nu se pot declara obiecte de tipul respectiv
+    ///     - Folosite pentru a spune compilatorului cum sa aloce/proceseze variabilele respective
+    ///     - Sunt accesibile ca si cum ar fi declarate in blocul respectiv
+    ///     - Nu pot avea functii
+    ///     - Nu pot avea private/protected
+    ///     - Union anonime globale trebuiesc precizate ca statice
+
+    /// EXEMPLU: Union
+
+    /// Scriem si union tot in main
+
+    // union {
+    //     long l;
+    //     double d;
+    // };
+    // l = 100000;
+    // cout << l << " "; /// 100000
+    // d = 23.432; 
+    // cout << d << "\n"; /// 23.432
+    // cout << l << " " << d << "\n"; /// random 23.432 (explicatie: l si d impart aceeasi zona de memorie)
+
+    /**************************************************************************************************/
+
+    /// Friend este folosit pentru:
+    ///     - Accesarea campurilor protected, private din alta clasa
+    ///     - Ovorload-area operatorilor pentru unele functii de I/O
+
+    /// EXEMPLU: Friend
+
+    /// In afara lui main:
+
+    // class myclass {
+    //     int a, b;
+    // public:
+    //     friend int sum(myclass x); /// poate accesa direct a si b private
+    //     void setAB(int x, int y) { a = x; b = y; }
+    // }
+    // int sum(myclass x) { return x.a + x.b; }
+
+    /// In main:
+
+    // myclass n;
+    // n.setAB(1, 4);
+    // cout << sum(n) << "\n"; /// 5
+
+    /// EXEMPLU: Declararea unei clase Y ca prieten al unei clase X, are ca efect ca toate functiile membre ale clasei Y au acces la membrii privati ai clasei X
+    
+    /// In afara lui main:
+
+    // class X {
+    //     int x;
+    // public:
+    //     friend class Y;
+    // };
+    // class Y {
+    // public:
+    //     void set_x(int val, X &ob) { ob.x = val; }
+    //     int get_x(C1 ob) const { return ob.x; }
+    // };
+
+    /// In main:
+
+    // X x;
+    // Y y;
+    // y.set_x(10, x);
+    // cout << y.get_x(x) << "\n"; /// 10
+
+    /**************************************************************************************************/
+
+    /// Functii inline:
+    ///     - Pentru executie rapida
+    ///     - Sugestie cerere pentru compilator
+    ///     - Pentru functii foarte mici
+    ///     - Pot fi si membrii ai unei clase
+    ///     - Foarte comune in clase
+    ///     - Doua tipuri: explicit (inline) si implicit
+
+    /// EXEMPLU: Explicit inline
+
+    /// In afara lui main:
+
+    // inline int max(int a, int b) { 
+    //     return (a > b) ? a : b;
+    // }
+
+    /// In main:
+
+    // cout << max(10, 20) << " " << max (99, 88) << "\n"; /// 20 99
+    // cout << ((10 > 20) ? 10 : 20) << " " << ((99 > 88) ? 99 : 88) << "\n"; /// 20 99 (nota: parantezele sunt importante aici)
+
+    /// EXEMPLU: Explicit inline in clase
+    
+    /// In afara lui main:
+
+    // class ExplicitInline {
+    //     int a, b;
+    // public:
+    //     void init(int i, int j);
+    //     void show() const;
+    // };
+
+    // inline void ExplicitInline::init(int i, int j) {
+    //     a = i;
+    //     b = j;
+    // }
+
+    // inline void ExplicitInline::show() {
+    //     cout << a << " " << b << "\n";
+    // }
+
+    /// In main:
+
+    // ExplicitInline e;
+    // e.init(10, 11);
+    // e.show(); /// 10 11
+
+    /// EXEMPLU: Implicit inline in clase
+
+    /// In afara lui main:
+
+    // class ImplicitInline {
+    //     int a, b;
+    // public:
+    //     /// Automatica inline
+    //     void init(int i, int j) {
+    //         a = i;
+    //         b = j;
+    //     }
+        
+    //     void show() const {
+    //         cout << a << " " << b << "\n";
+    //     }
+    // };
+
+    /// In main:
+
+    // ImplicitInline i;
+    // i.init(10, 11);
+    // i.show(); /// 10 11
+
+    /**************************************************************************************************/
+
+    /// Constructori/Destructori
+    ///     - Orice clasa are by default: 
+    ///         - Un constructor de initializare
+    ///         - Un constructor de copiere
+    ///         - Un destructor
+    ///         - Un operator de atribuire
+    ///     - Constructorii de copiere trebuiesc redefiniti la date alocate dinamic
+
+    /// In afara lui main:
+
+    // class A { int x; float y; string z; };
+
+    /// In main:
+
+    // A a; /// apel constructor de initializare fara parametrii
+    // A b = a; /// apel constructor de copiere
+    // A e(a); /// apel constructor de copiere
+    // A c; /// apel constructor de initializare
+    // c = a; /// operatorul de atribuire
+
+    /// EXEMPLU: Necesitate rescriere constructori (Constructorii de copiere trebuiesc redefiniti la date alocate dinamic)
+
+    /// In afara lui main:
+    
+    // class A {
+    //     int *v;
+    // public:
+    //     A() { v = new int[10]; cout << "C"; }
+    //     ~A() { delete[] v; cout << "D"; }
+    //     void afis() const { cout << v[3]; }
+    // };
+
+    // void afisare(A ob) { ob.afis(); }
+
+    /// In main:
+
+    // A o1; /// CC0DD nope, da "Aborted (core dumped)"
+    // afisare(o1);
+    // o1.afis();
+
+    /// Explicatie: Fara copy-constructor definit de noi (deoarece avem v alocat dinamic) o1 si ob pointeaza catre acelasi int[10]
+
+    /// Solutie: Scriem constructorul de copiere (bonus: si cel ce atribuire)
+
+    // class Afixed {
+    //     int *v;
+    // public:
+    //     /// Constructor
+    //     A() { v = new int[10]; cout << "C"; }
+        
+    //     /// Constructor de copiere
+    //     A(const A &other) { 
+    //         v = new int[10]; 
+    //         for(int i = 0; i < 10; i++) { 
+    //             v[i] = other.v[i]; 
+    //         } 
+    //         cout << "CC";
+    //     }
+
+    //     /// Operator de atribuire
+    //     A &operator=(const A &other) {
+    //         if (this != other) {
+    //             delete[] v;
+    //             v = new int[10];
+    //             for (int i = 0; i < 10; i++) {
+    //                 v[i] = other.v[i];
+    //             }
+    //         }
+    //         cout << "=";
+    //         return *this;
+    //     }
+
+    //     /// Destructor
+    //     ~A() { delete[] v; cout << "D"; }
+        
+    //     void afis() const { cout << v[3]; }
+    // };
+    // void afisare(A ob) { ob.afis(); }
+
+    // Afixed o1; /// CC0D0D (nu: CC0DD)
+    // afisare(o1);
+    // o1.afis();
+
+    /// Retine: Daca o clasa aloca dinamic memorie, atunci trebuie definit explicit:
+    ///     - Destructor
+    ///     - Constructor de copiere
+    ///     - Operator=
+
+    /// EXEMPLU: Constructorii urca, destructorii coboara
+
+    /// In afara lui main:
+
+    // class cls {
+    // public:
+    //     cls() { cout << "Inside constructor 1" << endl; }
+    //     ~cls(){ cout << "Inside destructor 1" << endl; }
+    // };
+
+    // class clss {
+    //     cls xx;   // compoziție
+    // public:
+    //     clss() { cout << "Inside constructor 2" << endl; }
+    //     ~clss() { cout << "Inside destructor 2" << endl; }
+    // };
+
+    // class clss2 {
+    //     clss xx;  // compoziție
+    //     cls xxx;  // compoziție
+    // public:
+    //     clss2() { cout << "Inside constructor 3" << endl; }
+    //     ~clss2() { cout << "Inside destructor 3" << endl; }
+    // };
+
+    // clss2 s; /// 12133121
+
+    /// Retine:
+    ///     - Constructorii merg de la membrii la clasa
+    ///     - Destructorii merg invers
 
     /**************************************************************************************************/
 
