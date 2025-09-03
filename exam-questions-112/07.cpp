@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream> // #include <iostream.h>
 #include <typeinfo>
 class B {
     int i;
@@ -17,8 +17,8 @@ public:
 int main()
 {
     B* p = new D;
-    cout << p->get_i();
+    std::cout << p->get_i();
     if (typeid((B*)p).name() == "D*")
-        cout << ((D*)p)->get_j();
+        std::cout << ((D*)p)->get_j();
     return 0;
 }

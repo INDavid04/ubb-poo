@@ -1,7 +1,7 @@
 /// 2025-09-03-1230-1357
 /// Irimia David
 /// VS Code
-/// g++ main.c -o e.exe
+/// g++ main.cpp -o e.exe
 /// ./e.exe
 /// Radu Tudor Vrinceanu
 

@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 class B {
 protected:
     static int x;
@@ -27,11 +27,11 @@ int f(B* q)
 int main()
 {
     B* p = new B[10];
-    cout << f(p); /// 2
+    std::cout << f(p); /// 2
     delete[] p;
     p = new D;
-    cout << f(p); /// 2
+    std::cout << f(p); /// 2
     delete p;
-    cout << D::get_x(); /// 0
+    std::cout << D::get_x(); /// 0
     return 0;
 }

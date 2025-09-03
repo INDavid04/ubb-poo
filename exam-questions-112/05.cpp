@@ -1,5 +1,5 @@
 //ordinea constructorilor
-#include <iostream.h>
+#include <iostream> /// #include <iostream.h>
 class B {
     int i;
 
@@ -31,12 +31,12 @@ public:
 int main()
 {
     B* o = new MM();
-    cout << o->get_i() << "\n"; /// 1 (Explicatie: o este un obiect de tipul B)
+    std::cout << o->get_i() << "\n"; /// 1 (Explicatie: o este un obiect de tipul B)
     MM* p = dynamic_cast<MM*>(o); /// baza ia locul derivatei - downcast
     if (p)
-        cout << p->get_i() << "\n"; /// 7 (Explicatie: D::get_i() + D2::get_i() = B::get_i() + j + B::get_i() + j2 = i + j + i + j2 = 1 + 2 + 1 + 3 = 7)
+        std::cout << p->get_i() << "\n"; /// 7 (Explicatie: D::get_i() + D2::get_i() = B::get_i() + j + B::get_i() + j2 = i + j + i + j2 = 1 + 2 + 1 + 3 = 7)
     D* p2 = dynamic_cast<D*>(o); /// derivata ia locul bazei - upcast
     if (p2)
-        cout << p2->get_i() << "\n"; /// 3 (Explicatie: B::get_i() + j = 1 + 2 = 3)
+        std::cout << p2->get_i() << "\n"; /// 3 (Explicatie: B::get_i() + j = 1 + 2 = 3)
     return 0;
 }

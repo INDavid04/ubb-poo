@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream> /// #include <iostream.h>
 class B {
     int x;
 
@@ -20,6 +20,6 @@ int main()
     D a; /// Apelam: D; B(-12). Deci: a.x = -12; 
     int b = 18;
     b += a; /// E.C.
-    cout << b;
+    std::cout << b;
     return 0;
 }

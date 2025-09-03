@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 class B {
 protected:
     int x;
@@ -6,7 +6,7 @@ protected:
 public:
     B(int i = 28) { x = i; }
     virtual B f(B ob) { return x + ob.x + 1; }
-    void afisare() { cout << x; }
+    void afisare() { std::cout << x; }
 };
 class D : public B {
 public:
