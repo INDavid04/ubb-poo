@@ -1,0 +1,246 @@
+# Examen 23 iunie 2025 Numarul 2
+
+## Cerinte
+
+1. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class Baza { public: Baza() { cout << "CoB\n"; } };
+class Derivata1 : public Baza {
+    public: Derivata1() { cout << "CoD1\n"; }
+    ~Derivata1() { cout << "DD1\n"; } };
+class Derivata2 : public Baza {
+    public: Derivata2() { cout << "CoD2\n"; }
+    virtual ~Derivata2() { cout << "DD2\n"; } };
+class Derivata3 : virtual public Baza {
+public: Derivata3() { cout << "CoD3\n"; } };
+class Derivata4 : public Baza { public: Derivata4() { cout << "DD4\n"; } };
+class Derivata5 : public Derivata1, Derivata2, protected Derivata3, public Derivata4 { public: Derivata5() { cout << "CoD5\n"; } };
+int main() { Derivata5 ob; }
+```
+
+2. Definirea copy-constructorului de catre programator. (sintaxa, proprietati, particularitati, motivatie).
+
+3. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+int main() {
+    int a = 5;
+    int b = ++a;
+    const int *a_ptr = &a;
+    int *const b_ptr = &b;
+    *b_ptr += 2;
+    *a_ptr += 3;
+    std::cout << *b_ptr << "\n";
+    std::cout << *a_ptr << "\n";
+    return 0;
+}
+```
+
+4. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class Cls {
+    int a;
+public:
+    Cls(int x) : a(x) { cout << a << " "; }
+    ~Cls() { cout << a << " "; }
+} A(1);
+void adauga() { static Cls B(2); }
+static Cls F(3);
+Cls C(4);
+int main() { Cls D(5);
+    adauga();
+    Cls E(6);
+    static Cls G(7);
+    cout << "* "; return 0;
+}
+```
+
+5. Descrieti notiunea de destructor virtual pur in C++. (sintaxa, proprietati, particularitati, motivatie).
+
+6. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class Cls { public: void afis() { cout << "5" ; }
+    Cls operator+(Cls ob) { cout << "4 "; return Cls(); }
+    Cls operator-(Cls ob) { cout << "3 "; return Cls(); } };
+class Cls2 : public Cls {
+public: void afis() { cout << "2 "; }
+    Cls2 operator+(Cls2 ob) { cout << "1 ";
+        return Cls2(); } };
+int main() {
+    Cls a;
+    Cls2 d, e, f;
+    (d + e).afis();
+    (d - e).afis();
+    (a + d).afis();
+    (d + a).afis();
+}
+```
+
+7. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class Baza { public: virtual ~Baza() {} };
+class D1 : virtual public Baza {};
+class D2 : public D1 {};
+class D3 : virtual public Baza {};
+class D4 : public D3, public D1 {};
+int main() {
+    D4 ob;
+    Baza &re = ob;
+    try { throw re; }
+    catch (D1 &o) { cout << "D1\n"; }
+    catch (D2 &o) { cout << "D2\n"; }
+    catch (D3 &o) { cout << "D3\n"; }
+    catch (D4 &o) { cout << "D4\n"; }
+    catch (Baza &o) { cout << "Baza\n"; }
+}
+```
+
+8. Descrieti particularitatile operatorului typeid. (sintaxa, proprietati, particularitati, motivatie).
+
+9. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class C { int c;
+public: C(int p = 5) { c = p; }
+    int &get() const { return c; } };
+int f(C op) { return op.get(); }
+int main() {
+    C o1;
+    int x = f(o1);
+    cout << x << "\n";
+    return 0;
+}
+```
+
+10. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+int main() {
+    const char *sFirst = "2025\n POO\0 Examen\n";
+    char sSecond[64];
+    const char *sSrc = sFirst;
+    char *sDst = sSecond;
+    while (*sDst++ = *sSrc++);
+    cout << sSecond;
+}
+```
+
+11. Descrieti folosirea pointerilor folositi impreuna cu cuvantul cheie const (sintaxa, proprietati, particularitati, exemplu).
+
+12. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class B { int b;
+public: B(int p = 1) { b = p; } };
+class D : public B { int *d;
+public: D(int p) { d = new int; *d = p; }
+    D(const D &s) : B(s) { d = new int; *d = *(s.d); }
+    ~D() { delete d; }
+    void set(int p) { *d = p; } };
+
+int main() {
+    D o1(2), o2(3);
+    o1 = o2;
+    o2.set(4);
+    return 0;
+}
+```
+
+13. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class C { int a;
+    static int x;
+public:
+    C(int a = 11) { x++; this->a = a; }
+    static int f() { return x; }
+    int getA() { return a; }
+} a;
+int C::x = 10;
+int main() {
+    C a(55), b;
+    cout << "instantieri C: " << C::f() << " val elem: " << ::a.getA();
+    return 0;
+}
+```
+
+14. Descrieti particularitatile unui constructor definit cu atributul protected sau private. (sintaxa, proprietati, particularitati, motivatie).
+
+15. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class I { public: I() { cout << "CI\n"; }
+    I(int x) { cout << x << "ci\n"; }
+    void afis() { cout << "i\n"; } };
+class uni : virtual public I {
+public: uni() { cout << "CU\n"; }
+    uni(int x) : I(x) { cout << x << " cu\n"; }
+    void afis() { cout << "u \n"; } };
+class oras : virtual public I {
+public: oras() { cout << "CO\n"; }
+    oras(int x) : I(x) { cout << x << " co\n"; }
+    void afis() { cout << "Bucuresti"; } };
+class unibuc : public uni, public oras { public: unibuc() { cout << "CUB\n"; }
+    unibuc(int x) : I(x) {} };
+int main() {
+    unibuc ob;
+    ob.afis();
+    unibuc ob2(20);
+}
+```
+
+16. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class B { public:
+    virtual B *fv() { return this; }
+    int adun(int p) { return p + 1; } };
+class D : public B { public:
+    virtual D *fv() { return this; }
+    int adun(int p) { return p + 2; } };
+int main() {
+    B *p = new D;
+    int x = p->fv()->adun(5);
+    cout << x << "\n";
+    return 0;
+}
+```
+
+17. Descrieti particularitatile metodelor statice considerand in special folosirea lor la mostenirea multipla. (sintaxa, proprietati, particularitati, motivatie).
+
+
+18. Spuneti daca programul de mai jos este corect. In caz afirmativ, spuneti ce afiseaza (cu explicatii), in caz negativ propuneti o (singura) modificare prin ccare programul devine corect.
+```cpp
+#include <iostream>
+using namespace std;
+class Base {
+public:
+    int f() const { cout << "B1\n"; return 1; }
+    int f(string) const {
+        cout << "B2\n"; return 1; } };
+class Derived : public Base {
+public: int f() const {
+    cout << "D1\n"; return 2; } };
+int main() {
+    string s("salut");
+    Derived d;
+    int x = d.f();
+    d.f(s);
+    return 0;
+}
+```

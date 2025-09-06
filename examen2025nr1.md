@@ -1,4 +1,4 @@
-# Examen 14 iunie 2024 numarul 2
+# Examen 23 iunie 2025 Numarul 1
 
 ## Cerinte
 
