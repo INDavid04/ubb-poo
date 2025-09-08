@@ -1,57 +1,40 @@
+/// Exercitiul 7 Varianta 2
+
 #include <iostream>
 
 using namespace std;
 
-class Baza { 
-public: 
-    Baza() { 
-        cout << "CoB\n"; 
-    } 
-};
+int x = 10;
 
-class Derivata1 : public Baza {
-public: 
-    Derivata1() { 
-        cout << "CoD1\n"; 
-    }
-    ~Derivata1() { 
-        cout << "DD1\n"; 
-    } 
-};
+void f() {
+    static int x = 20;
+    cout << x << " ";
 
-class Derivata2 : public Baza {
-public: 
-    Derivata2() { 
-        cout << "CoD2\n"; 
-    }
-    virtual ~Derivata2() { 
-        cout << "DD2\n"; 
-    } 
-};
+    class A {
+    protected:
+        int x;
+    public:
+        A(int a = 30) {
+            x = a;
+            cout << A::x << " ";
+        }
+    };
 
-class Derivata3 : virtual public Baza {
-public: 
-    Derivata3() { 
-        cout << "CoD3\n"; 
-    } 
-};
+    class B : public A {
+        int x;
+    public:
+        B(int b = 20) {
+            x = b;
+            cout << x << " " << x << " ";
+        }
+        int afis() { return ::x + A::x; }
+    } ob2;
+    
+    cout << x + ::x + ob2.afis();
+}
 
-class Derivata4 : public Baza { 
-public: 
-    Derivata4() { 
-        cout << "DD4\n"; 
-    } 
-};
-
-class Derivata5 : public Derivata1, Derivata2, protected Derivata3, public Derivata4 { 
-public: 
-    Derivata5() { 
-        cout << "CoD5\n"; 
-    } 
-};
-
-int main() { 
-    Derivata5 ob; 
+int main() {
+    f();
 
     return 0;
 }

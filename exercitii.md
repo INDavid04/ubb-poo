@@ -12,7 +12,7 @@ using namespace std;
 class C{
     int c;
     public: C(int p=1){c=p;}
-    int & get()const{return c;}
+    int &get()const{return c;}
 };
 
 int f(C op){return op.get();}
@@ -20,6 +20,14 @@ int f(C op){return op.get();}
 int main(){
     C o1;
     int x=f(o1);
+
+    /*
+    Apelam C() si setam o1.c = 1
+    x = 1
+
+    Compileaza dar nu afiseaza nimic (gresit)
+    */
+
     return 0;
 }
 ```
@@ -42,6 +50,9 @@ int f(const C*op){return op->get();}
 int main(){
     C o1;
     int x=f(&o1);
+
+    /// Copileaza (gresit)
+
     return 0;
 }
 ```
@@ -56,14 +67,17 @@ using namespace std;
 class C{
     int c;
     public: C(int p=1){c=p;}
-    const int & get(){return c;}
+    const int & get() {return c;}
 };
 
-int f(const C & op){return op.get();}
+int f(const C &op) {return op.get();}
 
 int main(){
     C o1;
     int x=f(o1);
+
+    /// Nu compileaza deoarece functia f primeste ca parametru o referinta catre o constanta si apeleaza o functie pe care nu o cunoaste. Modificam linia 13: int f(const C op { return op.get(); }) (gresit)
+
     return 0;
 }
 ```
@@ -78,12 +92,15 @@ using namespace std;
 class C{
     int c;
     public: C(int p=1){c=p;}
-    const int & get()const{return c++;}
+    const int & get()const{return c;}
 };
 
 int main(){
     const C o1;
     int x=o1.get();
+
+    /// Nu compileaza deoarece obiectul o1 este constant, insa apeleaza get care si ea este constanta, ceea ce e bun insa imi returneaza c si dupa il incrementeaza. Modificam linia 10: const int &get() const { return c; } (corect)
+
     return 0;
 }
 ```
@@ -106,6 +123,9 @@ int f(const C op){return op.get();}
 int main(){
     C o1;
     int x=f(o1);
+
+    /// Compileaza desi functia f nu primeste ca argument formal o referinta ci un obiect constant, prin urmare se copiaza obiectul o1 in op si apeleaza op.get. (gresit)
+
     return 0;
 }
 ```
@@ -131,6 +151,10 @@ int main(){
     B *p =new D;
     int x=p->fv()->adun(1);
 
+    cout << x << "\n";
+
+    /// Copileaza si retin in x valoarea 2 (corect)
+
     return 0;
 }
 ```
@@ -153,6 +177,10 @@ public: virtual B* fv(){return this;}
 int main(){
     B *p =new D;
     int x=p->fv()->adun(1);
+
+    cout << x << "\n";
+
+    /// Compileaza si afiseaza 3 (corect)
 
     return 0;
 }
@@ -178,6 +206,11 @@ public: virtual B* fv(){return this;}
 int main(){
     B *p =new D;
     int x=p->fv()->adun(1);
+
+    cout << x << "\n";
+
+    /// Compileaza si afiseaza 2 (corect)
+
     return 0;
 }
 ```
@@ -202,6 +235,11 @@ public: virtual D * fv(){return this;}
 int main(){
     B *p =new D;
     int x=p->fv()->adun(1);
+
+    cout << x << "\n";
+
+    /// Compileaza si afiseaza 3
+
     return 0;
 }
 ```
@@ -226,6 +264,11 @@ public: B * fv(){return this;}
 int main(){
     B *p =new D;
     int x=p->fv()->adun(1);
+
+    cout << x << "\n";
+
+    /// Compileaza si afiseaza 2 (gresit, explicatie, desi se apeleaza fv din B, se returneaza this, pointer care contine adresa obiectului de tip D)
+
     return 0;
 }
 ```
@@ -254,6 +297,13 @@ public:
 int main() {
     D o1(2),o2(3);
     o1=o2;o2.set(4);
+
+    /// Avem D(2) care apeleaza B() care initializeaza private o1.b = 1 si ne intoarcem in derivata care initializeaza private o1.*d = 2
+    /// Avem D(3) care apeleaza B() care initializeaza private o2.b = 1 si ne intoarcem in derivata care initializeaza private o2.*d = 3
+    /// Pe urmatoarea linie din main, apelam constructorul de copiere al lui D care apeleaza B(s) insa deoarece nu avem vreun constructor de copiere al lui B, rezulta eroare de compilare.
+    /// Asadar, nu compileaza deoarece se apeleaza B(s) fara a avea un constructor de copiere al lui B pentru un obiect de tipul D. Modificam linia 16: D(const D& s) {d=new int; *d=*(s.d);}
+    /// Gresit(vezi pdf-ul)
+
     return 0;
 }
 ```
@@ -281,6 +331,9 @@ public:
 int main() {
     D o1(2),o2(o1);
     o1=o2;o2.set(4);
+
+    /// Nu compileaza deoarece nu avem definit operatorul =, prin urmare se apeleaza operatorul defaul, cel predefinit copiind bit cu bit. De aceea se va sterge de doua ori d. (partial corect, vezi pdf-ul)
+
     return 0;
 }
 ```
@@ -310,6 +363,9 @@ public:
 int main() {
     D o1(2),o2(o1);
     o1=o2;
+
+    /// Compileaza, se retine 2 la adresa lui d
+
     return 0;
 }
 ```
@@ -338,6 +394,12 @@ public:
 int main() {
     D o1(2),o2(o1);
     o2.set(3);
+
+    /// Avem D(2) care apeleaza B(2) care initializeaza private o1.b = 2 si revine in derivata unde initializeaza private o1.*d = 2.
+    /// Avem D(o1) care copiaza bit cu bit deoarece nu avem constructor de copiere definit de programator, il apeleaza pe cel default.
+    /// Pe urmatoarea linie apeleam metoda set(3) care seteaza private o2.*d = 3
+    /// Asadar, nu comileaza deoarece se va sterge de doua ori d, modificam linia 22: D o1(2), o2(2). (corect)
+
     return 0;
 }
 ```
@@ -365,6 +427,9 @@ public:
 int main() {
     D o1(2),o2(o1);
     o2.set(3);
+
+    /// Nu compileaza, se apeleaza constructorul de copiere implicit, se copiaza bit cu bit, d retine aceeasi valoare si in o1 si in o2. Deoarece nu avem destructorul in care sa eliberam memoria, rezulta memory leak. Modificam linia 21: D o1(2), o2(2);
+
     return 0;
 }
 ```
@@ -393,6 +458,9 @@ public:
 int main() {
     D o1(2),o2(o1);
     o1=o2;o2.set(3);
+
+    /// Nu compileaza deoarece se sterge de doua ori d intrucat nu avem constructor de copiere definit de programator asa ca se va apela constructorul de copiere implicit care va copia bit cu bit.
+
     return 0;
 }
 ```
@@ -425,6 +493,16 @@ int main() {
     i=c.op(1);
     j=i+c.op(2.2, 4.8);
     k=c.op(2.2, 3.5, 4);
+
+    cout << i << " " << j << " " << k << "\n";
+
+    /// Avem C() care seteaza private c.z = 1.3
+    /// Dupa avem i = c.op(1) = 3.3
+    /// Dupa avem j = i + c.op(2.2, 4.8) = 3.3 + 1.3 + 2.2 + 4.8 = 4.6 + 7 = 11.6
+    /// Dupa avem k = c.op(2.2, 3.5, 4) = 1.3 + 2.2 + 3.5 + 4 = 3.5 + 7.5 = 11.0
+
+    /// Compileaza si retine in i, j, k valorile 3.3, 11.6, 11.0 (corect insa de observat este ca se afiseaza 11 nu 11.0)
+
     return 0;
 }
 ```
@@ -457,6 +535,13 @@ int main() {
     i=c.op(1.2);
     j=i+c.op(2.2, 4.8);
     k=c.op(2.2, 3.5, 4);
+
+    /// i = 1.2 + 1.0 + 1.3 = 3.5
+    /// j = i + 2.2 + 4.8 + 1.3 = 3.5 + 7 + 1.3 = 10.5 + 1.3 = 11.8
+    /// k = 2.2 + 3.5 + 1.3 + 4 = 5.7 + 5.3 = 11
+
+    /// Gresit, recunosc ca m-a furat, avem ambiguitate la primul apel, la i.
+
     return 0;
 }
 ```
@@ -489,6 +574,9 @@ int main() {
     i=c.op(1.2);
     j=i+c.op(2.2, 4.8);
     k=c.op(2.2, 3.5, 4);
+
+    /// Nu compileaza deoarece parametrii formalli impliciti trebuiesc trecuti la final. Modificam linia 14: float op(float y, float x = 1.0) (corect)
+
     return 0;
 }
 ```
@@ -521,6 +609,11 @@ int main() {
     i=c.op();
     j=i+c.op(1.2);
     k=c.op(2);
+
+    /// i = 2.0 + 1.2 + 1.3 + 1.5 = 6
+    /// j = i + 1.2 + 1.3 = 8.5
+    /// k = 1 + 2 = 3
+
     return 0;
 }
 ```
@@ -552,6 +645,9 @@ int main() {
     cout << c.op() << "\n";
     cout << c.op(1.2) << "\n";
     cout << c.op(1) << "\n";
+
+    /// Nu compileaza deoarece op(1.2) este ambiguu. Modificam inia 17: int op(int y) (corect)
+
     return 0;
 }
 ```
@@ -592,7 +688,18 @@ void func(B* q, int n) {cout << q->get_x() << " ";
 int main() {
     B* p = new B[2]; func(p, 2); delete[] p;
     p = new D; func(p, 1); delete p;
-    cout << D::get_x(); return 0;
+    cout << D::get_x(); 
+    
+    /// Avem B() care incrementeaza B::x de doua ori. Daca initial B::x era zero, acum devine 2. 
+    /// Apoi apelam func(p, 2) care afiseaza "2 ". Dupa aveam un for de la 0 la 2 si afisam "50 51 \n"
+    /// Apoi stergem p ceea ce face ca x sa revina la zero, B::x = 0
+    /// Apoi facem un upcast, apelam D() care face ca B::x = 1, atentie, avem protected static int x deci si derivatele au acces la x
+    /// Apelam func(p, 1) care afiseaza "1 " urmat de "50 \n"
+    /// Apoi stergem p, adica B::x = 0
+    /// La final, afisam 0
+    /// Asadar, compileaza si afiseaza "2 50 51 \n 1 50 \n 0" (compileaza dar afiseaza altceva)
+
+    return 0;
 }
 ```
 
@@ -781,6 +888,11 @@ int main() {
     (b=a).set_x(27);
     int i;
     i=b.get_x();
+
+    /// Avem A(18) care initalizeaza private a.x = 18
+    /// Avem A(7) care initalizeaza private b.x = 7
+    /// Compileaza si initializeaza i = 27 (gresit)
+
     return 0;
 }
 ```
@@ -809,6 +921,9 @@ int main() {
     (b=a).set_x(27);
     int i;
     i=b.get_x();
+
+    /// Compileaza, i = 27 (gresit)
+
     return 0;
 }
 ```
@@ -837,6 +952,9 @@ int main() {
     (b=a).set_x(27);
     int i;
     i=b.get_x();
+
+    /// Nu compileaza deoarece nu putem return o referinta care nu este constata. Stergem const. (gresit)
+
     return 0;
 }
 ```
@@ -871,6 +989,9 @@ int main() {
     int i;
     i=(b = a).get_x();
     (c = &a)->afisare();
+
+    /// Compileaza si afiseaza 0 (gresit)
+
     return 0;
 }
 ```
@@ -903,8 +1024,11 @@ public:
 int main() {
     B a(112), b, *c;
     int i;
-    i= (b = a).get_x()<<"\n";
+    // i= (b = a).get_x()<<"\n";
     (c = &a)->afisare();
+
+    /// Nu compileaza, comentam linia 28 (gresit)
+
     return 0;
 }
 ```
@@ -947,51 +1071,18 @@ void f(int x) {
 int main() {
     f(20);
 
+    /// Afiseaza "20 "
+    /// ob2.x = 30
+    /// Afiseaza "30 "
+
+    /// Nu compileaza deoarece B mosteneste A care are un camp protected x si B are un camp private x. Inlocuim protected cu private.
+
     return 0;
 }
 ```
 
 ```cpp
-/// Exercitiul 7 Varianta 2
 
-#include <iostream>
-
-using namespace std;
-
-int x = 10;
-
-void f() {
-    static int x = 20;
-    cout << x << " ";
-
-    class A {
-    protected:
-        int x;
-    public:
-        A(int a = 30) {
-            x = a;
-            cout << A::x << " ";
-        }
-    };
-
-    class B : public A {
-        int x;
-    public:
-        B(int b = 20) {
-            x = b;
-            cout << x << " " << x << " ";
-        }
-        int afis() { return ::x + A::x; }
-    } ob2;
-    
-    cout << x + ::x + ob2.afis();
-}
-
-int main() {
-    f();
-
-    return 0;
-}
 ```
 
 ```cpp
