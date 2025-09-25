@@ -1,4 +1,4 @@
-/// 2025-09-25-1501-1555
+/// 2025-09-25-1501-1657
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ using namespace std;
 /// z = y / 2;                                                ///
 /////////////////////////////////////////////////////////////////
 
-/// RASPUNS: Trebuie supraincarcati urmatorii operatori: =, *, +, /
+/// RASPUNS: Trebuiesc supraincarcati urmatorii operatori: =, *, +, /
 
 // class Irat {
 // private:
@@ -77,24 +77,118 @@ using namespace std;
 //     return 0;
 // }
 
-/// II: Dati cat mai multe variante de a se modifica starea (variabilele de instanta) unui obiect constant care apeleaza o functie constanta.
+///////////////////////////////////////////////////////////////
+/// II: Dati cat mai multe variante de a se modifica starea ///
+/// (variabilele de instanta) unui obiect constant          ///
+/// care apeleaza o functie constanta.                      ///
+///////////////////////////////////////////////////////////////
 
-/// III: Cum functioneaza operatorul de atribuire implicit (dat de compilator), al unei clase compuse
-// (cu date dintr-o clasa de baza),si cum trebuie scris de programator, operatorul de atribuire pentru
-// aceeasi clasa compusa? Sintaxa.
+/// RASPUNS: Mutable, static si alocare dinamica sunt trei variante in care putem modifica starea unui obiect constant care apeleaza o functie constanta
 
-/// IV: Descrieti specializarea explicita pentru sabloane (template-uri) de clase.
-// Sintaxa, proprietati, observatii.
+/// Varianta 1: Mutable
+// class C {
+// private:
+//     int var1;
+//     mutable int var2;
+// public:
+//     C() : var2(100) {}
+//     void resetVar() const {
+//         // var1 = 0; /// E.C.
+//         var2 = 0;
+//     }
+//     void afiseazaVar2() const {
+//         cout << var2 << "\n";
+//     }
+// };
+// int main() {
+//     const C x;
+//     x.afiseazaVar2(); /// 100
+//     x.resetVar();
+//     x.afiseazaVar2(); /// 0
+//     return 0;
+// }
 
-/// V: Descrieti cum se poate re-arunca o exceptie: sintaxa, proprietati, restrictii, utilizare.
+/// Varianta 2: Static
+// class C {
+// private:
+//     int var1;
+//     static int var2;
+// public:
+//     C() {}
+//     void resetVar() const {
+//         // var1 = 0; /// E.C.
+//         var2 = 0;
+//     }
+//     void afiseazaVar2() const {
+//         cout << var2 << "\n";
+//     }
+// };
+// int C::var2 = 100;
+// int main() {
+//     const C x;
+//     x.afiseazaVar2(); /// 100
+//     x.resetVar();
+//     x.afiseazaVar2(); /// 0
+//     return 0;
+// }
 
-/// VI: Sa se scrie cod pentru urmatoarea situatie:
-// sa se construiasca o clasa CLS care sa aibe ca date de instanta cel putin doi intregi unul constant c si unul
-// normal i.
-// se citeste n de la tastatura (va fi intotdeuna mai mare decat 10)
-// sa se instantieze n obiecte din aceasta clasa CLS cu restrictiile urmatoare:
-// 1. primele 3 obiecte vor avea initializate c si i cu c=2 si i=3
-// 2. obiectele de la 5 la 6 vor avea c si i la valoarea 1
-// 3 obiectele de la 7 la n vor avea c=numarul obiectului respectiv, i va fi n-c, adica al optulea obiect va avea
-// c=8, al noualea obiect va avea c=9, etc.
-// Sa se descrie notiunea de POO care va ajuta sa rezolvati restrictiile 1,2,3
+/// Varianta 3: Alocare dinamica
+// class C {
+// private:
+//     int *p;
+// public:
+//     C(const int val = 100) {
+//         p = new int(val);
+//     }
+//     void reset() const {
+//         *p = 0;
+//     }
+//     void afiseaza() const {
+//         cout << *p << "\n";
+//     }
+//     ~C() {
+//         delete p;
+//     }
+// };
+// int main() {
+//     const C x;
+//     x.afiseaza(); /// 100
+//     x.reset();
+//     x.afiseaza(); /// 0
+//     return 0;
+// }
+
+//////////////////////////////////////////////////////////////
+/// III: Cum functioneaza operatorul de atribuire implicit ///
+/// (dat de compilator), al unei clase compuse             ///
+/// (cu date dintr-o clasa de baza),                       ///
+/// si cum trebuie scris de programator,                   ///
+/// operatorul de atribuire pentru                         ///
+/// aceeasi clasa compusa? Sintaxa.                        ///
+//////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////
+/// IV: Descrieti specializarea explicita   ///
+/// pentru sabloane(template-uri) de clase. ///
+/// Sintaxa, proprietati, observatii.       ///
+///////////////////////////////////////////////
+
+///////////////////////////////////////////////////////
+/// V: Descrieti cum se poate re-arunca o exceptie. ///
+/// Sintaxa, proprietati, restrictii, utilizare.    ///
+///////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////
+/// VI: Sa se scrie cod pentru urmatoarea situatie:                              ///
+/// Sa se construiasca o clasa CLS care                                          ///
+/// sa aibe ca date de instanta cel putin doi intregi                            ///
+/// unul constant c si unul normal i.                                            ///
+/// Se citeste n de la tastatura (va fi intotdeuna mai mare decat 10)            ///
+/// Sa se instantieze n obiecte din aceasta clasa CLS cu restrictiile urmatoare: ///
+/// 1. Primele 3 obiecte vor avea initializate c si i cu c=2 si i=3              ///
+/// 2. Obiectele de la 5 la 6 vor avea c si i la valoarea 1                      ///
+/// 3. Obiectele de la 7 la n vor avea c=numarul obiectului respectiv,           ///
+/// i va fi n-c, adica al optulea obiect va avea                                 ///
+/// c=8, al noualea obiect va avea c=9, etc.                                     ///
+/// Sa se descrie notiunea de POO care va ajuta sa rezolvati restrictiile 1,2,3  ///
+////////////////////////////////////////////////////////////////////////////////////
