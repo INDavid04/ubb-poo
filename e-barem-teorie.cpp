@@ -1,4 +1,4 @@
-/// 2025-09-25-1501-1721 (24min for fourth solution)
+/// 2025-09-25-1501-1738 (17 min for fifth solution)
 
 #include <iostream>
 
@@ -209,33 +209,69 @@ using namespace std;
 ///////////////////////////////////////////////
 
 /// SINTAXA: Specializarea explicita pentru sabloane de clase
-template <class T>
-class MyClass {
-public:
-    void afis() {
-        cout << "Template generic\n";
-    }
-};
-template <>
-class MyClass<int> {
-public:
-    void afis() {
-        cout << "Template specializat\n";
-    }
-};
-int main() {
-    MyClass<char> a;
-    a.afis(); /// Template generic
-    MyClass<int> b;
-    b.afis(); /// Template specializat
-    // MyClass c; /// E.C. class template argument deduction failed
-    return 0;
-}
+// template <class T>
+// class MyClass {
+// public:
+//     void afis() {
+//         cout << "Template generic\n";
+//     }
+// };
+// template <>
+// class MyClass<int> {
+// public:
+//     void afis() {
+//         cout << "Template specializat\n";
+//     }
+// };
+// int main() {
+//     MyClass<char> a;
+//     a.afis(); /// Template generic
+//     MyClass<int> b;
+//     b.afis(); /// Template specializat
+//     // MyClass c; /// E.C. class template argument deduction failed
+//     return 0;
+// }
 
 ///////////////////////////////////////////////////////
 /// V: Descrieti cum se poate re-arunca o exceptie. ///
 /// Sintaxa, proprietati, restrictii, utilizare.    ///
 ///////////////////////////////////////////////////////
+
+/// SINTAXA: Rearuncare exceptie
+// try {
+//     if (condition) {
+//         throw exception("mesaj\n");
+//     }
+// } catch (const exception &e) {
+//     cout << e.what();
+//     throw; /// rearunca aceeasi exceptie
+// }
+
+/// PROPIETATI: Rearuncare exceptie
+/// Pastreaza tipul si obiectul original al obiectului
+/// Utilizata in logging si cleanup
+
+/// RESTRICTII: Rearuncare exceptie
+/// Se poate face doar dintr-un bloc catch activ
+/// Intai tratatarea (logging, cleanup) si abia apoi rearuncarea
+
+/// UITILIZARE: Rearuncare exceptie
+void f() {
+    try {
+        throw runtime_error("Exceptie din f\n");
+    } catch (const runtime_error &e) {
+        cout << e.what();
+        throw;
+    }
+}
+int main() {
+    try {
+        f();
+    } catch (const runtime_error &e) {
+        cout << e.what();
+    }
+    return 0;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 /// VI: Sa se scrie cod pentru urmatoarea situatie:                              ///
