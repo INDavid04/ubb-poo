@@ -1,6 +1,7 @@
-/// 2025-09-25-1501-1738 (17 min for fifth solution)
+/// 2025-09-25-1501-1800
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -256,22 +257,22 @@ using namespace std;
 /// Intai tratatarea (logging, cleanup) si abia apoi rearuncarea
 
 /// UITILIZARE: Rearuncare exceptie
-void f() {
-    try {
-        throw runtime_error("Exceptie din f\n");
-    } catch (const runtime_error &e) {
-        cout << e.what();
-        throw;
-    }
-}
-int main() {
-    try {
-        f();
-    } catch (const runtime_error &e) {
-        cout << e.what();
-    }
-    return 0;
-}
+// void f() {
+//     try {
+//         throw runtime_error("Exceptie din f\n");
+//     } catch (const runtime_error &e) {
+//         cout << e.what();
+//         throw;
+//     }
+// }
+// int main() {
+//     try {
+//         f();
+//     } catch (const runtime_error &e) {
+//         cout << e.what();
+//     }
+//     return 0;
+// }
 
 ////////////////////////////////////////////////////////////////////////////////////
 /// VI: Sa se scrie cod pentru urmatoarea situatie:                              ///
@@ -287,3 +288,35 @@ int main() {
 /// c=8, al noualea obiect va avea c=9, etc.                                     ///
 /// Sa se descrie notiunea de POO care va ajuta sa rezolvati restrictiile 1,2,3  ///
 ////////////////////////////////////////////////////////////////////////////////////
+
+/// RASPUNS: Vector de obiecte initializate prin niste for loop-uri
+// class CLS {
+// private:
+//     const int c;
+//     int i;
+// public:
+//     CLS(const int c = 0, const int i = 0) : c(c), i(i) {}
+//     void afiseaza() const {
+//         cout << "c: " << c << " si i: " << i << "\n";
+//     }
+// };
+// int main() {
+//     int n;
+//     cout << "n (n > 10): ";
+//     cin >> n;
+//     vector<CLS> v;
+//     for (int i = 1; i <= 3; i++) {
+//         v.push_back(CLS(2, 3));
+//     }
+//     v.push_back(CLS());
+//     for (int i = 5; i <= 6; i++) {
+//         v.push_back(CLS(1, 1));
+//     }
+//     for (int i = 7; i <= n; i++) {
+//         v.push_back(CLS(i, n - i));
+//     }
+//     for (auto item : v) {
+//         item.afiseaza();
+//     }
+//     return 0;
+// }
