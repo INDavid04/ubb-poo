@@ -1,4 +1,4 @@
-/// 2025-09-25-1501-1657
+/// 2025-09-25-1501-1721 (24min for fourth solution)
 
 #include <iostream>
 
@@ -167,11 +167,70 @@ using namespace std;
 /// aceeasi clasa compusa? Sintaxa.                        ///
 //////////////////////////////////////////////////////////////
 
+/// RASPUNS: Se copiaza bit cu bit in cazul in care nu avem operatorul de atribuire supraincarcat.
+
+/// EXEMPLU: Supraincarcarea operatorului de atribuire
+// class C {
+// private:
+//     int re, im;
+// public:
+//     /// Constructor cu/fara parametrii
+//     C(const int re = 0, const int im = 0) : re(re), im(im) {}
+//     /// Construcor de copiere
+//     C(const C &ob) {
+//         this->re = ob.re;
+//         this->im = ob.im;
+//     }
+//     /// Supraincarcare operator <<
+//     friend ostream &operator<<(ostream &out, const C &ob);
+//     /// Supraincarcare operator =
+//     C &operator=(const C ob) {
+//         this->re = ob.re;
+//         this->im = ob.im;
+//         return *this;
+//     }
+// };
+// ostream &operator<<(ostream &out, const C &ob) {
+//     out << ob.re << " + " << ob.im << "i\n";
+//     return out; /// pentru cout << a << b;
+// }
+// int main() {
+//     C x(3, 4), y(10, 40);
+//     cout << x; /// 3 + 4i
+//     x = y;
+//     cout << x; /// 10 + 40i
+//     return 0;
+// }
+
 ///////////////////////////////////////////////
 /// IV: Descrieti specializarea explicita   ///
 /// pentru sabloane(template-uri) de clase. ///
 /// Sintaxa, proprietati, observatii.       ///
 ///////////////////////////////////////////////
+
+/// SINTAXA: Specializarea explicita pentru sabloane de clase
+template <class T>
+class MyClass {
+public:
+    void afis() {
+        cout << "Template generic\n";
+    }
+};
+template <>
+class MyClass<int> {
+public:
+    void afis() {
+        cout << "Template specializat\n";
+    }
+};
+int main() {
+    MyClass<char> a;
+    a.afis(); /// Template generic
+    MyClass<int> b;
+    b.afis(); /// Template specializat
+    // MyClass c; /// E.C. class template argument deduction failed
+    return 0;
+}
 
 ///////////////////////////////////////////////////////
 /// V: Descrieti cum se poate re-arunca o exceptie. ///
